@@ -1,0 +1,173 @@
+openapi: 3.0.3
+info:
+  title: ReGive Backend API
+  version: 1.0.0
+  description: |
+    Final Release API for ReGive (Sprint 1–3).
+    Auth header: `Authorization: Bearer <JWT>`
+servers:
+  - url: http://localhost:5000/api
+tags:
+  - name: System
+  - name: Auth
+  - name: Campaigns
+  - name: Donations
+  - name: Volunteers
+  - name: Support
+  - name: Products
+  - name: Inventory
+  - name: Orders
+  - name: Payments
+  - name: AI
+  - name: Reports
+  - name: Notifications
+paths:
+  /health:
+    get:
+      tags: [System]
+      summary: Liveness
+      responses:
+        '200':
+          description: OK
+  /ready:
+    get:
+      tags: [System]
+      summary: Readiness (MongoDB)
+      responses:
+        '200':
+          description: Ready
+        '503':
+          description: Not ready
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Register USER or BENEFICIARY
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password, fullName]
+              properties:
+                email: { type: string }
+                password: { type: string }
+                fullName: { type: string }
+                role: { type: string, enum: [USER, BENEFICIARY] }
+      responses:
+        '201':
+          description: Registered
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string }
+                password: { type: string }
+      responses:
+        '200':
+          description: JWT + user
+  /auth/me:
+    get:
+      tags: [Auth]
+      summary: Current profile
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: OK
+  /campaigns:
+    get:
+      tags: [Campaigns]
+      summary: List active campaigns
+      responses:
+        '200':
+          description: OK
+  /products/marketplace:
+    get:
+      tags: [Products]
+      summary: Marketplace listings
+      responses:
+        '200':
+          description: OK
+  /products/intake:
+    post:
+      tags: [Products]
+      summary: Intake product from donation
+      security: [{ bearerAuth: [] }]
+      responses:
+        '201':
+          description: Created
+  /inventory/stock-in:
+    post:
+      tags: [Inventory]
+      summary: Stock in
+      security: [{ bearerAuth: [] }]
+      responses:
+        '201':
+          description: OK
+  /orders:
+    post:
+      tags: [Orders]
+      summary: Create order (buy now)
+      security: [{ bearerAuth: [] }]
+      responses:
+        '201':
+          description: Created
+  /payments:
+    post:
+      tags: [Payments]
+      summary: Create sandbox payment
+      security: [{ bearerAuth: [] }]
+      responses:
+        '201':
+          description: Created (includes sandboxToken)
+  /payments/sandbox/confirm:
+    post:
+      tags: [Payments]
+      summary: Confirm sandbox payment
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: Paid
+  /ai/assess-product:
+    post:
+      tags: [AI]
+      summary: Run AI suggestion (not applied)
+      security: [{ bearerAuth: [] }]
+      responses:
+        '201':
+          description: Suggested
+  /ai/assessments/{id}/confirm:
+    post:
+      tags: [AI]
+      summary: Human confirm/override and apply to product
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Applied (never auto-publishes)
+  /reports/overview:
+    get:
+      tags: [Reports]
+      summary: Ops/finance overview
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: OK
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
