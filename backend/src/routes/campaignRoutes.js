@@ -20,27 +20,37 @@ router.get(
   ctrl.listAll
 );
 router.get('/:id', optionalAuth, ctrl.idParam, validate, ctrl.getById);
+router.get('/:id/donations', ctrl.idParam, validate, ctrl.listPublicDonations);
+router.get('/:id/volunteers', ctrl.idParam, validate, ctrl.listVolunteers);
+
+router.post(
+  '/:id/activities',
+  authenticate,
+  ctrl.idParam,
+  validate,
+  ctrl.addActivity
+);
+
 router.post(
   '/',
   authenticate,
-  authorize(ROLES.ADMIN),
   ctrl.campaignBodyValidators,
   validate,
   ctrl.create
 );
+
 router.patch(
   '/:id',
   authenticate,
-  authorize(ROLES.ADMIN),
   ctrl.idParam,
   ctrl.campaignUpdateValidators,
   validate,
   ctrl.update
 );
+
 router.delete(
   '/:id',
   authenticate,
-  authorize(ROLES.ADMIN),
   ctrl.idParam,
   validate,
   ctrl.remove

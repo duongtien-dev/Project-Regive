@@ -165,6 +165,29 @@ const updateStatus = asyncHandler(async (req, res) => {
   return success(res, { order }, 'Order status updated');
 });
 
+const cancelOrder = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+  if (!order) throw new ApiError(404, 'Order not found');
+
+  const isOwner = order.buyer.toString() === req.user._id.toString();
+  if (!isOwner) throw new ApiError(403, 'Forbidden');
+
+  if (order.status !== ORDER_STATUS.PENDING) {
+    throw new ApiError(400, 'Chỉ có thể hủy đơn hàng đang chờ thanh toán');
+  }
+
+  order.status = ORDER_STATUS.CANCELLED;
+  order.statusHistory.push({
+    status: ORDER_STATUS.CANCELLED,
+    at: new Date(),
+    by: req.user._id,
+    note: req.body.reason || 'Khách hàng chủ động hủy đơn hàng',
+  });
+  await order.save();
+
+  return success(res, { order }, 'Đơn hàng đã được hủy thành công');
+});
+
 module.exports = {
   createValidators,
   statusValidators,
@@ -173,4 +196,5 @@ module.exports = {
   listAll,
   getById,
   updateStatus,
+  cancelOrder,
 };

@@ -130,75 +130,204 @@ async function seed() {
   const campaignsData = [
     {
       title: 'Áo Ấm Cho Em — Mùa Đông Vùng Cao Hà Giang 2026',
+      shortDescription: 'Gây quỹ trao tặng 1.200 áo phao ấm và 500 chăn bông cho học sinh tiểu học xã Lũng Cú & Đồng Văn vượt qua mùa đông buốt giá.',
+      category: 'children',
+      bannerImage: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1200&q=80',
       description:
         'Hàng ngàn em nhỏ tại các điểm trường xã Lũng Cú và Đồng Văn đang đối mặt với cái lạnh buốt giá dưới 5°C. Chiến dịch quyên góp kinh phí may áo khoác ấm, ủng đi mưa và chăn ấm cho các em.',
       goal: 'Trao tặng 1.200 bộ áo ấm và 500 chăn bông cho học sinh tiểu học Hà Giang.',
       location: 'Đồng Văn, Hà Giang',
+      organization: 'CLB Kết Nối Yêu Thương & ReGive Hà Giang',
+      contactInfo: {
+        representative: 'Nguyễn Văn Minh (Trưởng ban)',
+        phone: '0988112233',
+        email: 'minh.nguyen@regive.org.vn',
+      },
+      volunteerConditions: 'Độ tuổi từ 18-35, sức khỏe tốt chịu được địa hình núi cao, ưu tiên có kinh nghiệm đi phượt hoặc sơ cứu cơ bản.',
+      targetItems: [
+        { name: 'Áo khoác lông vũ chống rét', targetQty: 1200, receivedQty: 780, unit: 'chiếc' },
+        { name: 'Chăn ấm siêu nhẹ', targetQty: 500, receivedQty: 320, unit: 'chiếc' },
+        { name: 'Ủng đi mưa lót lông', targetQty: 1000, receivedQty: 450, unit: 'đôi' },
+      ],
+      tags: ['Vùng cao', 'Áo ấm mùa đông', 'Trẻ em', 'Khẩn cấp'],
       startDate: new Date('2026-09-01'),
       endDate: new Date('2026-12-31'),
       status: CAMPAIGN_STATUS.ACTIVE,
       targetAmount: 120000000,
       raisedAmount: 86500000,
+      activities: [
+        {
+          title: 'Khảo sát thực địa và trao đợt 1 tại xã Lũng Cú',
+          content: 'Đoàn tình nguyện viên ReGive phối hợp Hội Chữ Thập Đỏ đã trao 350 áo phao ấm và 150 chăn bông cho các em học sinh trường Phổ thông Dân tộc Bán trú Lũng Cú.',
+          date: new Date('2026-09-18'),
+          author: 'Ban Điều Hành ReGive',
+          image: 'https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&w=600&q=80',
+        },
+        {
+          title: 'Tiếp nhận 500 áo khoác lông vũ từ các nhà hảo tâm',
+          content: 'Kho ReGive Hà Nội đã hoàn tất phân loại, giặt sấy kháng khuẩn và đóng gói 500 chiếc áo ấm đạt chuẩn để chuẩn bị cho chuyến xe thứ 2.',
+          date: new Date('2026-09-24'),
+          author: 'Tổ Kiểm Định Vật Phẩm',
+          image: 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&w=600&q=80',
+        },
+      ],
     },
     {
       title: 'Chiến Dịch Hỗ Trợ Học Đường Vùng Lũ Miền Trung',
+      shortDescription: 'Tái thiết 4 điểm trường tiểu học bị bão lũ tàn phá tại Nam Trà My, trang bị bàn ghế và đồ dùng học tập.',
+      category: 'disaster_relief',
+      bannerImage: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80',
       description:
         'Trận lũ lụt vừa qua đã cuốn trôi toàn bộ sách vở, bàn ghế của 4 điểm trường tiểu học tại huyện Nam Trà My. Chúng tôi kêu gọi kinh phí và hiện vật để sửa chữa phòng học và trang bị đồ dùng học tập.',
       goal: 'Tái thiết 4 điểm trường và hỗ trợ dụng cụ học tập cho 450 học sinh.',
       location: 'Nam Trà My, Quảng Nam',
+      organization: 'Mạng Lưới Tình Nguyện Miền Trung',
+      contactInfo: {
+        representative: 'Lê Thu Trang',
+        phone: '0977223344',
+        email: 'trang.le@regive.org.vn',
+      },
+      volunteerConditions: 'Ưu tiên TNV tại Quảng Nam/Đà Nẵng có khả năng hỗ trợ dọn dẹp bùn đất và sửa chữa mộc, xây dựng cơ bản.',
+      targetItems: [
+        { name: 'Bàn ghế học sinh chống nước', targetQty: 150, receivedQty: 90, unit: 'bộ' },
+        { name: 'Bộ sách giáo khoa lớp 1-5', targetQty: 450, receivedQty: 310, unit: 'bộ' },
+        { name: 'Vở ô ly 96 trang', targetQty: 2500, receivedQty: 1800, unit: 'cuốn' },
+      ],
+      tags: ['Cứu trợ bão lũ', 'Miền Trung', 'Học đường', 'Tái thiết'],
       startDate: new Date('2026-08-15'),
       endDate: new Date('2026-11-30'),
       status: CAMPAIGN_STATUS.ACTIVE,
       targetAmount: 80000000,
       raisedAmount: 52000000,
+      activities: [
+        {
+          title: 'Khởi công sửa chữa mái tôn và sơn mới 3 phòng học',
+          content: 'Đội thợ địa phương cùng đội tình nguyện ReGive đã tiến hành lợp lại mái tôn chống bão và thay cửa kính kiên cố cho điểm trường Trà Leng.',
+          date: new Date('2026-09-05'),
+          author: 'Điều Phối Viên Miền Trung',
+          image: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=600&q=80',
+        },
+      ],
     },
     {
       title: 'Bữa Cơm Yêu Thương — Tiếp Sức Người Vô Gia Cư Sài Gòn',
+      shortDescription: 'Cung cấp 12.000 suất ăn nóng ấm và nhu yếu phẩm mỗi tuần cho người lao động nghèo và người vô gia cư tại TP.HCM.',
+      category: 'poverty_alleviation',
+      bannerImage: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=1200&q=80',
       description:
         'Mỗi đêm, hàng trăm người lao động nghèo, người già neo đơn và người vô gia cư tại TP.HCM mưu sinh vất vả. Chiến dịch duy trì 1.000 suất ăn nóng ấm mỗi tuần cùng các nhu yếu phẩm cơ bản.',
       goal: 'Phát 12.000 suất ăn dinh dưỡng và nước uống sạch trong vòng 3 tháng.',
       location: 'Quận 1 & Quận 4, TP. Hồ Chí Minh',
+      organization: 'Bếp Cơm Sài Gòn Ấm & ReGive Miền Nam',
+      contactInfo: {
+        representative: 'Trần Hoài An',
+        phone: '0903334455',
+        email: 'an.tran@regive.org.vn',
+      },
+      volunteerConditions: 'Nhiệt tình, có phương tiện di chuyển cá nhân vào buổi tối, có mặt đúng giờ tại điểm chuẩn bị lúc 18h00.',
+      targetItems: [
+        { name: 'Gạo sạch ST25', targetQty: 2000, receivedQty: 1400, unit: 'kg' },
+        { name: 'Dầu ăn & Gia vị đóng chai', targetQty: 300, receivedQty: 210, unit: 'chai' },
+        { name: 'Hộp bã mía thân thiện môi trường', targetQty: 5000, receivedQty: 3800, unit: 'hộp' },
+      ],
+      tags: ['Bữa cơm từ thiện', 'TP.HCM', 'Người vô gia cư', 'Tuần hoàn'],
       startDate: new Date('2026-09-10'),
       endDate: new Date('2026-12-10'),
       status: CAMPAIGN_STATUS.ACTIVE,
       targetAmount: 60000000,
       raisedAmount: 45200000,
+      activities: [
+        {
+          title: 'Đêm phát cơm thứ 4 - 350 suất ăn dinh dưỡng tại khu vực Chợ Lớn',
+          content: 'Hơn 20 tình nguyện viên đã tập trung chuẩn bị cơm thịt kho trứng và sữa tươi trao tận tay các cụ già và người lao động bán vé số dạo.',
+          date: new Date('2026-09-22'),
+          author: 'Nhóm TNV Sài Gòn Ấm',
+          image: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=600&q=80',
+        },
+      ],
     },
     {
       title: 'Tủ Sách Tri Thức Cho Trẻ Em Vùng Biên Giới',
+      shortDescription: 'Xây dựng 5 thư viện mini thân thiện với 3.000 đầu sách truyện tranh và kỹ năng sống tại Lạng Sơn.',
+      category: 'education',
+      bannerImage: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=1200&q=80',
       description:
         'Xây dựng 5 tủ sách cộng đồng với hơn 3.000 đầu sách truyện tranh, sách khoa học và kỹ năng sống cho thiếu nhi tại các xã biên giới Lạng Sơn.',
       goal: 'Xây dựng 5 thư viện mini thân thiện tại các trường bán trú.',
       location: 'Cao Lộc, Lạng Sơn',
+      organization: 'Hội Sách Cộng Đồng Việt Nam',
+      contactInfo: {
+        representative: 'Phạm Hồng Ánh',
+        phone: '0912445566',
+        email: 'anh.pham@regive.org.vn',
+      },
+      volunteerConditions: 'Yêu thích đọc sách, có kỹ năng phân loại và bọc dán sách bảo quản, hỗ trợ tổ chức ngày hội đọc.',
+      targetItems: [
+        { name: 'Sách truyện thiếu nhi & kỹ năng', targetQty: 3000, receivedQty: 1950, unit: 'cuốn' },
+        { name: 'Kệ sách gỗ 5 tầng', targetQty: 10, receivedQty: 7, unit: 'cái' },
+      ],
+      tags: ['Tủ sách', 'Giáo dục', 'Trẻ em biên giới', 'Tri thức'],
       startDate: new Date('2026-09-15'),
       endDate: new Date('2026-11-15'),
       status: CAMPAIGN_STATUS.ACTIVE,
       targetAmount: 40000000,
       raisedAmount: 28000000,
+      activities: [],
     },
     {
       title: 'Nước Sạch Cho Đồng Bào Hạn Mặn Bến Tre',
+      shortDescription: 'Lắp đặt 10 bồn chứa nước dung tích lớn và máy lọc nước RO cung cấp nước ngọt miễn phí cho 1.500 hộ dân.',
+      category: 'environment',
+      bannerImage: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1200&q=80',
       description:
         'Hạn mặn kéo dài khiến hàng ngàn hộ dân thiếu nước sinh hoạt. Chiến dịch lắp đặt 10 bồn chứa nước dung tích lớn và máy lọc nước RO công suất cao.',
       goal: 'Cung cấp nước ngọt sinh hoạt miễn phí cho 1.500 hộ gia đình.',
       location: 'Ba Tri, Bến Tre',
+      organization: 'Quỹ Môi Trường Xanh ĐBSCL',
+      contactInfo: {
+        representative: 'Võ Minh Đạt',
+        phone: '0939556677',
+        email: 'dat.vo@regive.org.vn',
+      },
+      volunteerConditions: 'Hiểu biết kỹ thuật lọc nước cơ bản hoặc hỗ trợ vận chuyển lắp đặt bồn chứa tại xã Ba Tri.',
+      targetItems: [
+        { name: 'Bồn chứa nước Inox 2000L', targetQty: 10, receivedQty: 8, unit: 'bồn' },
+        { name: 'Hệ thống máy lọc nước RO công nghiệp', targetQty: 3, receivedQty: 2, unit: 'hệ thống' },
+      ],
+      tags: ['Nước sạch', 'Bến Tre', 'Hạn mặn', 'Môi trường'],
       startDate: new Date('2026-07-01'),
       endDate: new Date('2026-10-31'),
       status: CAMPAIGN_STATUS.ACTIVE,
       targetAmount: 150000000,
       raisedAmount: 115000000,
+      activities: [],
     },
     {
       title: 'Hành Trình Chữa Lành — Phẫu Thuật Nụ Cười Trẻ Thơ',
+      shortDescription: 'Tài trợ 100% chi phí phẫu thuật nụ cười và phục hồi chức năng phát âm cho 30 em nhỏ hở môi vòm miệng.',
+      category: 'healthcare',
+      bannerImage: 'https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?auto=format&fit=crop&w=1200&q=80',
       description:
         'Phối hợp cùng các y bác sĩ tình nguyện mang lại nụ cười trọn vẹn cho các em nhỏ bị dị tật hở môi, vòm miệng có hoàn cảnh khó khăn.',
       goal: 'Tài trợ 100% chi phí phẫu thuật cho 30 em nhỏ.',
       location: 'Bệnh viện Nhi Trung Ương, Hà Nội',
+      organization: 'Nhóm Bác Sĩ Tình Nguyện Nụ Cười Mới',
+      contactInfo: {
+        representative: 'Bác sĩ Đặng Quốc Cường',
+        phone: '0913889900',
+        email: 'cuong.dang@regive.org.vn',
+      },
+      volunteerConditions: 'Ưu tiên sinh viên y khoa, điều dưỡng hoặc TNV có kinh nghiệm chăm sóc và chơi đùa cùng bệnh nhi.',
+      targetItems: [
+        { name: 'Gói hỗ trợ dinh dưỡng hậu phẫu', targetQty: 30, receivedQty: 22, unit: 'suất' },
+      ],
+      tags: ['Y tế', 'Phẫu thuật nụ cười', 'Trẻ em', 'Bệnh viện'],
       startDate: new Date('2026-08-01'),
       endDate: new Date('2026-12-25'),
       status: CAMPAIGN_STATUS.ACTIVE,
       targetAmount: 200000000,
       raisedAmount: 142000000,
+      activities: [],
     },
   ];
 
@@ -212,7 +341,17 @@ async function seed() {
       });
       console.log(`+ Tạo chiến dịch: ${c.title}`);
     } else {
-      console.log(`= Đã tồn tại chiến dịch: ${c.title}`);
+      c.category = camp.category;
+      c.bannerImage = camp.bannerImage;
+      c.shortDescription = camp.shortDescription;
+      c.organization = camp.organization;
+      c.contactInfo = camp.contactInfo;
+      c.volunteerConditions = camp.volunteerConditions;
+      c.targetItems = camp.targetItems;
+      c.tags = camp.tags;
+      c.activities = camp.activities;
+      await c.save();
+      console.log(`= Cập nhật chiến dịch: ${c.title}`);
     }
     campaigns.push(c);
   }

@@ -20,9 +20,33 @@ export type User = {
 
 export type CampaignStatus = 'draft' | 'active' | 'closed' | 'cancelled';
 
+export type CampaignActivity = {
+  _id?: string;
+  title: string;
+  date?: string;
+  content: string;
+  image?: string;
+  author?: string;
+};
+
+export type CampaignTargetItem = {
+  _id?: string;
+  name: string;
+  targetQty: number;
+  receivedQty: number;
+  unit: string;
+};
+
+export type CampaignContactInfo = {
+  representative?: string;
+  phone?: string;
+  email?: string;
+};
+
 export type Campaign = {
   _id: string;
   title: string;
+  shortDescription?: string;
   description: string;
   goal: string;
   location: string;
@@ -31,6 +55,16 @@ export type Campaign = {
   status: CampaignStatus;
   targetAmount: number;
   raisedAmount: number;
+  category?: string;
+  bannerImage?: string;
+  organization?: string;
+  contactInfo?: CampaignContactInfo;
+  volunteerConditions?: string;
+  targetItems?: CampaignTargetItem[];
+  tags?: string[];
+  activities?: CampaignActivity[];
+  donationCount?: number;
+  volunteerCount?: number;
   createdBy?: {
     _id?: string;
     fullName?: string;
@@ -47,8 +81,11 @@ export type DonationStatus = 'pending' | 'confirmed' | 'processing' | 'completed
 export type ProductDonationInfo = {
   name: string;
   quantity: number;
+  category?: string;
   description?: string;
   conditionNote?: string;
+  estimatedValue?: number;
+  images?: string[];
 };
 
 export type Donation = {
@@ -68,6 +105,7 @@ export type Donation = {
   type: DonationType;
   amount: number;
   productInfo?: ProductDonationInfo;
+  isAnonymous?: boolean;
   note?: string;
   status: DonationStatus;
   processedBy?: {
@@ -78,6 +116,30 @@ export type Donation = {
   processedAt?: string;
   createdAt: string;
   updatedAt: string;
+};
+
+export type PublicImpact = {
+  totalRaised: number;
+  totalDonations: number;
+  totalCampaigns: number;
+  activeCampaigns: number;
+  totalProducts: number;
+  totalVolunteers: number;
+  topDonors: Array<{
+    rank: number;
+    name: string;
+    totalAmount: number;
+    count: number;
+  }>;
+  recentDonations: Array<{
+    _id: string;
+    type: 'money' | 'product';
+    amount: number;
+    donorName: string;
+    campaignTitle?: string;
+    campaignId?: string;
+    createdAt: string;
+  }>;
 };
 
 export type VolunteerStatus = 'pending' | 'approved' | 'rejected' | 'cancelled';
@@ -176,6 +238,7 @@ export type Product = {
   currency: string;
   suitableForMarketplace: boolean;
   stockQuantity: number;
+  storageLocation?: string;
   listedOnMarketplace: boolean;
   listedAt?: string;
   status: ProductStatus;

@@ -19,11 +19,18 @@ const donationSchema = new mongoose.Schema(
       type: String,
       default: 'VND',
     },
+    isAnonymous: {
+      type: Boolean,
+      default: false,
+    },
     productInfo: {
       name: { type: String, default: '' },
       quantity: { type: Number, default: 1, min: 1 },
+      category: { type: String, default: '' },
       description: { type: String, default: '' },
       conditionNote: { type: String, default: '' },
+      images: [{ type: String }],
+      estimatedValue: { type: Number, default: 0 },
     },
     status: {
       type: String,

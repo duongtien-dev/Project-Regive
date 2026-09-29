@@ -13,6 +13,7 @@ router.post('/', ctrl.createValidators, validate, ctrl.create);
 router.get('/me', ctrl.myOrders);
 router.get('/', authorize(ROLES.ADMIN, ROLES.EMPLOYEE), ctrl.listAll);
 router.get('/:id', [param('id').isMongoId()], validate, ctrl.getById);
+router.patch('/:id/cancel', [param('id').isMongoId()], validate, ctrl.cancelOrder);
 router.patch(
   '/:id/status',
   authorize(ROLES.ADMIN, ROLES.EMPLOYEE),

@@ -5,6 +5,8 @@ const ctrl = require('../controllers/reportController');
 
 const router = express.Router();
 
+router.get('/public-impact', ctrl.publicImpact);
+
 router.get(
   '/overview',
   authenticate,

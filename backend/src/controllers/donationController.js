@@ -15,10 +15,14 @@ const createValidators = [
   body('type').isIn(Object.values(DONATION_TYPES)),
   body('amount').optional().isFloat({ min: 0 }),
   body('note').optional().isString(),
+  body('isAnonymous').optional().isBoolean(),
   body('productInfo.name').optional().isString(),
   body('productInfo.quantity').optional().isInt({ min: 1 }),
+  body('productInfo.category').optional().isString(),
   body('productInfo.description').optional().isString(),
   body('productInfo.conditionNote').optional().isString(),
+  body('productInfo.images').optional().isArray(),
+  body('productInfo.estimatedValue').optional().isFloat({ min: 0 }),
 ];
 
 const statusValidators = [
@@ -31,7 +35,7 @@ const create = asyncHandler(async (req, res) => {
     throw new ApiError(403, 'Only USER can create donations');
   }
 
-  const { campaignId, type, amount, note, productInfo } = req.body;
+  const { campaignId, type, amount, note, isAnonymous, productInfo } = req.body;
   const campaign = await Campaign.findById(campaignId);
   if (!campaign || campaign.status !== CAMPAIGN_STATUS.ACTIVE) {
     throw new ApiError(400, 'Campaign is not available for donation');
@@ -54,13 +58,17 @@ const create = asyncHandler(async (req, res) => {
     campaign: campaignId,
     type,
     amount: type === DONATION_TYPES.MONEY ? amount : 0,
+    isAnonymous: Boolean(isAnonymous),
     productInfo:
       type === DONATION_TYPES.PRODUCT
         ? {
             name: productInfo.name,
             quantity: productInfo.quantity || 1,
+            category: productInfo.category || '',
             description: productInfo.description || '',
             conditionNote: productInfo.conditionNote || '',
+            images: productInfo.images || [],
+            estimatedValue: productInfo.estimatedValue || 0,
           }
         : undefined,
     note: note || '',
@@ -80,7 +88,7 @@ const create = asyncHandler(async (req, res) => {
 
 const myDonations = asyncHandler(async (req, res) => {
   const donations = await Donation.find({ donor: req.user._id })
-    .populate('campaign', 'title status location')
+    .populate('campaign', 'title status location bannerImage category')
     .sort({ createdAt: -1 });
   return success(res, { donations });
 });
@@ -102,7 +110,7 @@ const listAll = asyncHandler(async (req, res) => {
 const getById = asyncHandler(async (req, res) => {
   const donation = await Donation.findById(req.params.id)
     .populate('donor', 'fullName email phone')
-    .populate('campaign', 'title status')
+    .populate('campaign', 'title status location bannerImage targetAmount raisedAmount')
     .populate('processedBy', 'fullName email');
 
   if (!donation) {

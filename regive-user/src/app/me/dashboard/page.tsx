@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Button } from 'antd';
+import { Button, Progress } from 'antd';
 import {
   Gift,
   HandHeart,
@@ -11,6 +11,10 @@ import {
   LifeBuoy,
   ArrowRight,
   TrendingUp,
+  Award,
+  Sparkles,
+  Calendar,
+  CheckCircle2,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
@@ -22,6 +26,16 @@ import { Donation, VolunteerRegistration, Order, SupportRequest } from '@/types'
 import { formatVND, formatDate } from '@/lib/format';
 import { StatusBadge } from '@/components/shared/StatusBadge';
 import { CardSkeleton } from '@/components/shared/LoadingSkeleton';
+
+function getImpactBadge(totalMoney: number, volCount: number) {
+  if (totalMoney >= 5000000 || volCount >= 5) {
+    return { title: 'Đại Sứ Thiện Nguyện', level: 'Bạch Kim', color: 'from-amber-500 to-yellow-600', icon: '🏆', nextGoal: 'Đạt danh hiệu cao nhất' };
+  }
+  if (totalMoney >= 1000000 || volCount >= 2) {
+    return { title: 'Trái Tim Vàng', level: 'Vàng', color: 'from-emerald-600 to-teal-700', icon: '💛', nextGoal: 'Ủng hộ thêm để đạt hạng Bạch Kim' };
+  }
+  return { title: 'Hạt Giống Hy Vọng', level: 'Đồng Hành', color: 'from-teal-600 to-sky-700', icon: '🌱', nextGoal: 'Tích lũy từ 1.000.000đ để đạt Trái Tim Vàng' };
+}
 
 export default function UserDashboardPage() {
   const { user } = useAuthStore();
@@ -59,10 +73,13 @@ export default function UserDashboardPage() {
     .filter((d) => d.type === 'money' && d.status === 'completed')
     .reduce((acc, d) => acc + (d.amount || 0), 0);
 
+  const productDonations = donations.filter((d) => d.type === 'product');
+  const badgeInfo = getImpactBadge(totalDonatedMoney, volunteers.length);
+
   return (
     <DashboardLayout
       title={`Xin chào, ${user?.fullName}!`}
-      subtitle="Tổng quan hoạt động và đóng góp của bạn trên ReGive"
+      subtitle="Bảng điều khiển cá nhân & tổng hợp hành trình thiện nguyện của bạn trên ReGive"
     >
       <div className="space-y-8">
         {/* Metric Cards */}
@@ -80,7 +97,7 @@ export default function UserDashboardPage() {
                   {formatVND(totalDonatedMoney)}
                 </span>
                 <span className="text-[11px] text-emerald-600 font-semibold">
-                  {donations.length} lượt quyên góp
+                  {donations.length} lượt đóng góp ({productDonations.length} hiện vật)
                 </span>
               </div>
             </div>
@@ -94,7 +111,9 @@ export default function UserDashboardPage() {
                 <span className="text-xl font-black text-gray-900 block">
                   {volunteers.length}
                 </span>
-                <span className="text-[11px] text-gray-400">Chiến dịch tham gia</span>
+                <span className="text-[11px] text-sky-600 font-semibold">
+                  Chiến dịch đã đăng ký
+                </span>
               </div>
             </div>
 
@@ -103,9 +122,9 @@ export default function UserDashboardPage() {
                 <Package className="w-6 h-6" />
               </div>
               <div>
-                <span className="text-xs text-gray-400 font-medium block">Đơn hàng mua sắm</span>
+                <span className="text-xs text-gray-400 font-medium block">Đơn hàng Marketplace</span>
                 <span className="text-xl font-black text-gray-900 block">{orders.length}</span>
-                <span className="text-[11px] text-gray-400">Vật phẩm gây quỹ</span>
+                <span className="text-[11px] text-teal-600 font-semibold">Vật phẩm trao tặng</span>
               </div>
             </div>
 
@@ -126,31 +145,67 @@ export default function UserDashboardPage() {
                   <TrendingUp className="w-6 h-6" />
                 </div>
                 <div>
-                  <span className="text-xs text-gray-400 font-medium block">Tác động xã hội</span>
-                  <span className="text-xl font-black text-gray-900 block">Tích cực</span>
-                  <span className="text-[11px] text-amber-600 font-semibold">Thành viên thân thiết</span>
+                  <span className="text-xs text-gray-400 font-medium block">Hạng thành viên</span>
+                  <span className="text-base font-black text-gray-900 block truncate">
+                    {badgeInfo.title}
+                  </span>
+                  <span className="text-[11px] text-amber-600 font-semibold">
+                    Cấp độ {badgeInfo.level}
+                  </span>
                 </div>
               </div>
             )}
           </div>
         )}
 
+        {/* Impact Passport Card */}
+        <div className={`rounded-3xl p-6 sm:p-8 text-white shadow-xl bg-gradient-to-r ${badgeInfo.color} relative overflow-hidden`}>
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div className="space-y-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-bold border border-white/20">
+                <Award className="w-3.5 h-3.5 text-amber-300" />
+                <span>Hộ Chiếu Thiện Nguyện ReGive</span>
+              </div>
+              <h3 className="text-2xl font-black">
+                {badgeInfo.icon} {badgeInfo.title} — {user?.fullName}
+              </h3>
+              <p className="text-xs sm:text-sm text-white/90 max-w-lg leading-relaxed">
+                Cảm ơn bạn đã đồng hành cùng cộng đồng ReGive. Mỗi đóng góp của bạn đã trực tiếp giúp đỡ các em nhỏ vùng cao và gia đình khó khăn.
+              </p>
+            </div>
+
+            <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 min-w-[240px] space-y-2 text-xs">
+              <div className="flex justify-between items-center text-white/90">
+                <span>Cấp độ hiện tại:</span>
+                <span className="font-bold text-amber-300">{badgeInfo.level}</span>
+              </div>
+              <div className="flex justify-between items-center text-white/90">
+                <span>Điểm hoạt động:</span>
+                <span className="font-bold text-white">{donations.length * 10 + volunteers.length * 20} điểm</span>
+              </div>
+              <p className="text-[11px] text-white/80 pt-1 border-t border-white/10">
+                Mục tiêu: {badgeInfo.nextGoal}
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Quick Action Shortcuts */}
-        <div className="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-3xl p-6 sm:p-8 text-white shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="bg-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <h3 className="text-lg font-bold">Chung tay lan tỏa yêu thương</h3>
-            <p className="text-xs text-emerald-100 max-w-md">
-              Bạn có thể tiếp tục quyên góp tiền mặt, ủng hộ hiện vật còn tốt hoặc tham gia tình nguyện tại các chiến dịch mới.
+            <p className="text-xs text-slate-300 max-w-md">
+              Bạn có thể tiếp tục ủng hộ tiền mặt, trao tặng hiện vật còn tốt hoặc tham gia các sự kiện tình nguyện mới nhất.
             </p>
           </div>
           <div className="flex flex-wrap gap-2.5">
             <Link href="/campaigns">
-              <Button className="h-10 rounded-xl bg-white text-emerald-800 font-bold border-0 hover:bg-emerald-50">
+              <Button className="h-10 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold border-0">
                 Ủng hộ chiến dịch
               </Button>
             </Link>
             <Link href="/marketplace">
-              <Button className="h-10 rounded-xl border border-white/40 text-white font-semibold hover:border-white bg-transparent">
+              <Button className="h-10 rounded-xl border border-white/30 text-white font-semibold hover:border-white bg-transparent">
                 Chợ vật phẩm
               </Button>
             </Link>
@@ -174,7 +229,7 @@ export default function UserDashboardPage() {
                 <span>Quyên góp gần đây</span>
               </h3>
               <Link href="/me/donations" className="text-xs font-semibold text-emerald-600 hover:underline">
-                Xem tất cả
+                Xem tất cả ({donations.length})
               </Link>
             </div>
 
@@ -185,15 +240,15 @@ export default function UserDashboardPage() {
                 {donations.slice(0, 4).map((d) => (
                   <div
                     key={d._id}
-                    className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between text-xs"
+                    className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between text-xs"
                   >
                     <div>
-                      <p className="font-semibold text-gray-800">
+                      <p className="font-bold text-gray-800">
                         {typeof d.campaign === 'object' && d.campaign?.title
                           ? d.campaign.title
                           : 'Chiến dịch thiện nguyện'}
                       </p>
-                      <p className="text-gray-400 mt-0.5">
+                      <p className="text-gray-500 mt-0.5">
                         {d.type === 'money' ? formatVND(d.amount) : `Hiện vật: ${d.productInfo?.name || 'Vật phẩm'}`} • {formatDate(d.createdAt)}
                       </p>
                     </div>
@@ -204,36 +259,38 @@ export default function UserDashboardPage() {
             )}
           </div>
 
-          {/* Recent Orders */}
+          {/* Recent Volunteer Registrations */}
           <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm space-y-4">
             <div className="flex items-center justify-between border-b border-gray-100 pb-3">
               <h3 className="font-bold text-gray-900 text-base flex items-center gap-2">
-                <Package className="w-4 h-4 text-teal-600" />
-                <span>Đơn hàng Marketplace</span>
+                <HandHeart className="w-4 h-4 text-sky-600" />
+                <span>Hoạt động tình nguyện</span>
               </h3>
-              <Link href="/me/orders" className="text-xs font-semibold text-teal-600 hover:underline">
-                Xem tất cả
+              <Link href="/me/volunteers" className="text-xs font-semibold text-sky-600 hover:underline">
+                Xem tất cả ({volunteers.length})
               </Link>
             </div>
 
-            {orders.length === 0 ? (
-              <p className="text-xs text-gray-400 py-6 text-center">Chưa có đơn hàng nào.</p>
+            {volunteers.length === 0 ? (
+              <p className="text-xs text-gray-400 py-6 text-center">Bạn chưa đăng ký tình nguyện viên cho chiến dịch nào.</p>
             ) : (
               <div className="space-y-3">
-                {orders.slice(0, 4).map((o) => (
+                {volunteers.slice(0, 4).map((v) => (
                   <div
-                    key={o._id}
-                    className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between text-xs"
+                    key={v._id}
+                    className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between text-xs"
                   >
                     <div>
-                      <p className="font-semibold text-gray-800 font-mono">
-                        {o.orderCode}
+                      <p className="font-bold text-gray-800">
+                        {typeof v.campaign === 'object' && v.campaign?.title
+                          ? v.campaign.title
+                          : 'Chiến dịch thiện nguyện'}
                       </p>
-                      <p className="text-gray-400 mt-0.5">
-                        {formatVND(o.totalAmount)} • {formatDate(o.createdAt)}
+                      <p className="text-gray-500 mt-0.5">
+                        Lịch: {v.schedule?.timeSlot || 'Cả ngày'} • {formatDate(v.createdAt)}
                       </p>
                     </div>
-                    <StatusBadge type="order" status={o.status} />
+                    <StatusBadge type="volunteer" status={v.status} />
                   </div>
                 ))}
               </div>

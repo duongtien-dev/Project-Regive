@@ -1,10 +1,13 @@
 const { body, param } = require('express-validator');
 const Campaign = require('../models/Campaign');
-const { CAMPAIGN_STATUS } = require('../constants/enums');
+const Donation = require('../models/Donation');
+const VolunteerRegistration = require('../models/VolunteerRegistration');
+const { CAMPAIGN_STATUS, DONATION_STATUS } = require('../constants/enums');
 const { ApiError, success, asyncHandler } = require('../utils/api');
 
 const campaignBodyValidators = [
   body('title').trim().notEmpty(),
+  body('shortDescription').optional().isString(),
   body('description').trim().notEmpty(),
   body('goal').trim().notEmpty(),
   body('location').trim().notEmpty(),
@@ -12,10 +15,18 @@ const campaignBodyValidators = [
   body('endDate').isISO8601(),
   body('status').optional().isIn(Object.values(CAMPAIGN_STATUS)),
   body('targetAmount').optional().isFloat({ min: 0 }),
+  body('category').optional().isString(),
+  body('bannerImage').optional().isString(),
+  body('organization').optional().isString(),
+  body('contactInfo').optional().isObject(),
+  body('volunteerConditions').optional().isString(),
+  body('targetItems').optional().isArray(),
+  body('tags').optional().isArray(),
 ];
 
 const campaignUpdateValidators = [
   body('title').optional().trim().notEmpty(),
+  body('shortDescription').optional().isString(),
   body('description').optional().trim().notEmpty(),
   body('goal').optional().trim().notEmpty(),
   body('location').optional().trim().notEmpty(),
@@ -23,6 +34,13 @@ const campaignUpdateValidators = [
   body('endDate').optional().isISO8601(),
   body('status').optional().isIn(Object.values(CAMPAIGN_STATUS)),
   body('targetAmount').optional().isFloat({ min: 0 }),
+  body('category').optional().isString(),
+  body('bannerImage').optional().isString(),
+  body('organization').optional().isString(),
+  body('contactInfo').optional().isObject(),
+  body('volunteerConditions').optional().isString(),
+  body('targetItems').optional().isArray(),
+  body('tags').optional().isArray(),
 ];
 
 const idParam = [param('id').isMongoId()];
@@ -32,13 +50,43 @@ const listPublic = asyncHandler(async (req, res) => {
   if (req.query.status && req.user && ['ADMIN', 'EMPLOYEE'].includes(req.user.role)) {
     filter.status = req.query.status;
   }
-  const campaigns = await Campaign.find(filter).sort({ startDate: -1 });
-  return success(res, { campaigns });
+  if (req.query.category && req.query.category !== 'all') {
+    filter.category = req.query.category;
+  }
+  const campaigns = await Campaign.find(filter)
+    .populate('createdBy', 'fullName email')
+    .sort({ startDate: -1 });
+
+  // Calculate live counts of donations and volunteers for each campaign
+  const campaignIds = campaigns.map((c) => c._id);
+  const [donationCounts, volunteerCounts] = await Promise.all([
+    Donation.aggregate([
+      { $match: { campaign: { $in: campaignIds }, status: { $in: ['completed', 'approved', 'received', 'confirmed'] } } },
+      { $group: { _id: '$campaign', count: { $sum: 1 } } },
+    ]),
+    VolunteerRegistration.aggregate([
+      { $match: { campaign: { $in: campaignIds }, status: { $in: ['approved', 'completed', 'pending'] } } },
+      { $group: { _id: '$campaign', count: { $sum: 1 } } },
+    ]),
+  ]);
+
+  const donationCountMap = Object.fromEntries(donationCounts.map((d) => [d._id.toString(), d.count]));
+  const volunteerCountMap = Object.fromEntries(volunteerCounts.map((v) => [v._id.toString(), v.count]));
+
+  const enrichedCampaigns = campaigns.map((c) => {
+    const obj = c.toObject();
+    obj.donationCount = donationCountMap[c._id.toString()] || 0;
+    obj.volunteerCount = volunteerCountMap[c._id.toString()] || 0;
+    return obj;
+  });
+
+  return success(res, { campaigns: enrichedCampaigns });
 });
 
 const listAll = asyncHandler(async (req, res) => {
   const filter = {};
   if (req.query.status) filter.status = req.query.status;
+  if (req.query.category) filter.category = req.query.category;
   const campaigns = await Campaign.find(filter)
     .populate('createdBy', 'fullName email role')
     .sort({ createdAt: -1 });
@@ -62,9 +110,107 @@ const getById = asyncHandler(async (req, res) => {
   return success(res, { campaign });
 });
 
+const listPublicDonations = asyncHandler(async (req, res) => {
+  const campaign = await Campaign.findById(req.params.id);
+  if (!campaign) {
+    throw new ApiError(404, 'Campaign not found');
+  }
+
+  const donations = await Donation.find({
+    campaign: req.params.id,
+    status: {
+      $in: [
+        DONATION_STATUS.COMPLETED,
+        DONATION_STATUS.CONFIRMED,
+        DONATION_STATUS.PROCESSING,
+      ],
+    },
+  })
+    .populate('donor', 'fullName')
+    .sort({ createdAt: -1 })
+    .limit(50);
+
+  const sanitized = donations.map((d) => {
+    const obj = d.toObject ? d.toObject() : { ...d };
+    if (obj.isAnonymous || !obj.donor) {
+      obj.donor = { fullName: 'Nhà hảo tâm ẩn danh' };
+    } else {
+      obj.donor = { fullName: obj.donor.fullName || 'Nhà hảo tâm' };
+    }
+    return {
+      _id: obj._id,
+      donor: obj.donor,
+      type: obj.type,
+      amount: obj.amount,
+      productInfo: obj.productInfo,
+      note: obj.note,
+      isAnonymous: obj.isAnonymous,
+      createdAt: obj.createdAt,
+    };
+  });
+
+  return success(res, { donations: sanitized });
+});
+
+const listVolunteers = asyncHandler(async (req, res) => {
+  const campaign = await Campaign.findById(req.params.id);
+  if (!campaign) {
+    throw new ApiError(404, 'Campaign not found');
+  }
+
+  const volunteers = await VolunteerRegistration.find({
+    campaign: req.params.id,
+    status: { $in: ['approved', 'completed', 'pending'] },
+  })
+    .populate('user', 'fullName email')
+    .sort({ createdAt: -1 })
+    .limit(50);
+
+  const sanitized = volunteers.map((v) => ({
+    _id: v._id,
+    userName: v.user?.fullName || 'Tình nguyện viên',
+    status: v.status,
+    skills: v.skills,
+    schedule: v.schedule,
+    createdAt: v.createdAt,
+  }));
+
+  return success(res, { volunteers: sanitized, total: sanitized.length });
+});
+
+const addActivity = asyncHandler(async (req, res) => {
+  const campaign = await Campaign.findById(req.params.id);
+  if (!campaign) {
+    throw new ApiError(404, 'Campaign not found');
+  }
+
+  const isOwner = campaign.createdBy.toString() === req.user._id.toString();
+  const isStaff = ['ADMIN', 'EMPLOYEE'].includes(req.user.role);
+  if (!isOwner && !isStaff) {
+    throw new ApiError(403, 'Forbidden');
+  }
+
+  const { title, content, image, author, date } = req.body;
+  if (!title || !content) {
+    throw new ApiError(400, 'Title and content are required');
+  }
+
+  campaign.activities.push({
+    title,
+    content,
+    image: image || '',
+    author: author || req.user.fullName || 'Ban điều phối ReGive',
+    date: date ? new Date(date) : new Date(),
+  });
+
+  await campaign.save();
+  return success(res, { campaign }, 'Hoạt động đã được thêm vào nhật ký thực địa', 201);
+});
+
 const create = asyncHandler(async (req, res) => {
   const {
     title,
+    shortDescription,
     description,
     goal,
     location,
@@ -72,25 +218,43 @@ const create = asyncHandler(async (req, res) => {
     endDate,
     status,
     targetAmount,
+    category,
+    bannerImage,
+    organization,
+    contactInfo,
+    volunteerConditions,
+    targetItems,
+    tags,
   } = req.body;
 
   if (new Date(endDate) < new Date(startDate)) {
     throw new ApiError(400, 'endDate must be after startDate');
   }
 
+  const isStaff = ['ADMIN', 'EMPLOYEE'].includes(req.user.role);
+  const initialStatus = isStaff ? (status || CAMPAIGN_STATUS.ACTIVE) : CAMPAIGN_STATUS.DRAFT;
+
   const campaign = await Campaign.create({
     title,
+    shortDescription: shortDescription || '',
     description,
     goal,
     location,
     startDate,
     endDate,
-    status: status || CAMPAIGN_STATUS.DRAFT,
+    status: initialStatus,
     targetAmount: targetAmount || 0,
+    category: category || 'chung',
+    bannerImage: bannerImage || '',
+    organization: organization || 'Ban Điều Hành ReGive',
+    contactInfo: contactInfo || {},
+    volunteerConditions: volunteerConditions || '',
+    targetItems: targetItems || [],
+    tags: tags || [],
     createdBy: req.user._id,
   });
 
-  return success(res, { campaign }, 'Campaign created', 201);
+  return success(res, { campaign }, 'Chiến dịch đã được tạo thành công', 201);
 });
 
 const update = asyncHandler(async (req, res) => {
@@ -99,8 +263,15 @@ const update = asyncHandler(async (req, res) => {
     throw new ApiError(404, 'Campaign not found');
   }
 
+  const isOwner = campaign.createdBy.toString() === req.user._id.toString();
+  const isStaff = ['ADMIN', 'EMPLOYEE'].includes(req.user.role);
+  if (!isOwner && !isStaff) {
+    throw new ApiError(403, 'Forbidden');
+  }
+
   const fields = [
     'title',
+    'shortDescription',
     'description',
     'goal',
     'location',
@@ -108,6 +279,13 @@ const update = asyncHandler(async (req, res) => {
     'endDate',
     'status',
     'targetAmount',
+    'category',
+    'bannerImage',
+    'organization',
+    'contactInfo',
+    'volunteerConditions',
+    'targetItems',
+    'tags',
   ];
   fields.forEach((field) => {
     if (req.body[field] !== undefined) {
@@ -120,15 +298,23 @@ const update = asyncHandler(async (req, res) => {
   }
 
   await campaign.save();
-  return success(res, { campaign }, 'Campaign updated');
+  return success(res, { campaign }, 'Chiến dịch đã được cập nhật thành công');
 });
 
 const remove = asyncHandler(async (req, res) => {
-  const campaign = await Campaign.findByIdAndDelete(req.params.id);
+  const campaign = await Campaign.findById(req.params.id);
   if (!campaign) {
     throw new ApiError(404, 'Campaign not found');
   }
-  return success(res, null, 'Campaign deleted');
+
+  const isOwner = campaign.createdBy.toString() === req.user._id.toString();
+  const isStaff = ['ADMIN'].includes(req.user.role);
+  if (!isOwner && !isStaff) {
+    throw new ApiError(403, 'Forbidden');
+  }
+
+  await Campaign.findByIdAndDelete(req.params.id);
+  return success(res, null, 'Chiến dịch đã được xóa thành công');
 });
 
 module.exports = {
@@ -138,6 +324,9 @@ module.exports = {
   listPublic,
   listAll,
   getById,
+  listPublicDonations,
+  listVolunteers,
+  addActivity,
   create,
   update,
   remove,

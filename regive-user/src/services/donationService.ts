@@ -5,6 +5,7 @@ export type CreateDonationPayload = {
   campaignId: string;
   type: DonationType;
   amount?: number;
+  isAnonymous?: boolean;
   note?: string;
   productInfo?: ProductDonationInfo;
 };
