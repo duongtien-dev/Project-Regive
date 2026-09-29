@@ -34,7 +34,7 @@ export default function LoginPage() {
         <div className="relative flex flex-col justify-between p-12">
           <div className="flex items-center gap-3">
             <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-lime text-ink">
-              <Leaf size={22} />
+              <Leaf size={22} aria-hidden="true" />
             </span>
             <div>
               <p className="font-display text-2xl text-lime">ReGive</p>
@@ -55,7 +55,7 @@ export default function LoginPage() {
       </section>
 
       <section className="flex items-center justify-center px-6 py-12">
-        <form onSubmit={onSubmit} className="w-full max-w-md space-y-6">
+        <form onSubmit={onSubmit} noValidate className="w-full max-w-md space-y-6">
           <div>
             <p className="text-xs font-semibold tracking-[0.2em] text-moss uppercase">Đăng nhập</p>
             <h1 className="font-display mt-2 text-4xl text-ink">Chào mừng trở lại</h1>
@@ -83,7 +83,7 @@ export default function LoginPage() {
             />
           </Field>
 
-          <Button type="submit" className="w-full py-3" disabled={loading}>
+          <Button type="submit" className="w-full py-3" loading={loading}>
             {loading ? 'Đang đăng nhập…' : 'Vào bảng điều khiển'}
           </Button>
 
@@ -94,7 +94,8 @@ export default function LoginPage() {
                 <button
                   key={acc.email}
                   type="button"
-                  className="rounded-full border border-forest/10 bg-white px-3 py-1.5 text-xs text-forest hover:border-moss/40"
+                  aria-label={`Dùng tài khoản demo ${LABELS.role[acc.role]}`}
+                  className="min-h-11 rounded-full border border-forest/10 bg-white px-3 py-1.5 text-xs text-forest transition hover:border-moss/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
                   onClick={() => {
                     setEmail(acc.email);
                     setPassword(acc.password);

@@ -5,13 +5,13 @@ import {
   Badge,
   Button,
   Card,
-  EmptyState,
+  DataState,
   ErrorBox,
   Field,
   Input,
   PageHeader,
   Select,
-  Spinner,
+  Skeleton,
   Textarea,
 } from '../components/ui';
 import { useToast } from '../context/ToastContext';
@@ -30,6 +30,30 @@ function suggestionToForm(suggestion = {}) {
     assessmentNote: suggestion.rationale || '',
     applyPrice: true,
   };
+}
+
+function AiReviewSkeleton() {
+  return (
+    <div role="status" className="space-y-4">
+      <Skeleton className="h-16 w-2/3 rounded-3xl" />
+      <div className="grid gap-4 lg:grid-cols-2">
+        <Skeleton className="h-96 rounded-3xl" />
+        <Skeleton className="h-96 rounded-3xl" />
+      </div>
+      <span className="sr-only">Đang tải đánh giá AI…</span>
+    </div>
+  );
+}
+
+function PendingSkeleton() {
+  return (
+    <div role="status" className="grid gap-3">
+      {[0, 1, 2].map((i) => (
+        <Skeleton key={i} className="h-20 rounded-3xl" />
+      ))}
+      <span className="sr-only">Đang tải hàng chờ AI…</span>
+    </div>
+  );
 }
 
 export default function AiReviewPage() {
@@ -119,7 +143,7 @@ export default function AiReviewPage() {
   }
 
   if (id) {
-    if (loading) return <Spinner />;
+    if (loading) return <AiReviewSkeleton />;
     if (error) return <ErrorBox error={error} />;
     if (!detail) return null;
 
@@ -130,7 +154,11 @@ export default function AiReviewPage() {
           title="So sánh gợi ý AI"
           description="Xem ảnh và gợi ý bên trái, chỉnh form bên phải, rồi Confirm. AI không tự đăng marketplace."
           actions={
-            <Link to="/ai" className="text-sm text-moss hover:underline">
+            <Link
+              to="/ai"
+              aria-label="Quay lại hàng chờ AI"
+              className="rounded text-sm text-moss hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
+            >
               ← Hàng chờ AI
             </Link>
           }
@@ -145,7 +173,7 @@ export default function AiReviewPage() {
             {product?.images?.length ? (
               <div className="mb-4 flex gap-2 overflow-x-auto">
                 {product.images.map((src) => (
-                  <img key={src} src={src} alt="" className="h-36 w-36 rounded-2xl object-cover" />
+                  <img key={src} src={src} alt={`Ảnh sản phẩm ${product?.name || ''}`} className="h-36 w-36 rounded-2xl object-cover" />
                 ))}
               </div>
             ) : (
@@ -256,10 +284,10 @@ export default function AiReviewPage() {
                   <Textarea value={form.assessmentNote} onChange={(e) => setForm({ ...form, assessmentNote: e.target.value })} />
                 </Field>
                 <div className="flex flex-wrap gap-2 pt-2">
-                  <Button type="submit" disabled={saving}>
+                  <Button type="submit" disabled={saving} loading={saving === 'confirm'}>
                     {saving === 'confirm' ? 'Đang lưu…' : changed ? 'Override & áp dụng' : 'Confirm & áp dụng'}
                   </Button>
-                  <Button variant="danger" disabled={saving} onClick={reject}>
+                  <Button variant="danger" disabled={saving} loading={saving === 'reject'} onClick={reject}>
                     Từ chối
                   </Button>
                 </div>
@@ -278,12 +306,16 @@ export default function AiReviewPage() {
         title="Hàng chờ AI"
         description="Chỉ các assessment status suggested. Confirm mới ghi vào product; publish là bước khác."
       />
-      {pending.loading ? <Spinner /> : null}
-      <ErrorBox error={pending.error} />
-      {!pending.loading && !assessments.length ? (
-        <EmptyState title="Không có gợi ý đang chờ" description="Mở sản phẩm nháp và bấm “Chạy AI đánh giá”." />
-      ) : null}
-      <div className="grid gap-3">
+      <DataState
+        loading={pending.loading}
+        error={pending.error}
+        isEmpty={!assessments.length}
+        onRetry={pending.reload}
+        skeleton={<PendingSkeleton />}
+        emptyTitle="Không có gợi ý đang chờ"
+        emptyDescription="Mở sản phẩm nháp và bấm “Chạy AI đánh giá”."
+      >
+        <div className="grid gap-3">
         {assessments.map((a) => (
           <Card key={oid(a)} className="flex flex-wrap items-center justify-between gap-4">
             <div>
@@ -293,10 +325,16 @@ export default function AiReviewPage() {
                 {formatVnd(a.suggestion?.suggestedPrice)} · {formatDate(a.createdAt)}
               </p>
             </div>
-            <Button onClick={() => navigate(`/ai/${oid(a)}`)}>Review</Button>
+            <Button
+              onClick={() => navigate(`/ai/${oid(a)}`)}
+              aria-label={`Review gợi ý AI cho ${a.product?.name || 'sản phẩm'}`}
+            >
+              Review
+            </Button>
           </Card>
         ))}
-      </div>
+        </div>
+      </DataState>
     </div>
   );
 }

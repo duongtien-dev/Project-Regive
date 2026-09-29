@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { paymentApi } from '../api/client';
-import { Badge, Card, EmptyState, ErrorBox, FilterSelect, PageHeader, Spinner, Table } from '../components/ui';
+import { Badge, Card, DataState, FilterSelect, PageHeader, Table, TableSkeleton } from '../components/ui';
 import { LABELS } from '../lib/constants';
 import { displayName, formatDate, formatVnd, oid } from '../lib/format';
 import { useAsync } from '../lib/hooks';
@@ -8,7 +8,7 @@ import { useAsync } from '../lib/hooks';
 export default function PaymentsPage() {
   const [status, setStatus] = useState('');
   const [purpose, setPurpose] = useState('');
-  const { data, loading, error } = useAsync(() => paymentApi.list({ status, purpose }), [status, purpose]);
+  const { data, loading, error, reload } = useAsync(() => paymentApi.list({ status, purpose }), [status, purpose]);
   const payments = data?.data?.payments || [];
 
   return (
@@ -20,22 +20,30 @@ export default function PaymentsPage() {
       />
       <div className="mb-4 grid max-w-xl gap-3 sm:grid-cols-2">
         <FilterSelect
+          label="Lọc theo trạng thái thanh toán"
           value={status}
           onChange={setStatus}
           options={Object.entries(LABELS.payment).map(([value, label]) => ({ value, label }))}
         />
         <FilterSelect
+          label="Lọc theo loại thanh toán"
           value={purpose}
           onChange={setPurpose}
           options={Object.entries(LABELS.purpose).map(([value, label]) => ({ value, label }))}
         />
       </div>
-      {loading ? <Spinner /> : null}
-      <ErrorBox error={error} />
-      {!loading && !payments.length ? <EmptyState title="Chưa có thanh toán" /> : null}
-      {payments.length ? (
+      <DataState
+        loading={loading}
+        error={error}
+        isEmpty={!payments.length}
+        onRetry={reload}
+        skeleton={<TableSkeleton rows={6} columns={7} />}
+        emptyTitle="Chưa có thanh toán"
+        emptyDescription="Giao dịch sẽ xuất hiện khi có đơn hàng hoặc quyên góp tiền."
+      >
         <Card>
           <Table
+            label="Danh sách thanh toán"
             rowKey={(row) => oid(row) || row.paymentCode}
             rows={payments}
             columns={[
@@ -53,7 +61,7 @@ export default function PaymentsPage() {
             ]}
           />
         </Card>
-      ) : null}
+      </DataState>
     </div>
   );
 }

@@ -5,16 +5,17 @@ import {
   Badge,
   Button,
   Card,
+  DataState,
   EmptyState,
-  ErrorBox,
   Field,
   FilterSelect,
   Input,
   PageHeader,
   Select,
-  Spinner,
+  Skeleton,
   StatCard,
   Table,
+  TableSkeleton,
 } from '../components/ui';
 import { useToast } from '../context/ToastContext';
 import { LABELS } from '../lib/constants';
@@ -76,14 +77,27 @@ export default function InventoryPage() {
         description="Nhập, xuất, điều chỉnh tồn. Publish marketplace cần sản phẩm còn hàng."
       />
 
-      {summary.loading ? <Spinner /> : null}
-      <ErrorBox error={summary.error} />
-      {stock ? (
-        <div className="mb-6 grid gap-4 sm:grid-cols-2">
-          <StatCard label="SKU còn hàng" value={stock.totalSku} />
-          <StatCard label="Tổng đơn vị" value={stock.totalUnits} />
-        </div>
-      ) : null}
+      <DataState
+        loading={summary.loading}
+        error={summary.error}
+        isEmpty={!stock}
+        onRetry={summary.reload}
+        skeleton={
+          <div role="status" className="mb-6 grid gap-4 sm:grid-cols-2">
+            <Skeleton className="h-28 rounded-3xl" />
+            <Skeleton className="h-28 rounded-3xl" />
+            <span className="sr-only">Đang tải tồn kho…</span>
+          </div>
+        }
+        emptyTitle="Chưa có dữ liệu tồn kho"
+      >
+        {stock ? (
+          <div className="mb-6 grid gap-4 sm:grid-cols-2">
+            <StatCard label="SKU còn hàng" value={stock.totalSku} />
+            <StatCard label="Tổng đơn vị" value={stock.totalUnits} />
+          </div>
+        ) : null}
+      </DataState>
 
       <div className="grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-1">
@@ -112,13 +126,13 @@ export default function InventoryPage() {
               <Input value={form.reason} onChange={(e) => setForm({ ...form, reason: e.target.value })} />
             </Field>
             <div className="flex flex-wrap gap-2">
-              <Button disabled={!form.productId || saving} onClick={() => submit('in')}>
+              <Button disabled={!form.productId || saving} loading={saving === 'in'} onClick={() => submit('in')}>
                 Nhập
               </Button>
-              <Button variant="outline" disabled={!form.productId || saving} onClick={() => submit('out')}>
+              <Button variant="outline" disabled={!form.productId || saving} loading={saving === 'out'} onClick={() => submit('out')}>
                 Xuất
               </Button>
-              <Button variant="lime" disabled={!form.productId || saving} onClick={() => submit('adjust')}>
+              <Button variant="lime" disabled={!form.productId || saving} loading={saving === 'adjust'} onClick={() => submit('adjust')}>
                 Điều chỉnh
               </Button>
             </div>
@@ -129,6 +143,7 @@ export default function InventoryPage() {
           <h2 className="font-display mb-4 text-xl">Tồn hiện tại</h2>
           {stock?.products?.length ? (
             <Table
+              label="Tồn kho hiện tại"
               rowKey={(row) => oid(row)}
               rows={stock.products}
               columns={[
@@ -136,7 +151,11 @@ export default function InventoryPage() {
                   key: 'name',
                   header: 'SP',
                   render: (row) => (
-                    <Link className="font-medium text-moss hover:underline" to={`/products/${oid(row)}`}>
+                    <Link
+                      aria-label={`Xem sản phẩm ${row.name}`}
+                      className="rounded font-medium text-moss hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
+                      to={`/products/${oid(row)}`}
+                    >
                       {row.name}
                     </Link>
                   ),
@@ -159,18 +178,26 @@ export default function InventoryPage() {
           <h2 className="font-display text-xl">Lịch sử giao dịch</h2>
           <div className="w-48">
             <FilterSelect
+              label="Lọc theo loại giao dịch kho"
               value={txType}
               onChange={setTxType}
               options={Object.entries(LABELS.inventory).map(([value, label]) => ({ value, label }))}
             />
           </div>
         </div>
-        {txs.loading ? <Spinner /> : null}
-        <ErrorBox error={txs.error} />
-        {txs.data?.data?.transactions?.length ? (
+        <DataState
+          loading={txs.loading}
+          error={txs.error}
+          isEmpty={!txs.data?.data?.transactions?.length}
+          onRetry={txs.reload}
+          skeleton={<TableSkeleton rows={4} columns={6} />}
+          emptyTitle="Chưa có giao dịch"
+          emptyDescription="Giao dịch nhập/xuất/điều chỉnh sẽ xuất hiện tại đây."
+        >
           <Table
+            label="Lịch sử giao dịch kho"
             rowKey={(row) => oid(row)}
-            rows={txs.data.data.transactions}
+            rows={txs.data?.data?.transactions || []}
             columns={[
               { key: 'product', header: 'SP', render: (row) => row.product?.name || '—' },
               { key: 'type', header: 'Loại', render: (row) => <Badge value={row.type} map={LABELS.inventory} /> },
@@ -180,9 +207,7 @@ export default function InventoryPage() {
               { key: 'at', header: 'Lúc', render: (row) => formatDate(row.createdAt) },
             ]}
           />
-        ) : (
-          !txs.loading && <p className="text-sm text-ink/50">Chưa có giao dịch.</p>
-        )}
+        </DataState>
       </Card>
     </div>
   );

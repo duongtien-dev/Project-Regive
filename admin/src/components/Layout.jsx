@@ -58,13 +58,35 @@ export default function Layout() {
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    if (!open) return undefined;
+    function onKeyDown(event) {
+      if (event.key === 'Escape') setOpen(false);
+    }
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [open]);
+
   const items = NAV.filter((item) => !item.adminOnly || isAdmin);
 
   return (
     <div className="min-h-svh bg-sand">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[90] focus:rounded-full focus:bg-lime focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-ink"
+      >
+        Bỏ qua điều hướng, tới nội dung chính
+      </a>
       <aside
+        id="sidebar-nav"
+        aria-label="Điều hướng chính"
         className={classNames(
-          'fixed inset-y-0 left-0 z-40 w-72 border-r border-white/5 bg-forest text-sand transition-transform lg:translate-x-0',
+          'fixed inset-y-0 left-0 z-40 w-72 border-r border-white/5 bg-forest text-sand transition-transform lg:translate-x-0 motion-reduce:transition-none',
           open ? 'translate-x-0' : '-translate-x-full'
         )}
       >
@@ -75,8 +97,13 @@ export default function Layout() {
               <p className="font-display text-2xl text-lime">ReGive</p>
               <p className="text-xs tracking-[0.2em] text-sand/55 uppercase">Ops console</p>
             </div>
-            <button className="rounded-full p-2 lg:hidden" onClick={() => setOpen(false)}>
-              <X size={18} />
+            <button
+              type="button"
+              className="min-h-11 min-w-11 rounded-full p-2 text-sand transition hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime lg:hidden"
+              onClick={() => setOpen(false)}
+              aria-label="Đóng menu"
+            >
+              <X size={18} aria-hidden="true" className="mx-auto" />
             </button>
           </div>
           <nav className="flex-1 space-y-1 overflow-y-auto">
@@ -88,15 +115,18 @@ export default function Layout() {
                 onClick={() => setOpen(false)}
                 className={({ isActive }) =>
                   classNames(
-                    'flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm transition',
+                    'flex min-h-11 items-center gap-3 rounded-2xl px-3 py-2.5 text-sm transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime',
                     isActive ? 'bg-lime text-ink' : 'text-sand/80 hover:bg-white/8 hover:text-white'
                   )
                 }
               >
-                <item.icon size={18} />
+                <item.icon size={18} aria-hidden="true" />
                 <span className="flex-1">{item.label}</span>
                 {item.to === '/notifications' && unread > 0 ? (
-                  <span className="rounded-full bg-clay px-2 py-0.5 text-[11px] text-white">{unread}</span>
+                  <span className="rounded-full bg-clay px-2 py-0.5 text-[11px] text-white">
+                    {unread}
+                    <span className="sr-only"> thông báo chưa đọc</span>
+                  </span>
                 ) : null}
               </NavLink>
             ))}
@@ -104,7 +134,7 @@ export default function Layout() {
           <div className="mt-4 rounded-2xl bg-white/8 p-3">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-lime/20 text-lime">
-                <UserRound size={18} />
+                <UserRound size={18} aria-hidden="true" />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium text-white">{user?.fullName}</p>
@@ -113,7 +143,8 @@ export default function Layout() {
             </div>
             <div className="mt-3 flex gap-2">
               <button
-                className="flex-1 rounded-full bg-white/10 px-3 py-2 text-xs text-sand hover:bg-white/15"
+                type="button"
+                className="min-h-11 flex-1 rounded-full bg-white/10 px-3 py-2 text-xs text-sand transition hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime"
                 onClick={() => {
                   setOpen(false);
                   navigate('/profile');
@@ -122,11 +153,12 @@ export default function Layout() {
                 Hồ sơ
               </button>
               <button
-                className="rounded-full bg-white/10 px-3 py-2 text-sand hover:bg-white/15"
+                type="button"
+                className="min-h-11 min-w-11 rounded-full bg-white/10 p-2 text-sand transition hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime"
                 onClick={logout}
-                title="Đăng xuất"
+                aria-label="Đăng xuất"
               >
-                <LogOut size={14} />
+                <LogOut size={14} aria-hidden="true" className="mx-auto" />
               </button>
             </div>
           </div>
@@ -134,22 +166,29 @@ export default function Layout() {
       </aside>
 
       {open ? (
-        <button
+        <div
           className="fixed inset-0 z-30 bg-ink/40 lg:hidden"
           onClick={() => setOpen(false)}
-          aria-label="Đóng menu"
+          aria-hidden="true"
         />
       ) : null}
 
       <div className="lg:pl-72">
         <header className="sticky top-0 z-20 flex items-center justify-between border-b border-forest/8 bg-sand/80 px-4 py-3 backdrop-blur-md lg:hidden">
-          <button className="rounded-full p-2" onClick={() => setOpen(true)}>
-            <Menu size={20} />
+          <button
+            type="button"
+            className="min-h-11 min-w-11 rounded-full p-2 transition hover:bg-white/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
+            onClick={() => setOpen(true)}
+            aria-label="Mở menu điều hướng"
+            aria-expanded={open}
+            aria-controls="sidebar-nav"
+          >
+            <Menu size={20} aria-hidden="true" className="mx-auto" />
           </button>
           <p className="font-display text-lg">ReGive</p>
-          <span className="w-9" />
+          <span className="w-11" aria-hidden="true" />
         </header>
-        <main className="px-4 py-6 sm:px-6 lg:px-8">
+        <main id="main-content" tabIndex={-1} className="px-4 py-6 outline-none sm:px-6 lg:px-8">
           <Outlet />
         </main>
       </div>

@@ -5,12 +5,11 @@ import {
   Badge,
   Button,
   Card,
-  EmptyState,
-  ErrorBox,
+  DataState,
   FilterSelect,
   PageHeader,
-  Spinner,
   Table,
+  TableSkeleton,
 } from '../components/ui';
 import { useToast } from '../context/ToastContext';
 import { LABELS, PRODUCT_STATUSES } from '../lib/constants';
@@ -47,17 +46,24 @@ export default function ProductsPage() {
       />
       <div className="mb-4 max-w-xs">
         <FilterSelect
+          label="Lọc theo trạng thái sản phẩm"
           value={status}
           onChange={setStatus}
           options={PRODUCT_STATUSES.map((s) => ({ value: s, label: LABELS.product[s] }))}
         />
       </div>
-      {loading ? <Spinner /> : null}
-      <ErrorBox error={error} />
-      {!loading && !products.length ? <EmptyState title="Chưa có sản phẩm" /> : null}
-      {products.length ? (
+      <DataState
+        loading={loading}
+        error={error}
+        isEmpty={!products.length}
+        onRetry={reload}
+        skeleton={<TableSkeleton rows={6} columns={8} />}
+        emptyTitle="Chưa có sản phẩm"
+        emptyDescription="Sản phẩm được tạo từ quyên góp đã tiếp nhận."
+      >
         <Card>
           <Table
+            label="Danh sách sản phẩm"
             rowKey={(row) => oid(row)}
             rows={products}
             columns={[
@@ -65,7 +71,11 @@ export default function ProductsPage() {
                 key: 'name',
                 header: 'Sản phẩm',
                 render: (row) => (
-                  <Link className="font-medium text-moss hover:underline" to={`/products/${oid(row)}`}>
+                  <Link
+                    aria-label={`Xem chi tiết sản phẩm ${row.name}`}
+                    className="rounded font-medium text-moss hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
+                    to={`/products/${oid(row)}`}
+                  >
                     {row.name}
                   </Link>
                 ),
@@ -102,7 +112,7 @@ export default function ProductsPage() {
             ]}
           />
         </Card>
-      ) : null}
+      </DataState>
     </div>
   );
 }

@@ -4,16 +4,15 @@ import {
   Badge,
   Button,
   Card,
-  EmptyState,
-  ErrorBox,
+  DataState,
   Field,
   FilterSelect,
   Input,
   Modal,
   PageHeader,
   Select,
-  Spinner,
   Table,
+  TableSkeleton,
 } from '../components/ui';
 import { useToast } from '../context/ToastContext';
 import { LABELS, VOLUNTEER_REVIEW } from '../lib/constants';
@@ -70,17 +69,24 @@ export default function VolunteersPage() {
       />
       <div className="mb-4 max-w-xs">
         <FilterSelect
+          label="Lọc theo trạng thái đăng ký"
           value={status}
           onChange={setStatus}
           options={Object.entries(LABELS.volunteer).map(([value, label]) => ({ value, label }))}
         />
       </div>
-      {loading ? <Spinner /> : null}
-      <ErrorBox error={error} />
-      {!loading && !rows.length ? <EmptyState title="Chưa có đăng ký tình nguyện" /> : null}
-      {rows.length ? (
+      <DataState
+        loading={loading}
+        error={error}
+        isEmpty={!rows.length}
+        onRetry={reload}
+        skeleton={<TableSkeleton rows={5} columns={6} />}
+        emptyTitle="Chưa có đăng ký tình nguyện"
+        emptyDescription="Đăng ký của tình nguyện viên sẽ xuất hiện tại đây."
+      >
         <Card>
           <Table
+            label="Danh sách đăng ký tình nguyện"
             rowKey={(row) => oid(row)}
             rows={rows}
             columns={[
@@ -121,7 +127,7 @@ export default function VolunteersPage() {
             ]}
           />
         </Card>
-      ) : null}
+      </DataState>
 
       <Modal open={Boolean(current)} title="Duyệt tình nguyện viên" onClose={() => setCurrent(null)}>
         <form className="space-y-3" onSubmit={onReview}>
@@ -147,7 +153,7 @@ export default function VolunteersPage() {
             <Button variant="ghost" onClick={() => setCurrent(null)}>
               Huỷ
             </Button>
-            <Button type="submit" disabled={saving}>
+            <Button type="submit" loading={saving}>
               {saving ? 'Đang lưu…' : 'Lưu'}
             </Button>
           </div>

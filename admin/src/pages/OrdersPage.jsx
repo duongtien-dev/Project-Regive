@@ -4,14 +4,13 @@ import {
   Badge,
   Button,
   Card,
-  EmptyState,
-  ErrorBox,
+  DataState,
   Field,
   FilterSelect,
   Modal,
   PageHeader,
-  Spinner,
   Table,
+  TableSkeleton,
   Textarea,
 } from '../components/ui';
 import { useToast } from '../context/ToastContext';
@@ -52,17 +51,24 @@ export default function OrdersPage() {
       />
       <div className="mb-4 max-w-xs">
         <FilterSelect
+          label="Lọc theo trạng thái đơn hàng"
           value={status}
           onChange={setStatus}
           options={Object.entries(LABELS.order).map(([value, label]) => ({ value, label }))}
         />
       </div>
-      {loading ? <Spinner /> : null}
-      <ErrorBox error={error} />
-      {!loading && !orders.length ? <EmptyState title="Chưa có đơn hàng" /> : null}
-      {orders.length ? (
+      <DataState
+        loading={loading}
+        error={error}
+        isEmpty={!orders.length}
+        onRetry={reload}
+        skeleton={<TableSkeleton rows={6} columns={7} />}
+        emptyTitle="Chưa có đơn hàng"
+        emptyDescription="Đơn hàng sẽ xuất hiện khi người dùng đặt mua sản phẩm."
+      >
         <Card>
           <Table
+            label="Danh sách đơn hàng"
             rowKey={(row) => oid(row)}
             rows={orders}
             columns={[
@@ -97,7 +103,7 @@ export default function OrdersPage() {
             ]}
           />
         </Card>
-      ) : null}
+      </DataState>
 
       <Modal open={Boolean(current)} title={current ? `Đơn ${current.orderCode}` : ''} onClose={() => setCurrent(null)}>
         {current ? (
@@ -117,6 +123,7 @@ export default function OrdersPage() {
                   key={next}
                   variant={next === 'cancelled' ? 'danger' : 'primary'}
                   disabled={Boolean(saving)}
+                  loading={saving === next}
                   onClick={() => changeStatus(current, next)}
                 >
                   {LABELS.order[next]}

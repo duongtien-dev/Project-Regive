@@ -4,15 +4,14 @@ import {
   Badge,
   Button,
   Card,
-  EmptyState,
-  ErrorBox,
+  DataState,
   Field,
   FilterSelect,
   Modal,
   PageHeader,
   Select,
-  Spinner,
   Table,
+  TableSkeleton,
   Textarea,
 } from '../components/ui';
 import { useToast } from '../context/ToastContext';
@@ -60,17 +59,24 @@ export default function SupportPage() {
       />
       <div className="mb-4 max-w-xs">
         <FilterSelect
+          label="Lọc theo trạng thái yêu cầu"
           value={status}
           onChange={setStatus}
           options={SUPPORT_STATUSES.map((s) => ({ value: s, label: LABELS.support[s] }))}
         />
       </div>
-      {loading ? <Spinner /> : null}
-      <ErrorBox error={error} />
-      {!loading && !rows.length ? <EmptyState title="Chưa có yêu cầu hỗ trợ" /> : null}
-      {rows.length ? (
+      <DataState
+        loading={loading}
+        error={error}
+        isEmpty={!rows.length}
+        onRetry={reload}
+        skeleton={<TableSkeleton rows={5} columns={6} />}
+        emptyTitle="Chưa có yêu cầu hỗ trợ"
+        emptyDescription="Yêu cầu từ người thụ hưởng sẽ xuất hiện tại đây."
+      >
         <Card>
           <Table
+            label="Danh sách yêu cầu hỗ trợ"
             rowKey={(row) => oid(row)}
             rows={rows}
             columns={[
@@ -118,7 +124,7 @@ export default function SupportPage() {
             ]}
           />
         </Card>
-      ) : null}
+      </DataState>
 
       <Modal open={Boolean(current)} title="Xử lý yêu cầu hỗ trợ" onClose={() => setCurrent(null)}>
         {current ? (
@@ -146,7 +152,7 @@ export default function SupportPage() {
               <Button variant="ghost" onClick={() => setCurrent(null)}>
                 Huỷ
               </Button>
-              <Button type="submit" disabled={saving}>
+              <Button type="submit" loading={saving}>
                 {saving ? 'Đang lưu…' : 'Lưu'}
               </Button>
             </div>

@@ -1,8 +1,19 @@
 import { notificationApi } from '../api/client';
-import { Badge, Button, Card, EmptyState, ErrorBox, PageHeader, Spinner } from '../components/ui';
+import { Badge, Button, Card, DataState, PageHeader, Skeleton } from '../components/ui';
 import { useToast } from '../context/ToastContext';
 import { formatDate, oid } from '../lib/format';
 import { useAsync } from '../lib/hooks';
+
+function NotificationsSkeleton() {
+  return (
+    <div role="status" className="space-y-3">
+      {[0, 1, 2].map((i) => (
+        <Skeleton key={i} className="h-24 rounded-3xl" />
+      ))}
+      <span className="sr-only">Đang tải thông báo…</span>
+    </div>
+  );
+}
 
 export default function NotificationsPage() {
   const toast = useToast();
@@ -36,10 +47,16 @@ export default function NotificationsPage() {
         description="Thông báo gắn với tài khoản đang đăng nhập (đổi trạng thái donation, volunteer, order…)."
         actions={<Button variant="ghost" onClick={markAll}>Đánh dấu tất cả đã đọc</Button>}
       />
-      {loading ? <Spinner /> : null}
-      <ErrorBox error={error} />
-      {!loading && !items.length ? <EmptyState title="Không có thông báo" /> : null}
-      <div className="space-y-3">
+      <DataState
+        loading={loading}
+        error={error}
+        isEmpty={!items.length}
+        onRetry={reload}
+        skeleton={<NotificationsSkeleton />}
+        emptyTitle="Không có thông báo"
+        emptyDescription="Thông báo mới sẽ xuất hiện tại đây."
+      >
+        <div className="space-y-3">
         {items.map((item) => (
           <Card key={oid(item)} className={item.isRead ? 'opacity-70' : ''}>
             <div className="flex flex-wrap items-start justify-between gap-3">
@@ -61,7 +78,8 @@ export default function NotificationsPage() {
             </div>
           </Card>
         ))}
-      </div>
+        </div>
+      </DataState>
     </div>
   );
 }

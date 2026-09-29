@@ -1,4 +1,5 @@
 import { X } from 'lucide-react';
+import { cloneElement, isValidElement, useEffect, useId, useRef } from 'react';
 import { BADGE_TONE } from '../lib/constants';
 import { classNames } from '../lib/format';
 
@@ -16,18 +17,28 @@ export function Button({
   variant = 'primary',
   className,
   type = 'button',
+  loading = false,
+  disabled,
   ...props
 }) {
   return (
     <button
       type={type}
+      disabled={disabled || loading}
+      aria-busy={loading || undefined}
       className={classNames(
-        'inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50',
+        'inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss motion-reduce:active:scale-100 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100',
         buttonStyles[variant],
         className
       )}
       {...props}
     >
+      {loading ? (
+        <span
+          aria-hidden="true"
+          className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"
+        />
+      ) : null}
       {children}
     </button>
   );
@@ -86,17 +97,52 @@ export function PageHeader({ eyebrow, title, description, actions }) {
   );
 }
 
-export function Field({ label, children }) {
+export function Field({ label, hint, error, required, children }) {
+  const id = useId();
+  const hintId = `${id}-hint`;
+  const errorId = `${id}-error`;
+  const describedBy =
+    [hint ? hintId : null, error ? errorId : null].filter(Boolean).join(' ') || undefined;
+
+  const control = isValidElement(children)
+    ? cloneElement(children, {
+        id: children.props.id ?? id,
+        'aria-describedby': describedBy,
+        'aria-invalid': error ? true : undefined,
+      })
+    : children;
+
   return (
-    <label className="block space-y-1.5">
-      <span className="text-xs font-medium tracking-wide text-ink/60 uppercase">{label}</span>
-      {children}
-    </label>
+    <div className="space-y-1.5">
+      <label
+        htmlFor={id}
+        className="block text-xs font-medium tracking-wide text-ink/60 uppercase"
+      >
+        {label}
+        {required ? (
+          <span className="text-rose" aria-hidden="true">
+            {' '}
+            *
+          </span>
+        ) : null}
+      </label>
+      {control}
+      {hint ? (
+        <p id={hintId} className="text-xs text-ink/50">
+          {hint}
+        </p>
+      ) : null}
+      {error ? (
+        <p id={errorId} className="text-xs text-rose">
+          {error}
+        </p>
+      ) : null}
+    </div>
   );
 }
 
 const controlClass =
-  'w-full rounded-2xl border border-forest/12 bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition placeholder:text-ink/35 focus:border-moss/40 focus:ring-4 focus:ring-lime/40';
+  'w-full rounded-2xl border border-forest/12 bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition placeholder:text-ink/35 focus:border-moss/40 focus:ring-4 focus:ring-lime/40 aria-[invalid=true]:border-rose/50 disabled:cursor-not-allowed disabled:bg-mist/60 disabled:text-ink/50';
 
 export function Input(props) {
   return <input className={controlClass} {...props} />;
@@ -114,41 +160,75 @@ export function Textarea(props) {
   return <textarea className={`${controlClass} min-h-28 resize-y`} {...props} />;
 }
 
-export function Spinner() {
+export function Spinner({ label = 'Đang tải…', className }) {
   return (
-    <div className="flex items-center justify-center py-16">
-      <div className="h-8 w-8 animate-spin rounded-full border-2 border-forest/15 border-t-moss" />
+    <div
+      role="status"
+      className={classNames('flex items-center justify-center py-16', className)}
+    >
+      <div
+        aria-hidden="true"
+        className="h-8 w-8 animate-spin rounded-full border-2 border-forest/15 border-t-moss"
+      />
+      <span className="sr-only">{label}</span>
     </div>
   );
 }
 
-export function EmptyState({ title, description }) {
+export function EmptyState({ title, description, action }) {
   return (
     <div className="rounded-3xl border border-dashed border-forest/15 bg-white/40 px-6 py-14 text-center">
       <p className="font-display text-xl text-ink">{title}</p>
       {description ? <p className="mt-2 text-sm text-ink/60">{description}</p> : null}
+      {action ? <div className="mt-5 flex justify-center">{action}</div> : null}
     </div>
   );
 }
 
-export function ErrorBox({ error }) {
+export function ErrorBox({ error, onRetry, className }) {
   if (!error) return null;
   return (
-    <div className="rounded-2xl border border-rose/20 bg-rose/8 px-4 py-3 text-sm text-rose">
-      {error.message || 'Đã xảy ra lỗi'}
+    <div
+      role="alert"
+      className={classNames(
+        'flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-rose/20 bg-rose/8 px-4 py-3 text-sm text-rose',
+        className
+      )}
+    >
+      <span>{error.message || 'Đã xảy ra lỗi'}</span>
+      {onRetry ? (
+        <button
+          type="button"
+          onClick={onRetry}
+          className="min-h-11 rounded-full border border-rose/30 px-4 text-xs font-medium text-rose transition hover:bg-rose/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose"
+        >
+          Thử lại
+        </button>
+      ) : null}
     </div>
   );
 }
 
-export function Table({ columns, rows, rowKey, compact }) {
+export function Table({ columns, rows, rowKey, compact, label }) {
   return (
     <div className="overflow-x-auto">
-      <table className={classNames('w-full text-left text-sm', compact ? '' : 'min-w-[640px]')}>
+      <table
+        aria-label={label}
+        className={classNames('w-full text-left text-sm', compact ? '' : 'min-w-[640px]')}
+      >
         <thead>
           <tr className="border-b border-forest/10 text-xs tracking-wide text-ink/50 uppercase">
             {columns.map((col) => (
-              <th key={col.key} className={classNames('px-3 py-3 font-medium', col.className)}>
-                {col.header}
+              <th
+                key={col.key}
+                scope="col"
+                className={classNames('px-3 py-3 font-medium', col.className)}
+              >
+                {col.header ? (
+                  col.header
+                ) : (
+                  <span className="sr-only">{col.ariaLabel || 'Thao tác'}</span>
+                )}
               </th>
             ))}
           </tr>
@@ -169,25 +249,80 @@ export function Table({ columns, rows, rowKey, compact }) {
   );
 }
 
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 export function Modal({ open, title, onClose, children, wide }) {
+  const panelRef = useRef(null);
+  const titleId = useId();
+  const closeRef = useRef(onClose);
+  useEffect(() => {
+    closeRef.current = onClose;
+  });
+
+  useEffect(() => {
+    if (!open) return undefined;
+    const previousActive = document.activeElement;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    panelRef.current?.focus();
+
+    function onKeyDown(event) {
+      if (event.key === 'Escape') {
+        closeRef.current();
+        return;
+      }
+      if (event.key !== 'Tab' || !panelRef.current) return;
+      const focusables = Array.from(panelRef.current.querySelectorAll(FOCUSABLE_SELECTOR));
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (
+        event.shiftKey &&
+        (document.activeElement === first || document.activeElement === panelRef.current)
+      ) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      document.body.style.overflow = previousOverflow;
+      if (previousActive instanceof HTMLElement) previousActive.focus();
+    };
+  }, [open]);
+
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-ink/40 p-3 sm:items-center">
-      <button className="absolute inset-0" aria-label="Đóng" onClick={onClose} />
+      <div className="absolute inset-0" aria-hidden="true" onClick={onClose} />
       <div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        tabIndex={-1}
         className={classNames(
-          'relative max-h-[90vh] w-full overflow-y-auto rounded-3xl bg-paper p-5 shadow-2xl',
+          'animate-modal-in relative max-h-[90vh] w-full overflow-y-auto rounded-3xl bg-paper p-5 shadow-2xl outline-none',
           wide ? 'max-w-4xl' : 'max-w-lg'
         )}
       >
         <div className="mb-4 flex items-start justify-between gap-4">
-          <h2 className="font-display text-2xl text-ink">{title}</h2>
+          <h2 id={titleId} className="font-display text-2xl text-ink">
+            {title}
+          </h2>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-full p-2 text-ink/50 hover:bg-white hover:text-ink"
+            aria-label="Đóng hộp thoại"
+            className="rounded-full p-2 text-ink/50 transition hover:bg-white hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
           >
-            <X size={18} />
+            <X size={18} aria-hidden="true" />
           </button>
         </div>
         {children}
@@ -206,9 +341,9 @@ export function StatCard({ label, value, hint }) {
   );
 }
 
-export function FilterSelect({ value, onChange, options, allLabel = 'Tất cả' }) {
+export function FilterSelect({ value, onChange, options, allLabel = 'Tất cả', label = 'Bộ lọc' }) {
   return (
-    <Select value={value} onChange={(e) => onChange(e.target.value)}>
+    <Select aria-label={label} value={value} onChange={(e) => onChange(e.target.value)}>
       <option value="">{allLabel}</option>
       {options.map((opt) => (
         <option key={opt.value} value={opt.value}>
@@ -216,5 +351,69 @@ export function FilterSelect({ value, onChange, options, allLabel = 'Tất cả'
         </option>
       ))}
     </Select>
+  );
+}
+
+export function Skeleton({ className }) {
+  return <div aria-hidden="true" className={classNames('animate-pulse rounded-2xl bg-forest/8', className)} />;
+}
+
+export function TableSkeleton({ rows = 5, columns = 5 }) {
+  return (
+    <Card>
+      <div role="status" className="space-y-4">
+        {Array.from({ length: rows }).map((_, rowIndex) => (
+          <div key={rowIndex} className="flex items-center gap-3">
+            {Array.from({ length: columns }).map((__, colIndex) => (
+              <Skeleton key={colIndex} className={colIndex === 0 ? 'h-4 flex-[2]' : 'h-4 flex-1'} />
+            ))}
+          </div>
+        ))}
+        <span className="sr-only">Đang tải dữ liệu…</span>
+      </div>
+    </Card>
+  );
+}
+
+export function DataState({
+  loading,
+  error,
+  isEmpty,
+  onRetry,
+  skeleton,
+  emptyTitle,
+  emptyDescription,
+  emptyAction,
+  children,
+}) {
+  if (loading) return skeleton || <Spinner />;
+  if (error) return <ErrorBox error={error} onRetry={onRetry} />;
+  if (isEmpty) return <EmptyState title={emptyTitle} description={emptyDescription} action={emptyAction} />;
+  return children;
+}
+
+export function ConfirmDialog({
+  open,
+  title,
+  description,
+  confirmLabel = 'Xác nhận',
+  cancelLabel = 'Huỷ',
+  tone = 'danger',
+  busy = false,
+  onConfirm,
+  onClose,
+}) {
+  return (
+    <Modal open={open} title={title} onClose={onClose}>
+      {description ? <p className="text-sm text-ink/70">{description}</p> : null}
+      <div className="mt-5 flex flex-wrap justify-end gap-2">
+        <Button variant="ghost" onClick={onClose} disabled={busy}>
+          {cancelLabel}
+        </Button>
+        <Button variant={tone} onClick={onConfirm} loading={busy}>
+          {confirmLabel}
+        </Button>
+      </div>
+    </Modal>
   );
 }

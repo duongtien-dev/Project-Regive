@@ -10,7 +10,7 @@ import {
   Input,
   PageHeader,
   Select,
-  Spinner,
+  Skeleton,
   Textarea,
 } from '../components/ui';
 import { useToast } from '../context/ToastContext';
@@ -27,6 +27,20 @@ const emptyAssess = {
   assessmentNote: '',
   description: '',
 };
+
+function ProductDetailSkeleton() {
+  return (
+    <div role="status" className="space-y-4">
+      <Skeleton className="h-16 w-2/3 rounded-3xl" />
+      <div className="grid gap-4 lg:grid-cols-3">
+        <Skeleton className="h-64 rounded-3xl lg:col-span-2" />
+        <Skeleton className="h-64 rounded-3xl" />
+      </div>
+      <Skeleton className="h-72 rounded-3xl" />
+      <span className="sr-only">Đang tải sản phẩm…</span>
+    </div>
+  );
+}
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -90,8 +104,8 @@ export default function ProductDetailPage() {
     }
   }
 
-  if (loading) return <Spinner />;
-  if (error) return <ErrorBox error={error} />;
+  if (loading) return <ProductDetailSkeleton />;
+  if (error) return <ErrorBox error={error} onRetry={load} />;
   if (!product) return null;
 
   const latestSuggested = assessments.find((a) => a.status === 'suggested');
@@ -104,15 +118,19 @@ export default function ProductDetailPage() {
         description="Đánh giá thủ công hoặc xác nhận gợi ý AI. Publish marketplace là bước riêng sau khi có tồn kho."
         actions={
           <>
-            <Link to="/products" className="text-sm text-moss hover:underline">
+            <Link
+              to="/products"
+              aria-label="Quay lại danh sách sản phẩm"
+              className="rounded text-sm text-moss hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
+            >
               ← Danh sách
             </Link>
             {product.listedOnMarketplace ? (
-              <Button variant="ghost" disabled={busy === 'pub'} onClick={() => run('pub', () => productApi.unpublish(id), 'Đã gỡ bán')}>
+              <Button variant="ghost" disabled={busy === 'pub'} loading={busy === 'pub'} onClick={() => run('pub', () => productApi.unpublish(id), 'Đã gỡ bán')}>
                 Gỡ marketplace
               </Button>
             ) : (
-              <Button disabled={busy === 'pub'} onClick={() => run('pub', () => productApi.publish(id), 'Đã đăng marketplace')}>
+              <Button disabled={busy === 'pub'} loading={busy === 'pub'} onClick={() => run('pub', () => productApi.publish(id), 'Đã đăng marketplace')}>
                 Đăng marketplace
               </Button>
             )}
@@ -131,7 +149,7 @@ export default function ProductDetailPage() {
           {product.images?.length ? (
             <div className="flex gap-2 overflow-x-auto">
               {product.images.map((src) => (
-                <img key={src} src={src} alt="" className="h-28 w-28 rounded-2xl object-cover" />
+                <img key={src} src={src} alt={`Ảnh sản phẩm ${product.name}`} className="h-28 w-28 rounded-2xl object-cover" />
               ))}
             </div>
           ) : (
@@ -169,6 +187,7 @@ export default function ProductDetailPage() {
             <Button
               variant="lime"
               disabled={busy === 'in'}
+              loading={busy === 'in'}
               onClick={() =>
                 run('in', () => inventoryApi.stockIn({ productId: id, quantity: stockQty, reason: 'Admin stock in' }), 'Đã nhập kho')
               }
@@ -178,6 +197,7 @@ export default function ProductDetailPage() {
             <Button
               variant="outline"
               disabled={busy === 'out'}
+              loading={busy === 'out'}
               onClick={() =>
                 run('out', () => inventoryApi.stockOut({ productId: id, quantity: stockQty, reason: 'Admin stock out' }), 'Đã xuất kho')
               }
@@ -222,7 +242,7 @@ export default function ProductDetailPage() {
             <Field label="Mô tả">
               <Textarea value={edit.description} onChange={(e) => setEdit({ ...edit, description: e.target.value })} />
             </Field>
-            <Button type="submit" disabled={busy === 'edit'}>
+            <Button type="submit" disabled={busy === 'edit'} loading={busy === 'edit'}>
               Lưu thông tin
             </Button>
           </form>
@@ -288,7 +308,7 @@ export default function ProductDetailPage() {
             <Field label="Ghi chú đánh giá">
               <Textarea value={form.assessmentNote} onChange={(e) => setForm({ ...form, assessmentNote: e.target.value })} />
             </Field>
-            <Button type="submit" disabled={busy === 'assess'}>
+            <Button type="submit" disabled={busy === 'assess'} loading={busy === 'assess'}>
               Xác nhận đánh giá
             </Button>
           </form>
@@ -304,6 +324,7 @@ export default function ProductDetailPage() {
           <Button
             variant="lime"
             disabled={busy === 'ai'}
+            loading={busy === 'ai'}
             onClick={() => run('ai', () => aiApi.assess({ productId: id }), 'AI đã trả gợi ý — hãy xác nhận')}
           >
             Chạy AI đánh giá
@@ -329,7 +350,11 @@ export default function ProductDetailPage() {
                   </p>
                 </div>
                 {a.status === 'suggested' ? (
-                  <Link to={`/ai/${oid(a)}`} className="text-sm font-medium text-moss hover:underline">
+                  <Link
+                    to={`/ai/${oid(a)}`}
+                    aria-label={`Review đánh giá AI tạo lúc ${formatDate(a.createdAt)}`}
+                    className="rounded text-sm font-medium text-moss hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
+                  >
                     Review
                   </Link>
                 ) : null}

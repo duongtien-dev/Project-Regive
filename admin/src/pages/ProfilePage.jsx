@@ -33,7 +33,7 @@ export default function ProfilePage() {
     <div className="max-w-xl">
       <PageHeader eyebrow="Tài khoản" title="Hồ sơ" description={`Vai trò: ${LABELS.role[user?.role] || user?.role}`} />
       <Card>
-        <form className="space-y-3" onSubmit={onSubmit}>
+        <form className="space-y-3" noValidate onSubmit={onSubmit}>
           <Field label="Email">
             <Input value={user?.email || ''} disabled />
           </Field>
@@ -46,7 +46,7 @@ export default function ProfilePage() {
           <Field label="Địa chỉ">
             <Textarea value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} />
           </Field>
-          <Button type="submit" disabled={saving}>
+          <Button type="submit" loading={saving}>
             {saving ? 'Đang lưu…' : 'Lưu hồ sơ'}
           </Button>
         </form>

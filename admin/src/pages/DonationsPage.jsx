@@ -5,13 +5,12 @@ import {
   Badge,
   Button,
   Card,
-  EmptyState,
-  ErrorBox,
+  DataState,
   FilterSelect,
   PageHeader,
   Select,
-  Spinner,
   Table,
+  TableSkeleton,
 } from '../components/ui';
 import { useToast } from '../context/ToastContext';
 import { DONATION_STATUSES, LABELS } from '../lib/constants';
@@ -65,11 +64,13 @@ export default function DonationsPage() {
       />
       <div className="mb-4 grid max-w-xl gap-3 sm:grid-cols-2">
         <FilterSelect
+          label="Lọc theo trạng thái quyên góp"
           value={status}
           onChange={setStatus}
           options={DONATION_STATUSES.map((s) => ({ value: s, label: LABELS.donation[s] }))}
         />
         <FilterSelect
+          label="Lọc theo loại quyên góp"
           value={type}
           onChange={setType}
           options={[
@@ -79,13 +80,18 @@ export default function DonationsPage() {
         />
       </div>
 
-      {loading ? <Spinner /> : null}
-      <ErrorBox error={error} />
-      {!loading && !donations.length ? <EmptyState title="Không có khoản quyên góp" /> : null}
-
-      {donations.length ? (
+      <DataState
+        loading={loading}
+        error={error}
+        isEmpty={!donations.length}
+        onRetry={reload}
+        skeleton={<TableSkeleton rows={5} columns={7} />}
+        emptyTitle="Không có khoản quyên góp"
+        emptyDescription="Quyên góp tiền và sản phẩm sẽ xuất hiện tại đây."
+      >
         <Card>
           <Table
+            label="Danh sách quyên góp"
             rowKey={(row) => oid(row)}
             rows={donations}
             columns={[
@@ -125,6 +131,7 @@ export default function DonationsPage() {
                 render: (row) => (
                   <div className="flex min-w-52 flex-col gap-2">
                     <Select
+                      aria-label={`Trạng thái quyên góp của ${displayName(row.donor)}`}
                       value={row.status}
                       disabled={busy === oid(row)}
                       onChange={(e) => changeStatus(row, e.target.value)}
@@ -146,7 +153,7 @@ export default function DonationsPage() {
             ]}
           />
         </Card>
-      ) : null}
+      </DataState>
     </div>
   );
 }

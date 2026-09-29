@@ -4,16 +4,16 @@ import {
   Badge,
   Button,
   Card,
-  EmptyState,
-  ErrorBox,
+  ConfirmDialog,
+  DataState,
   Field,
   FilterSelect,
   Input,
   Modal,
   PageHeader,
   Select,
-  Spinner,
   Table,
+  TableSkeleton,
   Textarea,
 } from '../components/ui';
 import { useAuth } from '../context/AuthContext';
@@ -43,6 +43,8 @@ export default function CampaignsPage() {
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(null);
+  const [deleteBusy, setDeleteBusy] = useState(false);
 
   function openCreate() {
     setEditing(null);
@@ -87,14 +89,18 @@ export default function CampaignsPage() {
     }
   }
 
-  async function onDelete(campaign) {
-    if (!window.confirm(`Xoá chiến dịch “${campaign.title}”?`)) return;
+  async function confirmDelete() {
+    if (!deleting) return;
+    setDeleteBusy(true);
     try {
-      await campaignApi.remove(oid(campaign));
+      await campaignApi.remove(oid(deleting));
       toast.success('Đã xoá chiến dịch');
+      setDeleting(null);
       reload();
     } catch (err) {
       toast.error(err.message);
+    } finally {
+      setDeleteBusy(false);
     }
   }
 
@@ -113,22 +119,25 @@ export default function CampaignsPage() {
 
       <div className="mb-4 max-w-xs">
         <FilterSelect
+          label="Lọc theo trạng thái chiến dịch"
           value={status}
           onChange={setStatus}
           options={CAMPAIGN_STATUSES.map((s) => ({ value: s, label: LABELS.campaign[s] }))}
         />
       </div>
 
-      {loading ? <Spinner /> : null}
-      <ErrorBox error={error} />
-
-      {!loading && !campaigns.length ? (
-        <EmptyState title="Chưa có chiến dịch" description="Tạo chiến dịch đầu tiên để bắt đầu quyên góp." />
-      ) : null}
-
-      {!loading && campaigns.length ? (
+      <DataState
+        loading={loading}
+        error={error}
+        isEmpty={!campaigns.length}
+        onRetry={reload}
+        skeleton={<TableSkeleton rows={5} columns={6} />}
+        emptyTitle="Chưa có chiến dịch"
+        emptyDescription="Tạo chiến dịch đầu tiên để bắt đầu quyên góp."
+      >
         <Card>
           <Table
+            label="Danh sách chiến dịch"
             rowKey={(row) => oid(row)}
             rows={campaigns}
             columns={[
@@ -159,7 +168,7 @@ export default function CampaignsPage() {
                       <Button variant="ghost" onClick={() => openEdit(row)}>
                         Sửa
                       </Button>
-                      <Button variant="danger" onClick={() => onDelete(row)}>
+                      <Button variant="danger" onClick={() => setDeleting(row)}>
                         Xoá
                       </Button>
                     </div>
@@ -168,7 +177,7 @@ export default function CampaignsPage() {
             ]}
           />
         </Card>
-      ) : null}
+      </DataState>
 
       <Modal open={open} title={editing ? 'Sửa chiến dịch' : 'Tạo chiến dịch'} onClose={() => setOpen(false)}>
         <form className="space-y-3" onSubmit={onSave}>
@@ -215,12 +224,22 @@ export default function CampaignsPage() {
             <Button variant="ghost" onClick={() => setOpen(false)}>
               Huỷ
             </Button>
-            <Button type="submit" disabled={saving}>
+            <Button type="submit" loading={saving}>
               {saving ? 'Đang lưu…' : 'Lưu'}
             </Button>
           </div>
         </form>
       </Modal>
+
+      <ConfirmDialog
+        open={Boolean(deleting)}
+        title="Xoá chiến dịch"
+        description={deleting ? `Xoá chiến dịch “${deleting.title}”? Hành động này không thể hoàn tác.` : ''}
+        confirmLabel="Xoá"
+        busy={deleteBusy}
+        onConfirm={confirmDelete}
+        onClose={() => setDeleting(null)}
+      />
     </div>
   );
 }

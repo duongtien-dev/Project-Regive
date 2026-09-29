@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { authApi } from '../api/client';
-import { Badge, Card, EmptyState, ErrorBox, FilterSelect, PageHeader, Spinner, Table } from '../components/ui';
+import { Badge, Card, DataState, FilterSelect, PageHeader, Table, TableSkeleton } from '../components/ui';
 import { LABELS, ROLES } from '../lib/constants';
 import { formatDate, oid } from '../lib/format';
 import { useAsync } from '../lib/hooks';
 
 export default function UsersPage() {
   const [role, setRole] = useState('');
-  const { data, loading, error } = useAsync(() => authApi.users({ role }), [role]);
+  const { data, loading, error, reload } = useAsync(() => authApi.users({ role }), [role]);
   const users = data?.data?.users || [];
 
   return (
@@ -19,17 +19,24 @@ export default function UsersPage() {
       />
       <div className="mb-4 max-w-xs">
         <FilterSelect
+          label="Lọc theo vai trò"
           value={role}
           onChange={setRole}
           options={Object.values(ROLES).map((value) => ({ value, label: LABELS.role[value] }))}
         />
       </div>
-      {loading ? <Spinner /> : null}
-      <ErrorBox error={error} />
-      {!loading && !users.length ? <EmptyState title="Không có người dùng" /> : null}
-      {users.length ? (
+      <DataState
+        loading={loading}
+        error={error}
+        isEmpty={!users.length}
+        onRetry={reload}
+        skeleton={<TableSkeleton rows={6} columns={6} />}
+        emptyTitle="Không có người dùng"
+        emptyDescription="Thử chọn vai trò khác."
+      >
         <Card>
           <Table
+            label="Danh sách người dùng"
             rowKey={(row) => oid(row)}
             rows={users}
             columns={[
@@ -60,7 +67,7 @@ export default function UsersPage() {
             ]}
           />
         </Card>
-      ) : null}
+      </DataState>
     </div>
   );
 }

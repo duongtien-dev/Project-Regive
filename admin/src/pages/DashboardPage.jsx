@@ -1,19 +1,31 @@
 import { Link } from 'react-router-dom';
 import { reportApi } from '../api/client';
-import { Badge, Card, EmptyState, ErrorBox, PageHeader, Spinner, StatCard, Table } from '../components/ui';
+import { Badge, Card, EmptyState, ErrorBox, PageHeader, Skeleton, StatCard, Table } from '../components/ui';
 import { useAsync } from '../lib/hooks';
 import { LABELS } from '../lib/constants';
 import { displayName, formatDate, formatVnd, oid } from '../lib/format';
 
+const linkClass =
+  'rounded text-sm text-moss hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss';
+
+function DashboardSkeleton() {
+  return (
+    <div role="status" className="space-y-4">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {[0, 1, 2, 3].map((i) => (
+          <Skeleton key={i} className="h-28 rounded-3xl" />
+        ))}
+      </div>
+      <Skeleton className="h-56 rounded-3xl" />
+      <Skeleton className="h-56 rounded-3xl" />
+      <span className="sr-only">Đang tải báo cáo…</span>
+    </div>
+  );
+}
+
 export default function DashboardPage() {
-  const { data, loading, error } = useAsync(() => reportApi.overview(), []);
+  const { data, loading, error, reload } = useAsync(() => reportApi.overview(), []);
   const overview = data?.data;
-
-  if (loading) return <Spinner />;
-  if (error) return <ErrorBox error={error} />;
-  if (!overview) return <EmptyState title="Chưa có dữ liệu báo cáo" />;
-
-  const { summary, recentOrders, recentPayments, recentStockMoves } = overview;
 
   return (
     <div>
@@ -23,6 +35,21 @@ export default function DashboardPage() {
         description="Doanh thu marketplace, quyên góp tiền, tồn kho thấp và hoạt động gần đây."
       />
 
+      {loading ? <DashboardSkeleton /> : null}
+      <ErrorBox error={error} onRetry={reload} />
+      {!loading && !error && !overview ? (
+        <EmptyState title="Chưa có dữ liệu báo cáo" description="Báo cáo sẽ xuất hiện khi hệ thống có hoạt động." />
+      ) : null}
+      {!loading && overview ? <DashboardContent overview={overview} /> : null}
+    </div>
+  );
+}
+
+function DashboardContent({ overview }) {
+  const { summary, recentOrders, recentPayments, recentStockMoves } = overview;
+
+  return (
+    <>
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard label="Doanh thu bán hàng" value={formatVnd(summary.orderRevenue)} hint="Thanh toán đơn thành công" />
         <StatCard label="Quyên góp tiền" value={formatVnd(summary.donationRevenue)} hint={`${summary.moneyDonationsCompleted} khoản hoàn tất`} />
@@ -34,13 +61,14 @@ export default function DashboardPage() {
         <Card>
           <div className="mb-4 flex items-center justify-between gap-3">
             <h2 className="font-display text-xl">Đơn gần đây</h2>
-            <Link className="text-sm text-moss hover:underline" to="/orders">
+            <Link aria-label="Xem tất cả đơn hàng" className={linkClass} to="/orders">
               Xem tất cả
             </Link>
           </div>
           {recentOrders?.length ? (
             <Table
               compact
+              label="Đơn hàng gần đây"
               rowKey={(row) => oid(row)}
               rows={recentOrders}
               columns={[
@@ -48,7 +76,11 @@ export default function DashboardPage() {
                   key: 'order',
                   header: 'Mã',
                   render: (row) => (
-                    <Link className="font-medium text-moss hover:underline" to="/orders">
+                    <Link
+                      aria-label={`Xem đơn hàng ${row.orderCode}`}
+                      className="rounded font-medium text-moss hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
+                      to="/orders"
+                    >
                       {row.orderCode}
                     </Link>
                   ),
@@ -83,13 +115,14 @@ export default function DashboardPage() {
         <Card>
           <div className="mb-4 flex items-center justify-between gap-3">
             <h2 className="font-display text-xl">Thanh toán</h2>
-            <Link className="text-sm text-moss hover:underline" to="/payments">
+            <Link aria-label="Xem tất cả thanh toán" className={linkClass} to="/payments">
               Xem tất cả
             </Link>
           </div>
           {recentPayments?.length ? (
             <Table
               compact
+              label="Thanh toán gần đây"
               rowKey={(row) => oid(row)}
               rows={recentPayments}
               columns={[
@@ -108,13 +141,14 @@ export default function DashboardPage() {
         <Card>
           <div className="mb-4 flex items-center justify-between gap-3">
             <h2 className="font-display text-xl">Kho gần đây</h2>
-            <Link className="text-sm text-moss hover:underline" to="/inventory">
+            <Link aria-label="Xem tất cả giao dịch kho" className={linkClass} to="/inventory">
               Xem tất cả
             </Link>
           </div>
           {recentStockMoves?.length ? (
             <Table
               compact
+              label="Giao dịch kho gần đây"
               rowKey={(row) => oid(row)}
               rows={recentStockMoves}
               columns={[
@@ -130,6 +164,6 @@ export default function DashboardPage() {
           )}
         </Card>
       </div>
-    </div>
+    </>
   );
 }
