@@ -6,6 +6,7 @@ const ctrl = require('../controllers/reportController');
 const router = express.Router();
 
 router.get('/public-impact', ctrl.publicImpact);
+router.get('/transparency-ledger', ctrl.transparencyLedger);
 
 router.get(
   '/overview',

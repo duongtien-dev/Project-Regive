@@ -2,14 +2,13 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Progress, Button, Tooltip } from 'antd';
+import { Tooltip } from 'antd';
 import {
   MapPin,
   Calendar,
   ArrowRight,
   Heart,
   Eye,
-  Building,
   Clock,
   Users,
 } from 'lucide-react';
@@ -34,134 +33,278 @@ export const CampaignCard: React.FC<CampaignCardProps> = ({
   const end = new Date(campaign.endDate).getTime();
   const diffDays = Math.ceil((end - now) / (1000 * 60 * 60 * 24));
   const daysLeftText = diffDays > 0 ? `Còn ${diffDays} ngày` : 'Đã kết thúc';
+  const isUrgent = diffDays > 0 && diffDays <= 7;
 
   return (
-    <div className="group bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden h-full">
-      {/* Visual Header / Cover Image */}
+    <div
+      className="clay-card"
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        overflow: 'hidden',
+        cursor: 'default',
+      }}
+    >
+      {/* ── Cover Image ── */}
       <div
-        className="relative h-52 w-full bg-cover bg-center flex flex-col justify-between p-4 overflow-hidden"
         style={{
+          position: 'relative',
+          height: 200,
+          width: '100%',
           backgroundImage: campaign.bannerImage
-            ? `linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.2) 60%, rgba(0,0,0,0.1) 100%), url(${campaign.bannerImage})`
-            : 'linear-gradient(to tr, #059669, #0d9488, #0284c7)',
+            ? `linear-gradient(to top, rgba(15,23,42,.80) 0%, rgba(15,23,42,.20) 55%, rgba(15,23,42,.05) 100%), url(${campaign.bannerImage})`
+            : 'linear-gradient(135deg, #22C55E 0%, #34D399 50%, #60A5FA 100%)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          overflow: 'hidden',
         }}
       >
-        <div className="flex items-center justify-between z-10">
-          <span className="bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-semibold text-white border border-white/20 flex items-center gap-1">
-            <Clock className="w-3 h-3 text-emerald-300" />
+        {/* Top badges */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 14,
+            left: 14,
+            right: 14,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            zIndex: 10,
+          }}
+        >
+          <span
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 5,
+              padding: '5px 11px',
+              borderRadius: 'var(--radius-pill)',
+              background: 'rgba(15,23,42,.55)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255,255,255,.20)',
+              color: isUrgent ? '#FCA5A5' : '#A7F3D0',
+              fontSize: 11,
+              fontWeight: 700,
+              fontFamily: 'var(--font-body)',
+            }}
+          >
+            <Clock className="w-3 h-3" />
             {daysLeftText}
           </span>
           <StatusBadge type="campaign" status={campaign.status} />
         </div>
 
-        {/* Quick View trigger on hover */}
+        {/* Quick View overlay */}
         {onQuickView && (
-          <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 z-10 pointer-events-none group-hover:pointer-events-auto">
-            <Button
-              type="primary"
-              size="small"
-              icon={<Eye className="w-3.5 h-3.5" />}
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'rgba(15,23,42,.40)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              opacity: 0,
+              transition: 'opacity 0.25s ease',
+              zIndex: 10,
+            }}
+            className="group-hover-overlay"
+            onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.opacity = '1'; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.opacity = '0'; }}
+          >
+            <button
               onClick={() => onQuickView(campaign)}
-              className="bg-white/90 text-gray-900 hover:bg-white font-bold rounded-xl h-9 px-3.5 border-0 shadow-md"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                padding: '10px 18px',
+                borderRadius: 'var(--radius-pill)',
+                background: 'rgba(255,255,255,.92)',
+                backdropFilter: 'blur(8px)',
+                border: 'none',
+                color: 'var(--clay-navy)',
+                fontSize: 13,
+                fontWeight: 700,
+                cursor: 'pointer',
+                boxShadow: 'var(--shadow-clay-md)',
+                fontFamily: 'var(--font-body)',
+              }}
             >
+              <Eye className="w-4 h-4" />
               Xem nhanh
-            </Button>
+            </button>
           </div>
         )}
 
-        <div className="relative z-10 text-white">
-          <span className="inline-block text-[11px] font-bold uppercase tracking-wider bg-white/20 backdrop-blur-md px-2 py-0.5 rounded-md text-emerald-100 mb-1">
+        {/* Bottom: org + location */}
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 14,
+            left: 14,
+            right: 14,
+            zIndex: 10,
+          }}
+        >
+          <span
+            style={{
+              display: 'inline-block',
+              padding: '3px 10px',
+              borderRadius: 8,
+              background: 'rgba(255,255,255,.18)',
+              backdropFilter: 'blur(8px)',
+              border: '1px solid rgba(255,255,255,.25)',
+              color: '#A7F3D0',
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+              marginBottom: 5,
+            }}
+          >
             {campaign.organization || 'ReGive'}
           </span>
-          <div className="flex items-center gap-2 text-[11px] text-emerald-100">
-            <span className="inline-flex items-center gap-1">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#A7F3D0', fontSize: 11 }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}>
               <MapPin className="w-3 h-3 text-emerald-300" />
-              <span className="truncate max-w-[130px]">{campaign.location}</span>
+              <span style={{ maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {campaign.location}
+              </span>
             </span>
-            <span>•</span>
-            <span className="inline-flex items-center gap-1">
+            <span style={{ opacity: .5 }}>•</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}>
               <Calendar className="w-3 h-3 text-emerald-300" />
-              <span>{formatDate(campaign.endDate)}</span>
+              {formatDate(campaign.endDate)}
             </span>
           </div>
         </div>
       </div>
 
-      {/* Content */}
-      <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
-        <div className="space-y-2">
-          <Link href={`/campaigns/${campaign._id}`}>
-            <h3 className="font-black text-gray-900 text-base leading-snug line-clamp-2 group-hover:text-emerald-600 transition-colors">
+      {/* ── Content ── */}
+      <div style={{ padding: '20px 20px 18px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 16 }}>
+        <div>
+          <Link href={`/campaigns/${campaign._id}`} style={{ textDecoration: 'none' }}>
+            <h3
+              style={{
+                fontFamily: 'var(--font-heading)',
+                fontSize: 17,
+                fontWeight: 700,
+                color: 'var(--clay-navy)',
+                lineHeight: 1.35,
+                margin: '0 0 8px',
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+                transition: 'color 0.2s',
+              }}
+              className="hover:text-green-700"
+            >
               {campaign.title}
             </h3>
           </Link>
 
-          <p className="text-gray-500 text-xs line-clamp-2 leading-relaxed">
+          <p
+            style={{
+              fontSize: 13,
+              color: 'var(--clay-navy-500)',
+              lineHeight: 1.65,
+              margin: 0,
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+            }}
+          >
             {campaign.shortDescription || campaign.goal || campaign.description}
           </p>
         </div>
 
-        {/* Progress & Target Section */}
-        <div className="pt-3 border-t border-gray-100 space-y-2">
-          <div className="flex justify-between items-baseline">
+        {/* ── Progress ── */}
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
             <div>
-              <span className="text-[11px] text-gray-400 block">Đã gây quỹ:</span>
-              <span className="text-sm font-black text-emerald-700">
+              <span style={{ display: 'block', fontSize: 11, color: 'var(--clay-navy-300)', fontWeight: 600 }}>Đã gây quỹ</span>
+              <span style={{ fontSize: 15, fontWeight: 900, color: 'var(--clay-green-deep)', fontFamily: 'var(--font-heading)' }}>
                 {formatVND(campaign.raisedAmount)}
               </span>
             </div>
-            <span className="text-xs font-bold text-gray-700 bg-gray-100 px-2 py-0.5 rounded-md">
+            <span
+              style={{
+                padding: '3px 10px',
+                borderRadius: 'var(--radius-pill)',
+                background: progress >= 100 ? 'var(--clay-green-soft)' : 'var(--clay-bg-soft)',
+                color: progress >= 100 ? 'var(--clay-green-deep)' : 'var(--clay-navy-500)',
+                fontSize: 12,
+                fontWeight: 800,
+                border: '1.5px solid var(--clay-border)',
+              }}
+            >
               {progress}%
             </span>
           </div>
 
-          <Progress
-            percent={progress}
-            showInfo={false}
-            strokeColor={{ '0%': '#10b981', '100%': '#059669' }}
-            size={['100%', 7]}
-          />
+          {/* Clay progress bar */}
+          <div className="clay-progress-track">
+            <div className="clay-progress-fill" style={{ width: `${Math.min(progress, 100)}%` }} />
+          </div>
 
-          <div className="flex justify-between items-center text-[11px] text-gray-400">
-            <span>Mục tiêu: {formatVND(campaign.targetAmount)}</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 6 }}>
+            <span style={{ fontSize: 11, color: 'var(--clay-navy-300)', fontWeight: 500 }}>
+              Mục tiêu: {formatVND(campaign.targetAmount)}
+            </span>
             {campaign.donationCount ? (
-              <span className="text-emerald-700 font-semibold">{campaign.donationCount} lượt ủng hộ</span>
+              <span
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 4,
+                  fontSize: 11,
+                  color: 'var(--clay-green-deep)',
+                  fontWeight: 700,
+                }}
+              >
+                <Users className="w-3 h-3" />
+                {campaign.donationCount} lượt
+              </span>
             ) : null}
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="pt-2 flex items-center gap-2">
+        {/* ── Action Buttons ── */}
+        <div style={{ display: 'flex', gap: 8 }}>
           {onQuickDonate ? (
-            <Button
-              type="primary"
-              size="small"
-              icon={<Heart className="w-3.5 h-3.5 fill-white" />}
+            <button
               onClick={() => onQuickDonate(campaign)}
-              className="flex-1 h-9 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs"
+              className="clay-btn-primary"
+              style={{ flex: 1, fontSize: 13, padding: '10px 16px', gap: 6 }}
             >
+              <Heart className="w-3.5 h-3.5 fill-white" />
               Ủng hộ nhanh
-            </Button>
+            </button>
           ) : (
-            <Link href={`/campaigns/${campaign._id}/donate-money`} className="flex-1">
-              <Button
-                type="primary"
-                size="small"
-                icon={<Heart className="w-3.5 h-3.5 fill-white" />}
-                className="w-full h-9 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs"
+            <Link href={`/campaigns/${campaign._id}/donate-money`} style={{ flex: 1, textDecoration: 'none' }}>
+              <button
+                className="clay-btn-primary"
+                style={{ width: '100%', fontSize: 13, padding: '10px 16px', gap: 6 }}
               >
+                <Heart className="w-3.5 h-3.5 fill-white" />
                 Ủng hộ tiền
-              </Button>
+              </button>
             </Link>
           )}
 
-          <Link href={`/campaigns/${campaign._id}`} className="shrink-0">
-            <Button
-              size="small"
-              className="h-9 px-3 rounded-xl border-gray-200 text-gray-700 hover:text-emerald-600 hover:border-emerald-600 text-xs font-semibold"
+          <Link href={`/campaigns/${campaign._id}`} style={{ textDecoration: 'none', flexShrink: 0 }}>
+            <button
+              className="clay-btn-outline"
+              style={{ padding: '10px 14px', fontSize: 13 }}
             >
               Chi tiết
-            </Button>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
           </Link>
         </div>
       </div>

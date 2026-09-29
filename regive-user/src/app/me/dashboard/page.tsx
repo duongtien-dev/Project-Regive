@@ -190,6 +190,56 @@ export default function UserDashboardPage() {
           </div>
         </div>
 
+        {/* Personal ESG & Green Footprint */}
+        <div className="bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 rounded-3xl p-6 sm:p-8 border border-emerald-200/80 shadow-sm space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-100 pb-3">
+            <div className="flex items-center gap-2">
+              <span className="text-xl">🌱</span>
+              <div>
+                <h4 className="font-extrabold text-gray-900 text-base">Dấu Chân Sinh Thái & Tác Động Xã Hội Cá Nhân</h4>
+                <p className="text-xs text-gray-500">Lượng hóa giá trị bảo vệ môi trường và đóng góp cộng đồng từ hành trình của bạn</p>
+              </div>
+            </div>
+            <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-600 text-white self-start sm:self-auto">
+              Chỉ số ESG Cá Nhân
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-1">
+            <div className="bg-white/90 p-4 rounded-2xl border border-emerald-100 shadow-xs">
+              <span className="text-xs text-gray-400 font-medium block">Vật phẩm đã tuần hoàn</span>
+              <span className="text-2xl font-black text-emerald-800 font-mono mt-1 block">
+                {productDonations.length} món
+              </span>
+              <span className="text-[10px] text-emerald-600 font-semibold block mt-1">Được cứu khỏi bãi rác</span>
+            </div>
+
+            <div className="bg-white/90 p-4 rounded-2xl border border-emerald-100 shadow-xs">
+              <span className="text-xs text-gray-400 font-medium block">Rác thải giảm thiểu</span>
+              <span className="text-2xl font-black text-teal-800 font-mono mt-1 block">
+                ~{(productDonations.length * 1.2).toFixed(1)} kg
+              </span>
+              <span className="text-[10px] text-teal-600 font-semibold block mt-1">Chuyển hướng tái sinh</span>
+            </div>
+
+            <div className="bg-white/90 p-4 rounded-2xl border border-emerald-100 shadow-xs">
+              <span className="text-xs text-gray-400 font-medium block">Giảm phát thải CO2</span>
+              <span className="text-2xl font-black text-sky-800 font-mono mt-1 block">
+                ~{(productDonations.length * 1.2 * 2.5).toFixed(1)} kg
+              </span>
+              <span className="text-[10px] text-sky-600 font-semibold block mt-1">Tiết kiệm năng lượng sản xuất</span>
+            </div>
+
+            <div className="bg-white/90 p-4 rounded-2xl border border-emerald-100 shadow-xs">
+              <span className="text-xs text-gray-400 font-medium block">Bữa ăn dinh dưỡng tạo ra</span>
+              <span className="text-2xl font-black text-amber-700 font-mono mt-1 block">
+                ~{Math.max(1, Math.floor(totalDonatedMoney / 30000))} bữa
+              </span>
+              <span className="text-[10px] text-amber-600 font-semibold block mt-1">Cho các em nhỏ vùng cao</span>
+            </div>
+          </div>
+        </div>
+
         {/* Quick Action Shortcuts */}
         <div className="bg-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">

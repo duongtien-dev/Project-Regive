@@ -154,10 +154,23 @@ async function confirmSandboxPayment({ paymentId, sandboxToken: token, rawCallba
       });
       await order.save();
 
+      // Allocate revenue to linked charity campaigns (Circular Charity)
+      for (const item of order.items) {
+        const prod = await Product.findById(item.product);
+        if (prod && prod.campaign) {
+          const itemTotal = (item.price || 0) * (item.quantity || 1);
+          if (itemTotal > 0) {
+            await Campaign.findByIdAndUpdate(prod.campaign, {
+              $inc: { raisedAmount: itemTotal },
+            });
+          }
+        }
+      }
+
       await createNotification({
         userId: order.buyer,
         title: 'Thanh toán đơn hàng thành công',
-        message: `Đơn ${order.orderCode} đã được thanh toán.`,
+        message: `Đơn ${order.orderCode} đã được thanh toán. Doanh thu đã được chuyển vào quỹ thiện nguyện liên kết!`,
         type: 'payment',
         relatedId: claimed._id.toString(),
       });

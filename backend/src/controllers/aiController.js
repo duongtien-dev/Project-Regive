@@ -245,6 +245,27 @@ const reject = asyncHandler(async (req, res) => {
   return success(res, { assessment }, 'AI assessment rejected — product unchanged');
 });
 
+const previewDonation = asyncHandler(async (req, res) => {
+  const { name, description, category, images, extraNote } = req.body;
+  const input = {
+    name: name || '',
+    description: description || '',
+    category: category || 'other',
+    images: Array.isArray(images) ? images : [],
+    extraNote: extraNote || '',
+  };
+
+  const aiResult = await assessProductInput(input);
+  return success(
+    res,
+    {
+      assessment: aiResult.suggestion,
+      impactMetrics: aiResult.suggestion.impactMetrics,
+    },
+    'AI donation preview generated successfully'
+  );
+});
+
 module.exports = {
   assessValidators,
   reviewValidators,
@@ -255,4 +276,5 @@ module.exports = {
   listPending,
   confirm,
   reject,
+  previewDonation,
 };

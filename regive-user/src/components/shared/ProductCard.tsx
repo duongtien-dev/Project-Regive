@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Package, ShoppingBag, ArrowRight } from 'lucide-react';
+import { Package, ShoppingBag, ArrowRight, Sparkles } from 'lucide-react';
 import { Product } from '@/types';
 import { formatVND } from '@/lib/format';
 import { StatusBadge } from './StatusBadge';
@@ -12,82 +12,248 @@ interface ProductCardProps {
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, onBuyNow }) => {
   const hasImage = product.images && product.images.length > 0;
+  const inStock = product.stockQuantity > 0;
 
   return (
-    <div className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden h-full">
-      {/* Product Image / Visual */}
-      <div className="relative h-48 w-full bg-slate-50 flex items-center justify-center overflow-hidden">
+    <div
+      className="clay-card"
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        overflow: 'hidden',
+      }}
+    >
+      {/* ── Product Image ── */}
+      <div
+        style={{
+          position: 'relative',
+          height: 190,
+          width: '100%',
+          background: hasImage ? 'transparent' : 'linear-gradient(135deg, var(--clay-green-soft) 0%, var(--clay-mint-soft) 100%)',
+          overflow: 'hidden',
+        }}
+      >
         {hasImage ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={product.images[0]}
             alt={product.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              transition: 'transform 0.35s var(--ease-out)',
+            }}
+            className="group-hover:scale-105"
+            loading="lazy"
           />
         ) : (
-          <div className="flex flex-col items-center justify-center text-gray-400 p-6">
-            <Package className="w-12 h-12 stroke-[1.5] mb-2 text-emerald-500" />
-            <span className="text-xs font-medium text-gray-500">Sản phẩm quyên góp</span>
+          <div
+            style={{
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 10,
+            }}
+          >
+            <Package
+              className="w-14 h-14"
+              style={{ color: 'var(--clay-green)', strokeWidth: 1.5 }}
+            />
+            <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--clay-navy-500)' }}>
+              Sản phẩm quyên góp
+            </span>
           </div>
         )}
 
         {/* Condition Badge */}
         {product.condition && (
-          <div className="absolute top-3 left-3 z-10">
+          <div style={{ position: 'absolute', top: 12, left: 12, zIndex: 10 }}>
             <StatusBadge type="product" status={product.condition} />
           </div>
         )}
 
         {/* Stock Badge */}
-        <div className="absolute top-3 right-3 z-10 bg-black/60 backdrop-blur-md text-white text-[11px] font-medium px-2 py-0.5 rounded-full">
-          Còn {product.stockQuantity}
+        <div
+          style={{
+            position: 'absolute',
+            top: 12,
+            right: 12,
+            zIndex: 10,
+            padding: '4px 10px',
+            borderRadius: 'var(--radius-pill)',
+            background: inStock ? 'rgba(15,23,42,.60)' : 'rgba(239,68,68,.80)',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            border: '1px solid rgba(255,255,255,.20)',
+            color: '#fff',
+            fontSize: 11,
+            fontWeight: 700,
+            fontFamily: 'var(--font-body)',
+          }}
+        >
+          {inStock ? `Còn ${product.stockQuantity}` : 'Hết hàng'}
         </div>
       </div>
 
-      {/* Content */}
-      <div className="p-5 flex-1 flex flex-col justify-between">
+      {/* ── Content ── */}
+      <div style={{ padding: '18px 18px 16px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 12 }}>
         <div>
-          <div className="text-xs font-semibold text-emerald-600 uppercase tracking-wider mb-1">
+          {/* Category tag */}
+          <span className="clay-badge clay-badge-green" style={{ fontSize: 11, marginBottom: 8 }}>
             {product.category || 'Vật phẩm'}
-          </div>
+          </span>
 
-          <Link href={`/marketplace/${product._id}`}>
-            <h3 className="font-bold text-gray-900 text-base line-clamp-2 group-hover:text-emerald-600 transition-colors">
+          <Link href={`/marketplace/${product._id}`} style={{ textDecoration: 'none', display: 'block', marginTop: 6 }}>
+            <h3
+              style={{
+                fontFamily: 'var(--font-heading)',
+                fontSize: 16,
+                fontWeight: 700,
+                color: 'var(--clay-navy)',
+                lineHeight: 1.35,
+                margin: '0 0 8px',
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+                transition: 'color 0.2s',
+              }}
+              className="hover:text-green-700"
+            >
               {product.name}
             </h3>
           </Link>
 
+          {/* Linked Campaign */}
+          {product.campaign && typeof product.campaign === 'object' && product.campaign.title && (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                padding: '6px 10px',
+                borderRadius: 10,
+                background: 'var(--clay-yellow-soft)',
+                border: '1.5px solid rgba(251,191,36,.30)',
+                marginBottom: 6,
+              }}
+            >
+              <span style={{ fontSize: 11, fontWeight: 800, color: '#92400E' }}>Quỹ:</span>
+              <span
+                style={{
+                  fontSize: 11,
+                  fontWeight: 600,
+                  color: '#78350F',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {product.campaign.title}
+              </span>
+            </div>
+          )}
+
+          {/* AI Verified Badge */}
+          {product.latestAiAssessment?.suggestion && (
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 5,
+                padding: '4px 10px',
+                borderRadius: 'var(--radius-pill)',
+                background: 'var(--clay-mint-soft)',
+                border: '1.5px solid rgba(52,211,153,.30)',
+                fontSize: 11,
+                fontWeight: 700,
+                color: '#065F46',
+                marginBottom: 6,
+              }}
+            >
+              <Sparkles className="w-3 h-3" />
+              AI Verified · {product.condition || 'Tốt'}
+            </div>
+          )}
+
           {product.description && (
-            <p className="text-gray-500 text-xs mt-1.5 line-clamp-2">
+            <p
+              style={{
+                fontSize: 12,
+                color: 'var(--clay-navy-500)',
+                lineHeight: 1.6,
+                margin: '4px 0 0',
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+              }}
+            >
               {product.description}
             </p>
           )}
         </div>
 
-        <div className="mt-4 pt-3 border-t border-gray-100">
-          <div className="flex items-baseline justify-between mb-3">
-            <span className="text-xs text-gray-400 font-medium">Giá gây quỹ</span>
-            <span className="text-lg font-extrabold text-emerald-700">
+        {/* ── Price + Actions ── */}
+        <div>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: 12,
+              paddingTop: 12,
+              borderTop: '1.5px dashed rgba(34,197,94,.20)',
+            }}
+          >
+            <span style={{ fontSize: 12, color: 'var(--clay-navy-300)', fontWeight: 600 }}>Giá gây quỹ</span>
+            <span
+              style={{
+                fontFamily: 'var(--font-heading)',
+                fontSize: 18,
+                fontWeight: 700,
+                color: 'var(--clay-green-deep)',
+              }}
+            >
               {formatVND(product.price)}
             </span>
           </div>
 
-          <div className="flex gap-2">
+          <div style={{ display: 'flex', gap: 8 }}>
             <Link
               href={`/marketplace/${product._id}`}
-              className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-gray-50 text-gray-700 font-medium text-xs hover:bg-gray-100 transition-colors"
+              style={{ flex: 1, textDecoration: 'none' }}
             >
-              <span>Chi tiết</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <button
+                className="clay-btn-outline"
+                style={{ width: '100%', fontSize: 13, padding: '9px 12px' }}
+              >
+                Chi tiết
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
             </Link>
 
             <button
-              onClick={() => onBuyNow ? onBuyNow(product) : window.location.href = `/marketplace/${product._id}`}
-              disabled={product.stockQuantity <= 0}
-              className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-emerald-600 text-white font-medium text-xs hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              onClick={() =>
+                onBuyNow ? onBuyNow(product) : (window.location.href = `/marketplace/${product._id}`)
+              }
+              disabled={!inStock}
+              className="clay-btn-primary"
+              style={{
+                flex: 1,
+                fontSize: 13,
+                padding: '9px 12px',
+                opacity: inStock ? 1 : 0.5,
+                cursor: inStock ? 'pointer' : 'not-allowed',
+              }}
             >
               <ShoppingBag className="w-3.5 h-3.5" />
-              <span>Mua ngay</span>
+              Mua ngay
             </button>
           </div>
         </div>

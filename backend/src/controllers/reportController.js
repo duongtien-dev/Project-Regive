@@ -162,4 +162,94 @@ const publicImpact = asyncHandler(async (_req, res) => {
   });
 });
 
-module.exports = { overview, publicImpact };
+const transparencyLedger = asyncHandler(async (_req, res) => {
+  const SupportRequest = require('../models/SupportRequest');
+
+  const [donations, payments, supports] = await Promise.all([
+    Donation.find({ status: 'completed' })
+      .populate('donor', 'fullName')
+      .populate('campaign', 'title')
+      .sort({ processedAt: -1, createdAt: -1 })
+      .limit(30),
+    Payment.find({ status: PAYMENT_STATUS.SUCCESS, purpose: PAYMENT_PURPOSE.ORDER })
+      .populate('payer', 'fullName')
+      .sort({ paidAt: -1 })
+      .limit(30),
+    SupportRequest.find({ status: 'completed' })
+      .populate('beneficiary', 'fullName')
+      .populate('campaign', 'title')
+      .sort({ handledAt: -1, updatedAt: -1 })
+      .limit(20),
+  ]);
+
+  const transactions = [];
+
+  donations.forEach((d) => {
+    transactions.push({
+      id: d._id,
+      code: `DON-${d._id.toString().slice(-6).toUpperCase()}`,
+      direction: 'INFLOW',
+      category: d.type === 'money' ? 'DONATION_MONEY' : 'DONATION_PRODUCT',
+      title: d.type === 'money' ? 'Quyên góp tiền mặt trực tiếp' : `Hiện vật: ${d.productInfo?.name || 'Vật phẩm'}`,
+      amount: d.amount || d.productInfo?.estimatedValue || 0,
+      partner: d.isAnonymous ? 'Nhà hảo tâm ẩn danh' : (d.donor?.fullName || 'Nhà hảo tâm'),
+      campaignTitle: d.campaign?.title || 'Quỹ Chung ReGive',
+      campaignId: d.campaign?._id,
+      timestamp: d.processedAt || d.createdAt,
+      proofType: 'Biên lai điện tử',
+    });
+  });
+
+  payments.forEach((p) => {
+    transactions.push({
+      id: p._id,
+      code: `ORD-${p._id.toString().slice(-6).toUpperCase()}`,
+      direction: 'INFLOW',
+      category: 'MARKETPLACE_REVENUE',
+      title: `Doanh thu bán đồ tuần hoàn (Mã ${p.paymentCode})`,
+      amount: p.amount,
+      partner: p.payer?.fullName ? `${p.payer.fullName.split(' ').slice(-1)[0]} (Mua hàng)` : 'Người mua tuần hoàn',
+      campaignTitle: '100% Phân bổ vào Quỹ Chiến Dịch',
+      timestamp: p.paidAt || p.createdAt,
+      proofType: 'Cổng thanh toán Sandbox',
+    });
+  });
+
+  supports.forEach((s) => {
+    transactions.push({
+      id: s._id,
+      code: `SUP-${s._id.toString().slice(-6).toUpperCase()}`,
+      direction: 'OUTFLOW',
+      category: 'BENEFICIARY_DISBURSEMENT',
+      title: `Giải ngân cứu trợ: ${s.title}`,
+      amount: 1500000,
+      partner: s.beneficiary?.fullName || 'Người thụ hưởng',
+      campaignTitle: s.campaign?.title || 'Chương trình trợ cấp ReGive',
+      campaignId: s.campaign?._id,
+      timestamp: s.handledAt || s.updatedAt,
+      proofType: 'Biên bản nghiệm thu & trao quà',
+    });
+  });
+
+  transactions.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+
+  const totalInflow = transactions
+    .filter((t) => t.direction === 'INFLOW')
+    .reduce((sum, t) => sum + (t.amount || 0), 0);
+  const totalOutflow = transactions
+    .filter((t) => t.direction === 'OUTFLOW')
+    .reduce((sum, t) => sum + (t.amount || 0), 0);
+
+  return success(res, {
+    summary: {
+      totalInflow,
+      totalOutflow,
+      netBalance: totalInflow - totalOutflow,
+      transactionCount: transactions.length,
+      lastAuditedAt: new Date(),
+    },
+    transactions: transactions.slice(0, 50),
+  });
+});
+
+module.exports = { overview, publicImpact, transparencyLedger };

@@ -87,6 +87,23 @@ async function runMockAssessment({ name, description, category, images, extraNot
 
   const confidence = images && images.length > 0 ? 0.78 : 0.62;
 
+  // Impact metrics
+  const mealCost = 30000;
+  const notebookCost = 15000;
+  const mealsCount = Math.max(1, Math.floor(suggestedPrice / mealCost));
+  const notebooksCount = Math.max(2, Math.floor(suggestedPrice / notebookCost));
+  const wasteMap = {
+    clothing: 0.8,
+    bags: 1.2,
+    books: 0.6,
+    electronics: 1.5,
+    toys: 0.5,
+    home: 2.0,
+    other: 1.0,
+  };
+  const wasteDivertedKg = wasteMap[detectedCategory] || 1.0;
+  const co2SavedKg = Number((wasteDivertedKg * 2.5).toFixed(1));
+
   return {
     provider: 'mock',
     suggestion: {
@@ -98,6 +115,16 @@ async function runMockAssessment({ name, description, category, images, extraNot
       confidence,
       rationale:
         'Heuristic assessment from product text/images metadata. Human review is required before applying.',
+      impactMetrics: {
+        mealsCount,
+        notebooksCount,
+        wasteDivertedKg,
+        co2SavedKg,
+        quote:
+          suggestedPrice > 0
+            ? `Món đồ này có thể tạo ra ~${mealsCount} bữa ăn dinh dưỡng hoặc ${notebooksCount} cuốn vở cho trẻ em vùng cao.`
+            : 'Món đồ mang giá trị sẻ chia và lan tỏa tình yêu thương đến cộng đồng.',
+      },
     },
     rawResponse: {
       engine: 'regive-mock-ai-v1',

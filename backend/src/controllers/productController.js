@@ -155,6 +155,8 @@ const listMarketplace = asyncHandler(async (req, res) => {
   if (req.query.condition) filter.condition = req.query.condition;
 
   const products = await Product.find(filter)
+    .populate('campaign', 'title bannerImage targetAmount raisedAmount location status')
+    .populate('latestAiAssessment', 'suggestion status')
     .select('-assessmentNote')
     .sort({ listedAt: -1 });
 
@@ -166,7 +168,11 @@ const getMarketplaceDetail = asyncHandler(async (req, res) => {
     _id: req.params.id,
     listedOnMarketplace: true,
     status: PRODUCT_STATUS.LISTED,
-  }).select('-assessmentNote');
+  })
+    .populate('campaign', 'title bannerImage targetAmount raisedAmount location status description')
+    .populate('donation', 'donor anonymous productInfo')
+    .populate('latestAiAssessment', 'suggestion status')
+    .select('-assessmentNote');
 
   if (!product) throw new ApiError(404, 'Marketplace product not found');
   return success(res, { product });

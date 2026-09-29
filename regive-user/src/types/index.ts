@@ -230,7 +230,22 @@ export type Product = {
     _id?: string;
     title?: string;
     status?: string;
+    bannerImage?: string;
+    targetAmount?: number;
+    raisedAmount?: number;
+    location?: string;
+    description?: string;
   } | string | null;
+  latestAiAssessment?: {
+    suggestion?: {
+      category?: string;
+      condition?: ProductCondition;
+      quality?: ProductQuality;
+      suggestedPrice?: number;
+      confidence?: number;
+    };
+    status?: string;
+  } | null;
   condition?: ProductCondition;
   quality?: ProductQuality;
   suggestedPrice?: number;
@@ -244,6 +259,32 @@ export type Product = {
   status: ProductStatus;
   createdAt: string;
   updatedAt: string;
+};
+
+export type AiDonationPreview = {
+  assessment: {
+    category: string;
+    condition: ProductCondition;
+    quality: ProductQuality;
+    suggestedPrice: number;
+    suitableForMarketplace: boolean;
+    confidence: number;
+    rationale: string;
+    impactMetrics?: {
+      mealsCount: number;
+      notebooksCount: number;
+      wasteDivertedKg: number;
+      co2SavedKg: number;
+      quote: string;
+    };
+  };
+  impactMetrics: {
+    mealsCount: number;
+    notebooksCount: number;
+    wasteDivertedKg: number;
+    co2SavedKg: number;
+    quote: string;
+  };
 };
 
 export type OrderStatus = 'pending' | 'paid' | 'processing' | 'shipped' | 'completed' | 'cancelled';
@@ -353,3 +394,29 @@ export type ApiResponse<T> = {
   data: T;
   errors?: any;
 };
+
+export type TransparencyTransaction = {
+  id: string;
+  code: string;
+  direction: 'INFLOW' | 'OUTFLOW';
+  category: 'DONATION_MONEY' | 'DONATION_PRODUCT' | 'MARKETPLACE_REVENUE' | 'BENEFICIARY_DISBURSEMENT';
+  title: string;
+  amount: number;
+  partner: string;
+  campaignTitle: string;
+  campaignId?: string;
+  timestamp: string;
+  proofType: string;
+};
+
+export type TransparencyLedgerData = {
+  summary: {
+    totalInflow: number;
+    totalOutflow: number;
+    netBalance: number;
+    transactionCount: number;
+    lastAuditedAt: string;
+  };
+  transactions: TransparencyTransaction[];
+};
+

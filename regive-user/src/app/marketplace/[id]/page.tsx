@@ -235,6 +235,59 @@ export default function ProductDetailPage() {
                   </span>
                 </div>
               </div>
+
+              {/* Linked Target Campaign */}
+              {product.campaign && typeof product.campaign === 'object' && product.campaign.title && (
+                <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/80 flex items-center justify-between gap-4">
+                  <div className="space-y-1 min-w-0">
+                    <div className="flex items-center gap-1.5 text-xs font-bold text-amber-800 uppercase tracking-wide">
+                      <HeartHandshake className="w-4 h-4 text-amber-600 shrink-0" />
+                      <span>Chiến dịch thụ hưởng doanh thu</span>
+                    </div>
+                    <h4 className="font-extrabold text-gray-900 text-sm truncate">
+                      {product.campaign.title}
+                    </h4>
+                    <p className="text-xs text-amber-900/80">
+                      100% số tiền {formatVND(product.price)} sẽ được nạp trực tiếp vào quỹ hỗ trợ của chiến dịch này.
+                    </p>
+                  </div>
+                  <Link
+                    href={`/campaigns/${product.campaign._id}`}
+                    className="shrink-0 px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-colors shadow-sm"
+                  >
+                    Xem quỹ
+                  </Link>
+                </div>
+              )}
+
+              {/* AI Verification & Quality Card */}
+              {product.latestAiAssessment && (
+                <div className="p-4 rounded-2xl bg-teal-50/70 border border-teal-200/80 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5 text-xs font-bold text-teal-900">
+                      <Sparkles className="w-4 h-4 text-teal-600" />
+                      <span>Kiểm định chất lượng bằng AI (AI Assessment)</span>
+                    </div>
+                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-teal-600 text-white">
+                      Độ tin cậy {Math.round((product.latestAiAssessment.suggestion?.confidence || 0.8) * 100)}%
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-xs pt-1">
+                    <div className="bg-white/80 p-2.5 rounded-xl border border-teal-100">
+                      <span className="text-gray-400 block text-[10px]">Tình trạng ghi nhận:</span>
+                      <span className="font-bold text-teal-900 uppercase">
+                        {product.latestAiAssessment.suggestion?.condition || product.condition}
+                      </span>
+                    </div>
+                    <div className="bg-white/80 p-2.5 rounded-xl border border-teal-100">
+                      <span className="text-gray-400 block text-[10px]">Phẩm chất:</span>
+                      <span className="font-bold text-teal-900 uppercase">
+                        {product.latestAiAssessment.suggestion?.quality || product.quality || 'Tốt'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="text-sm text-gray-600 space-y-4 pt-2 border-t border-gray-100">

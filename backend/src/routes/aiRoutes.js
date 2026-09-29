@@ -7,6 +7,9 @@ const ctrl = require('../controllers/aiController');
 
 const router = express.Router();
 
+// Public / User AI donation preview endpoint
+router.post('/preview-donation', ctrl.previewDonation);
+
 router.use(authenticate, authorize(ROLES.ADMIN, ROLES.EMPLOYEE));
 
 router.post('/assess-product', ctrl.assessValidators, validate, ctrl.assessProduct);
