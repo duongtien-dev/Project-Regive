@@ -243,7 +243,7 @@ export default function DonateProductPage() {
                     <div className="mt-3 p-4 bg-white/90 rounded-xl border border-teal-200 space-y-3 text-xs">
                       <div className="flex items-center justify-between border-b border-gray-100 pb-2">
                         <span className="font-bold text-teal-900 text-sm flex items-center gap-1.5">
-                          <span>✨ Kết quả thẩm định AI</span>
+                          <span>Kết quả thẩm định AI</span>
                           <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-teal-100 text-teal-800">
                             Độ tin cậy {(aiResult.assessment.confidence * 100).toFixed(0)}%
                           </span>
@@ -279,7 +279,7 @@ export default function DonateProductPage() {
                       {aiResult.impactMetrics && (
                         <div className="p-3 rounded-lg bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/70 text-amber-900 space-y-1">
                           <p className="font-bold text-xs flex items-center gap-1">
-                            🌱 Tác động xã hội & môi trường ước tính:
+                            Tác động xã hội & môi trường ước tính:
                           </p>
                           <p className="text-[11px] leading-relaxed">
                             {aiResult.impactMetrics.quote}

@@ -29,12 +29,12 @@ import { CardSkeleton } from '@/components/shared/LoadingSkeleton';
 
 function getImpactBadge(totalMoney: number, volCount: number) {
   if (totalMoney >= 5000000 || volCount >= 5) {
-    return { title: 'Đại Sứ Thiện Nguyện', level: 'Bạch Kim', color: 'from-amber-500 to-yellow-600', icon: '🏆', nextGoal: 'Đạt danh hiệu cao nhất' };
+    return { title: 'Đại Sứ Thiện Nguyện', level: 'Bạch Kim', color: 'from-amber-500 to-yellow-600', icon: '', nextGoal: 'Đạt danh hiệu cao nhất' };
   }
   if (totalMoney >= 1000000 || volCount >= 2) {
-    return { title: 'Trái Tim Vàng', level: 'Vàng', color: 'from-emerald-600 to-teal-700', icon: '💛', nextGoal: 'Ủng hộ thêm để đạt hạng Bạch Kim' };
+    return { title: 'Trái Tim Vàng', level: 'Vàng', color: 'from-emerald-600 to-teal-700', icon: '', nextGoal: 'Ủng hộ thêm để đạt hạng Bạch Kim' };
   }
-  return { title: 'Hạt Giống Hy Vọng', level: 'Đồng Hành', color: 'from-teal-600 to-sky-700', icon: '🌱', nextGoal: 'Tích lũy từ 1.000.000đ để đạt Trái Tim Vàng' };
+  return { title: 'Hạt Giống Hy Vọng', level: 'Đồng Hành', color: 'from-teal-600 to-sky-700', icon: '', nextGoal: 'Tích lũy từ 1.000.000đ để đạt Trái Tim Vàng' };
 }
 
 export default function UserDashboardPage() {
@@ -194,7 +194,7 @@ export default function UserDashboardPage() {
         <div className="bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 rounded-3xl p-6 sm:p-8 border border-emerald-200/80 shadow-sm space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-100 pb-3">
             <div className="flex items-center gap-2">
-              <span className="text-xl">🌱</span>
+              <span className="text-xl"></span>
               <div>
                 <h4 className="font-extrabold text-gray-900 text-base">Dấu Chân Sinh Thái & Tác Động Xã Hội Cá Nhân</h4>
                 <p className="text-xs text-gray-500">Lượng hóa giá trị bảo vệ môi trường và đóng góp cộng đồng từ hành trình của bạn</p>

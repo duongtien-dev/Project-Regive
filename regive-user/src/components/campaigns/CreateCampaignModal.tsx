@@ -26,13 +26,13 @@ interface CreateCampaignModalProps {
 }
 
 const CATEGORY_OPTIONS = [
-  { value: 'children', label: '👶 Trẻ em & Áo ấm vùng cao' },
-  { value: 'disaster_relief', label: '🌧️ Cứu trợ bão lũ & Thiên tai' },
-  { value: 'poverty_alleviation', label: '🍱 Bữa cơm yêu thương & Người nghèo' },
-  { value: 'education', label: '📚 Tủ sách tri thức & Giáo dục' },
-  { value: 'environment', label: '💧 Nước sạch & Môi trường sống' },
-  { value: 'healthcare', label: '🏥 Y tế cộng đồng & Nụ cười trẻ thơ' },
-  { value: 'other', label: '🌟 Khác' },
+  { value: 'children', label: 'Trẻ em & Áo ấm vùng cao' },
+  { value: 'disaster_relief', label: 'Cứu trợ bão lũ & Thiên tai' },
+  { value: 'poverty_alleviation', label: 'Bữa cơm yêu thương & Người nghèo' },
+  { value: 'education', label: 'Tủ sách tri thức & Giáo dục' },
+  { value: 'environment', label: 'Nước sạch & Môi trường sống' },
+  { value: 'healthcare', label: 'Y tế cộng đồng & Nụ cười trẻ thơ' },
+  { value: 'other', label: 'Khác' },
 ];
 
 export const CreateCampaignModal: React.FC<CreateCampaignModalProps> = ({

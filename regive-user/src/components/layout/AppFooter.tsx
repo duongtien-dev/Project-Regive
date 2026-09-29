@@ -147,11 +147,11 @@ export const AppFooter: React.FC = () => {
             </h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
               {[
-                { href: '/campaigns', label: '🌱 Chiến dịch gây quỹ' },
-                { href: '/marketplace', label: '🛍️ Cửa hàng trao tặng' },
-                { href: '/transparency', label: '📊 Sổ cái minh bạch', highlight: true },
-                { href: '/campaigns', label: '🤝 Đăng ký tình nguyện' },
-                { href: '/support/new', label: '🆘 Yêu cầu hỗ trợ' },
+                { href: '/campaigns', label: 'Chiến dịch gây quỹ' },
+                { href: '/marketplace', label: 'Cửa hàng trao tặng' },
+                { href: '/transparency', label: 'Sổ cái minh bạch', highlight: true },
+                { href: '/campaigns', label: 'Đăng ký tình nguyện' },
+                { href: '/support/new', label: 'Yêu cầu hỗ trợ' },
               ].map((item) => (
                 <li key={item.href + item.label}>
                   <Link
@@ -189,9 +189,9 @@ export const AppFooter: React.FC = () => {
             </h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
               {[
-                { href: '/about', label: '💚 Giới thiệu sứ mệnh' },
-                { href: '/faq', label: '❓ Câu hỏi thường gặp' },
-                { href: '/policy', label: '📋 Chính sách & Điều khoản' },
+                { href: '/about', label: 'Giới thiệu sứ mệnh' },
+                { href: '/faq', label: 'Câu hỏi thường gặp' },
+                { href: '/policy', label: 'Chính sách & Điều khoản' },
               ].map((item) => (
                 <li key={item.href}>
                   <Link
@@ -282,7 +282,7 @@ export const AppFooter: React.FC = () => {
         >
           <p style={{ fontSize: 13, color: '#475569', margin: 0 }}>
             © {new Date().getFullYear()} <span style={{ color: 'var(--clay-mint)', fontWeight: 700 }}>ReGive</span> Platform —
-            Đồng lòng sẻ chia yêu thương 💚
+            Đồng lòng sẻ chia yêu thương
           </p>
           <p style={{ fontSize: 12, color: '#334155', margin: 0 }}>
             Đồ án Capstone 2 · ReGive Community Platform

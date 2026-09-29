@@ -28,13 +28,13 @@ import { formatVND } from '@/lib/format';
 import { useAuthStore } from '@/store/useAuthStore';
 
 const CAUSE_CATEGORIES = [
-  { id: 'all', label: 'Tất cả chiến dịch', icon: '🌟' },
-  { id: 'children', label: 'Trẻ em & Áo ấm', icon: '👶' },
-  { id: 'disaster_relief', label: 'Cứu trợ bão lũ', icon: '🌧️' },
-  { id: 'poverty_alleviation', label: 'Bữa cơm yêu thương', icon: '🍱' },
-  { id: 'education', label: 'Tủ sách & Tri thức', icon: '📚' },
-  { id: 'environment', label: 'Nước sạch nông thôn', icon: '💧' },
-  { id: 'healthcare', label: 'Y tế & Nụ cười', icon: '🏥' },
+  { id: 'all', label: 'Tất cả chiến dịch' },
+  { id: 'children', label: 'Trẻ em & Áo ấm' },
+  { id: 'disaster_relief', label: 'Cứu trợ bão lũ' },
+  { id: 'poverty_alleviation', label: 'Bữa cơm yêu thương' },
+  { id: 'education', label: 'Tủ sách & Tri thức' },
+  { id: 'environment', label: 'Nước sạch nông thôn' },
+  { id: 'healthcare', label: 'Y tế & Nụ cười' },
 ];
 
 export default function CampaignsPage() {
@@ -188,7 +188,6 @@ export default function CampaignsPage() {
                 : 'bg-white border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50'
             }`}
           >
-            <span>{cat.icon}</span>
             <span>{cat.label}</span>
           </button>
         ))}

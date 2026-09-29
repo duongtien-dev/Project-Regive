@@ -37,7 +37,6 @@ const IMPACT_TIERS = [
     label: '50.000 đ',
     title: '2 Bữa cơm ấm',
     desc: 'Cung cấp 2 phần cơm nóng hổi đầy đủ dinh dưỡng cho người vô gia cư tại TP.HCM.',
-    emoji: '🍲',
     color: 'var(--clay-coral)',
     bg: 'var(--clay-coral-soft)',
   },
@@ -46,7 +45,6 @@ const IMPACT_TIERS = [
     label: '150.000 đ',
     title: 'Bộ dụng cụ học tập',
     desc: 'Trang bị trọn bộ tập vở, bút màu, thước kẻ cho 1 em nhỏ vùng biên giới.',
-    emoji: '✏️',
     color: 'var(--clay-sky)',
     bg: 'var(--clay-sky-soft)',
   },
@@ -55,7 +53,6 @@ const IMPACT_TIERS = [
     label: '350.000 đ',
     title: 'Áo ấm & Ủng đi mưa',
     desc: 'Bảo vệ các em học sinh tiểu học Hà Giang vượt qua mùa đông buốt giá dưới 5°C.',
-    emoji: '🧥',
     color: 'var(--clay-lavender)',
     bg: '#F5F3FF',
   },
@@ -64,26 +61,24 @@ const IMPACT_TIERS = [
     label: '1.000.000 đ',
     title: 'Học bổng vượt khó 1 tháng',
     desc: 'Hỗ trợ sinh hoạt phí và sách vở cho trẻ em mồ côi hoặc gia đình bị sạt lở bão lũ.',
-    emoji: '🎓',
     color: 'var(--clay-yellow)',
     bg: 'var(--clay-yellow-soft)',
   },
 ];
 
 const CAUSE_CATEGORIES = [
-  { id: 'all', label: 'Tất cả', emoji: '🌟' },
-  { id: 'children', label: 'Trẻ em', emoji: '👶' },
-  { id: 'disaster_relief', label: 'Cứu trợ', emoji: '🌧️' },
-  { id: 'poverty_alleviation', label: 'Bữa cơm', emoji: '🍱' },
-  { id: 'education', label: 'Tri thức', emoji: '📚' },
-  { id: 'environment', label: 'Nước sạch', emoji: '💧' },
-  { id: 'healthcare', label: 'Y tế', emoji: '🏥' },
+  { id: 'all', label: 'Tất cả' },
+  { id: 'children', label: 'Trẻ em' },
+  { id: 'disaster_relief', label: 'Cứu trợ' },
+  { id: 'poverty_alleviation', label: 'Bữa cơm' },
+  { id: 'education', label: 'Tri thức' },
+  { id: 'environment', label: 'Nước sạch' },
+  { id: 'healthcare', label: 'Y tế' },
 ];
 
 const FLOW_STEPS = [
   {
     num: '01',
-    emoji: '🎁',
     title: 'Quyên Góp Tiền & Vật Phẩm',
     desc: 'Bạn có thể ủng hộ trực tiếp bằng tiền mặt hoặc trao tặng những đồ dùng còn tốt như sách vở, quần áo ấm, thiết bị điện tử.',
     color: 'var(--clay-green)',
@@ -91,7 +86,6 @@ const FLOW_STEPS = [
   },
   {
     num: '02',
-    emoji: '🔄',
     title: 'Kiểm Định & Tuần Hoàn',
     desc: 'Đội ngũ kiểm định phân loại cẩn thận, chuyển giao trực tiếp cho người cần hoặc đăng bán minh bạch trên sàn gây quỹ.',
     color: 'var(--clay-coral)',
@@ -99,7 +93,6 @@ const FLOW_STEPS = [
   },
   {
     num: '03',
-    emoji: '🤝',
     title: 'Trao Tận Tay & Báo Cáo',
     desc: 'Tình nguyện viên trực tiếp trao quà, người thụ hưởng nhận quà và hệ thống cập nhật nhật ký thực địa minh bạch.',
     color: 'var(--clay-sky)',
@@ -429,13 +422,12 @@ export default function HomePage() {
               }}
             />
             {[
-              { value: impactData?.totalCampaigns || campaigns.length, label: 'Chiến dịch thiện nguyện', color: '#4ADE80', emoji: '🌱' },
-              { value: formatVND(impactData?.totalRaised || 385000000), label: 'Tổng nguồn lực quyên góp', color: '#FBBF24', emoji: '💰', isFormatted: true },
-              { value: impactData?.totalDonations || 148, label: 'Lượt đóng góp thành công', color: '#60A5FA', emoji: '💙' },
-              { value: impactData?.totalVolunteers || 24, label: 'Tình nguyện viên đã xác nhận', color: '#FB923C', emoji: '🤝' },
+              { value: impactData?.totalCampaigns || campaigns.length, label: 'Chiến dịch thiện nguyện', color: '#4ADE80' },
+              { value: formatVND(impactData?.totalRaised || 385000000), label: 'Tổng nguồn lực quyên góp', color: '#FBBF24', isFormatted: true },
+              { value: impactData?.totalDonations || 148, label: 'Lượt đóng góp thành công', color: '#60A5FA' },
+              { value: impactData?.totalVolunteers || 24, label: 'Tình nguyện viên đã xác nhận', color: '#FB923C' },
             ].map((stat, idx) => (
               <div key={idx} style={{ textAlign: 'center', position: 'relative', zIndex: 1 }}>
-                <span style={{ display: 'block', fontSize: 11, marginBottom: 6 }}>{stat.emoji}</span>
                 <span
                   style={{
                     display: 'block',
@@ -562,22 +554,6 @@ export default function HomePage() {
                     transition: 'background 0.3s ease, border-color 0.3s ease',
                   }}
                 >
-                  <div
-                    style={{
-                      width: 72,
-                      height: 72,
-                      borderRadius: 'var(--radius-clay-md)',
-                      background: 'var(--clay-surface)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: 36,
-                      boxShadow: 'var(--shadow-clay-sm)',
-                      flexShrink: 0,
-                    }}
-                  >
-                    {currentImpactTier.emoji}
-                  </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <h4
                       style={{
@@ -697,7 +673,6 @@ export default function HomePage() {
                   transform: selectedCategory === cat.id ? 'translateY(-2px)' : 'none',
                 }}
               >
-                <span style={{ fontSize: 14 }}>{cat.emoji}</span>
                 {cat.label}
               </button>
             ))}
@@ -832,7 +807,7 @@ export default function HomePage() {
                         fontFamily: 'var(--font-heading)',
                       }}
                     >
-                      {idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : `#${idx + 1}`}
+                      {idx === 0 ? '1' : idx === 1 ? '2' : idx === 2 ? '3' : `#${idx + 1}`}
                     </div>
                     <h4
                       style={{
@@ -1000,24 +975,6 @@ export default function HomePage() {
                 >
                   {step.num}
                 </span>
-
-                <div
-                  style={{
-                    width: 60,
-                    height: 60,
-                    borderRadius: 'var(--radius-clay-md)',
-                    background: step.bg,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: 28,
-                    marginBottom: 20,
-                    boxShadow: 'var(--shadow-clay-sm)',
-                    border: '2px solid rgba(255,255,255,.8)',
-                  }}
-                >
-                  {step.emoji}
-                </div>
 
                 <h3
                   style={{

@@ -14,10 +14,10 @@ interface EditCampaignModalProps {
 }
 
 const STATUS_OPTIONS = [
-  { value: 'active', label: '🟢 Đang hoạt động (Active)' },
-  { value: 'closed', label: '🔵 Đã hoàn thành (Closed)' },
-  { value: 'draft', label: '🟡 Bản nháp / Chờ duyệt (Draft)' },
-  { value: 'cancelled', label: '🔴 Đã hủy (Cancelled)' },
+  { value: 'active', label: 'Đang hoạt động (Active)' },
+  { value: 'closed', label: 'Đã hoàn thành (Closed)' },
+  { value: 'draft', label: 'Bản nháp / Chờ duyệt (Draft)' },
+  { value: 'cancelled', label: 'Đã hủy (Cancelled)' },
 ];
 
 export const EditCampaignModal: React.FC<EditCampaignModalProps> = ({

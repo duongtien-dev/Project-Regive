@@ -55,11 +55,11 @@ export const AppHeader: React.FC = () => {
   };
 
   const navLinks = [
-    { label: 'Chiến dịch', href: '/campaigns', emoji: '🌱' },
-    { label: 'Cửa hàng', href: '/marketplace', emoji: '🛍️' },
-    { label: 'Minh bạch', href: '/transparency', emoji: '📊' },
-    { label: 'Về ReGive', href: '/about', emoji: '💚' },
-    { label: 'Hỏi đáp', href: '/faq', emoji: '❓' },
+    { label: 'Chiến dịch', href: '/campaigns' },
+    { label: 'Cửa hàng', href: '/marketplace' },
+    { label: 'Minh bạch', href: '/transparency' },
+    { label: 'Về ReGive', href: '/about' },
+    { label: 'Hỏi đáp', href: '/faq' },
   ];
 
   const userMenuItems: MenuProps['items'] = [
@@ -76,7 +76,7 @@ export const AppHeader: React.FC = () => {
             className="clay-badge clay-badge-green"
             style={{ marginTop: 6, display: 'inline-flex' }}
           >
-            {user?.role === 'BENEFICIARY' ? '🤲 Người thụ hưởng' : '💚 Thành viên'}
+            {user?.role === 'BENEFICIARY' ? 'Người thụ hưởng' : 'Thành viên'}
           </span>
         </div>
       ),
@@ -234,7 +234,7 @@ export const AppHeader: React.FC = () => {
                 }}
                 className="hover:bg-green-50 hover:text-green-700"
               >
-                <span style={{ fontSize: 13 }}>{link.emoji}</span>
+
                 {link.label}
               </Link>
             );
@@ -363,17 +363,17 @@ export const AppHeader: React.FC = () => {
                     </p>
                     <p style={{ fontSize: 11, color: 'var(--clay-navy-300)', margin: '2px 0 6px' }}>{user.email}</p>
                     <span className="clay-badge clay-badge-green" style={{ fontSize: 11 }}>
-                      {user.role === 'BENEFICIARY' ? '🤲 Người thụ hưởng' : '💚 Thành viên'}
+                      {user.role === 'BENEFICIARY' ? 'Người thụ hưởng' : 'Thành viên'}
                     </span>
                   </div>
                   {[
-                    { href: '/me/dashboard', icon: '📊', label: 'Tổng quan của tôi' },
-                    { href: '/me/donations', icon: '🎁', label: 'Quyên góp của tôi' },
-                    { href: '/me/volunteers', icon: '🤝', label: 'Đăng ký tình nguyện' },
-                    { href: '/me/orders', icon: '📦', label: 'Đơn hàng Marketplace' },
-                    { href: '/me/payments', icon: '💳', label: 'Lịch sử thanh toán' },
-                    ...(user.role === 'BENEFICIARY' ? [{ href: '/me/support-requests', icon: '🆘', label: 'Yêu cầu hỗ trợ' }] : []),
-                    { href: '/profile', icon: '⚙️', label: 'Cài đặt tài khoản' },
+                    { href: '/me/dashboard', label: 'Tổng quan của tôi' },
+                    { href: '/me/donations', label: 'Quyên góp của tôi' },
+                    { href: '/me/volunteers', label: 'Đăng ký tình nguyện' },
+                    { href: '/me/orders', label: 'Đơn hàng Marketplace' },
+                    { href: '/me/payments', label: 'Lịch sử thanh toán' },
+                    ...(user.role === 'BENEFICIARY' ? [{ href: '/me/support-requests', label: 'Yêu cầu hỗ trợ' }] : []),
+                    { href: '/profile', label: 'Cài đặt tài khoản' },
                   ].map((item) => (
                     <Link
                       key={item.href}
@@ -391,7 +391,6 @@ export const AppHeader: React.FC = () => {
                       }}
                       className="hover:bg-green-50"
                     >
-                      <span>{item.icon}</span>
                       {item.label}
                     </Link>
                   ))}
@@ -448,7 +447,7 @@ export const AppHeader: React.FC = () => {
                 className="clay-btn-primary"
                 style={{ padding: '9px 22px', fontSize: 14 }}
               >
-                🌱 Tham gia ngay
+                Tham gia ngay
               </Link>
             </div>
           )}
@@ -530,7 +529,7 @@ export const AppHeader: React.FC = () => {
                   border: isActive ? '1.5px solid rgba(34,197,94,.2)' : '1.5px solid transparent',
                 }}
               >
-                <span style={{ fontSize: 18 }}>{link.emoji}</span>
+
                 {link.label}
               </Link>
             );
@@ -555,7 +554,7 @@ export const AppHeader: React.FC = () => {
                 fontFamily: 'var(--font-body)',
               }}
             >
-              🆘 Gửi yêu cầu hỗ trợ
+              Gửi yêu cầu hỗ trợ
             </Link>
           )}
 
@@ -638,7 +637,7 @@ export const AppHeader: React.FC = () => {
                   className="clay-btn-primary"
                   style={{ width: '100%', justifyContent: 'center', textDecoration: 'none' }}
                 >
-                  🌱 Tham gia ngay
+                  Tham gia ngay
                 </Link>
               </div>
             )}
