@@ -18,7 +18,8 @@ const config = {
   })(),
   nodeEnv: process.env.NODE_ENV || 'development',
   aiProvider: process.env.AI_PROVIDER || 'mock',
-  aiApiKey: process.env.AI_API_KEY || '',
+  aiApiKey: process.env.GEMINI_API_KEY || process.env.AI_API_KEY || '',
+  aiModel: process.env.GEMINI_MODEL || process.env.AI_MODEL || 'gemini-2.0-flash',
   vnpay: {
     url: process.env.VN_PAY_URL || '',
     merchantId: process.env.VN_PAY_MERCHANT_ID || '',

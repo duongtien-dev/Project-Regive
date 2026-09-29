@@ -53,6 +53,11 @@ MONGODB_URI=mongodb://127.0.0.1:27017/regive
 JWT_SECRET=<strong-secret>
 CORS_ORIGIN=http://localhost:5173,http://localhost:3000
 AI_PROVIDER=mock
+AI_API_KEY=
+GEMINI_API_KEY=
+GEMINI_MODEL=gemini-2.0-flash
 AUTH_RATE_LIMIT_MAX=50
 API_RATE_LIMIT_MAX=300
 ```
+
+Set `AI_PROVIDER=gemini` and provide `GEMINI_API_KEY` to call Gemini API for product classification, condition/quality assessment, and second-hand price recommendation. If Gemini fails, the backend records a `gemini-fallback` provider result using the local heuristic contract so the review workflow remains available.
