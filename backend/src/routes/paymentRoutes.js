@@ -9,6 +9,8 @@ const router = express.Router();
 
 // Sandbox webhook can be called without user JWT (simulates provider callback)
 router.post('/sandbox/webhook', ctrl.sandboxWebhook);
+router.get('/vnpay/return', ctrl.vnpayReturn);
+router.get('/vnpay/ipn', ctrl.vnpayIpn);
 
 router.use(authenticate);
 

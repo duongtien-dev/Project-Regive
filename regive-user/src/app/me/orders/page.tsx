@@ -63,7 +63,7 @@ export default function MyOrdersPage() {
         orderId,
       });
       const paymentId = payment.id || payment._id;
-      window.location.href = `/payments/${paymentId}/checkout`;
+      window.location.href = payment.checkoutUrl || `/payments/${paymentId}/checkout`;
     } catch (err: any) {
       setError(err.message || 'Không thể tạo phiên thanh toán cho đơn hàng');
       setPayingId(null);

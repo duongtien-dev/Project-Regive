@@ -102,7 +102,7 @@ export default function ProductDetailPage() {
       setModalOpen(false);
 
       const paymentId = payment.id || payment._id;
-      router.push(`/payments/${paymentId}/checkout`);
+      window.location.href = payment.checkoutUrl || `/payments/${paymentId}/checkout`;
     } catch (err: any) {
       setOrderError(err.message || 'Có lỗi xảy ra khi đặt đơn hàng');
     } finally {

@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const Payment = require('../models/Payment');
 const Order = require('../models/Order');
 const Donation = require('../models/Donation');
@@ -13,11 +14,64 @@ const {
   INVENTORY_TX_TYPE,
 } = require('../constants/enums');
 const { ApiError } = require('../utils/api');
-const { shortCode, sandboxToken } = require('../utils/codes');
+const config = require('../config');
+const { shortCode } = require('../utils/codes');
 const { applyStockChange } = require('./inventoryService');
 const { createNotification } = require('./common');
 
-async function createPayment({ purpose, payerId, orderId, donationId }) {
+function pad2(value) {
+  return String(value).padStart(2, '0');
+}
+
+function formatVnpayDate(date) {
+  return [
+    date.getFullYear(),
+    pad2(date.getMonth() + 1),
+    pad2(date.getDate()),
+    pad2(date.getHours()),
+    pad2(date.getMinutes()),
+    pad2(date.getSeconds()),
+  ].join('');
+}
+
+function normalizeIp(value = '') {
+  return value.split(',')[0].trim().replace('::ffff:', '') || '127.0.0.1';
+}
+
+function buildSignedQuery(params) {
+  const search = new URLSearchParams();
+  Object.keys(params)
+    .filter((key) => params[key] !== undefined && params[key] !== null && params[key] !== '')
+    .sort()
+    .forEach((key) => search.append(key, String(params[key])));
+  return search.toString();
+}
+
+function signVnpayParams(params) {
+  const secret = config.vnpay.hashSecret;
+  if (!config.vnpay.url || !config.vnpay.merchantId || !secret) {
+    throw new ApiError(500, 'VNPay is not configured');
+  }
+
+  const signData = buildSignedQuery(params);
+  const secureHash = crypto.createHmac('sha512', secret).update(signData).digest('hex');
+  return { signData, secureHash };
+}
+
+function verifyVnpaySignature(query) {
+  const receivedHash = query.vnp_SecureHash;
+  if (!receivedHash) return false;
+
+  const params = { ...query };
+  delete params.vnp_SecureHash;
+  delete params.vnp_SecureHashType;
+
+  const { secureHash } = signVnpayParams(params);
+  if (secureHash.length !== String(receivedHash).length) return false;
+  return crypto.timingSafeEqual(Buffer.from(secureHash), Buffer.from(String(receivedHash)));
+}
+
+async function createPayment({ purpose, payerId, orderId, donationId, clientReturnUrl = null }) {
   if (purpose === PAYMENT_PURPOSE.ORDER) {
     const order = await Order.findById(orderId);
     if (!order) throw new ApiError(404, 'Order not found');
@@ -39,9 +93,10 @@ async function createPayment({ purpose, payerId, orderId, donationId }) {
       purpose,
       amount: order.totalAmount,
       currency: order.currency,
+      provider: 'vnpay',
       payer: payerId,
       order: order._id,
-      sandboxToken: sandboxToken(),
+      clientReturnUrl,
     });
   }
 
@@ -69,17 +124,42 @@ async function createPayment({ purpose, payerId, orderId, donationId }) {
       purpose,
       amount: donation.amount,
       currency: donation.currency || 'VND',
+      provider: 'vnpay',
       payer: payerId,
       donation: donation._id,
-      sandboxToken: sandboxToken(),
+      clientReturnUrl,
     });
   }
 
   throw new ApiError(400, 'Invalid payment purpose');
 }
 
-async function confirmSandboxPayment({ paymentId, sandboxToken: token, rawCallback = null }) {
-  const payment = await Payment.findById(paymentId);
+function createVnpayCheckoutUrl({ payment, returnUrl, ipAddr }) {
+  const createdAt = new Date();
+  const expireAt = new Date(createdAt.getTime() + 15 * 60 * 1000);
+  const params = {
+    vnp_Version: '2.1.0',
+    vnp_Command: 'pay',
+    vnp_TmnCode: config.vnpay.merchantId,
+    vnp_Amount: Math.round(payment.amount * 100),
+    vnp_CurrCode: payment.currency || 'VND',
+    vnp_TxnRef: payment.paymentCode,
+    vnp_OrderInfo: `Thanh toan ReGive ${payment.paymentCode}`,
+    vnp_OrderType: 'other',
+    vnp_Locale: 'vn',
+    vnp_ReturnUrl: returnUrl,
+    vnp_IpAddr: normalizeIp(ipAddr),
+    vnp_CreateDate: formatVnpayDate(createdAt),
+    vnp_ExpireDate: formatVnpayDate(expireAt),
+  };
+
+  const { signData, secureHash } = signVnpayParams(params);
+  return `${config.vnpay.url}?${signData}&vnp_SecureHash=${secureHash}`;
+}
+
+async function completePayment({ paymentId, paymentCode, providerRef, rawCallback = null, claimFilter = {} }) {
+  const lookup = paymentId ? { _id: paymentId } : { paymentCode };
+  const payment = await Payment.findOne(lookup);
   if (!payment) {
     throw new ApiError(404, 'Payment not found');
   }
@@ -93,18 +173,14 @@ async function confirmSandboxPayment({ paymentId, sandboxToken: token, rawCallba
     throw new ApiError(400, `Payment cannot be confirmed from status ${payment.status}`);
   }
 
-  if (payment.sandboxToken !== token) {
-    throw new ApiError(400, 'Invalid sandbox token');
-  }
-
   // Mark success first to reduce double-confirm race (best-effort without replica-set txn)
   const claimed = await Payment.findOneAndUpdate(
-    { _id: payment._id, status: PAYMENT_STATUS.PENDING, sandboxToken: token },
+    { _id: payment._id, status: PAYMENT_STATUS.PENDING, ...claimFilter },
     {
       $set: {
         status: PAYMENT_STATUS.SUCCESS,
         paidAt: new Date(),
-        providerRef: shortCode('SBX'),
+        providerRef,
         rawCallback,
       },
     },
@@ -150,7 +226,7 @@ async function confirmSandboxPayment({ paymentId, sandboxToken: token, rawCallba
         status: ORDER_STATUS.PAID,
         at: new Date(),
         by: claimed.payer,
-        note: 'Payment sandbox success',
+        note: 'Payment VNPay success',
       });
       await order.save();
 
@@ -203,4 +279,53 @@ async function confirmSandboxPayment({ paymentId, sandboxToken: token, rawCallba
   return claimed;
 }
 
-module.exports = { createPayment, confirmSandboxPayment };
+async function confirmSandboxPayment({ paymentId, sandboxToken: token, rawCallback = null }) {
+  const payment = await Payment.findById(paymentId);
+  if (!payment) throw new ApiError(404, 'Payment not found');
+  if (payment.sandboxToken !== token) throw new ApiError(400, 'Invalid sandbox token');
+
+  return completePayment({
+    paymentId,
+    providerRef: shortCode('SBX'),
+    rawCallback,
+    claimFilter: { sandboxToken: token },
+  });
+}
+
+async function confirmVnpayPayment({ query }) {
+  if (!verifyVnpaySignature(query)) {
+    throw new ApiError(400, 'Invalid VNPay signature');
+  }
+
+  const responseCode = query.vnp_ResponseCode;
+  const transactionStatus = query.vnp_TransactionStatus;
+  const payment = await Payment.findOne({ paymentCode: query.vnp_TxnRef });
+  if (!payment) throw new ApiError(404, 'Payment not found');
+
+  if (responseCode !== '00' || transactionStatus !== '00') {
+    payment.status = PAYMENT_STATUS.FAILED;
+    payment.failureReason = `VNPay response ${responseCode || 'unknown'}`;
+    payment.providerRef = query.vnp_TransactionNo || query.vnp_BankTranNo || null;
+    payment.rawCallback = query;
+    await payment.save();
+    return payment;
+  }
+
+  const expectedAmount = Math.round(payment.amount * 100);
+  if (Number(query.vnp_Amount) !== expectedAmount) {
+    throw new ApiError(400, 'VNPay amount mismatch');
+  }
+
+  return completePayment({
+    paymentId: payment._id,
+    providerRef: query.vnp_TransactionNo || query.vnp_BankTranNo || query.vnp_TxnRef,
+    rawCallback: query,
+  });
+}
+
+module.exports = {
+  createPayment,
+  createVnpayCheckoutUrl,
+  confirmSandboxPayment,
+  confirmVnpayPayment,
+};

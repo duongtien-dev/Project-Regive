@@ -2,15 +2,20 @@ const { body, param } = require('express-validator');
 const Payment = require('../models/Payment');
 const { PAYMENT_PURPOSE, ROLES } = require('../constants/enums');
 const { ApiError, success, asyncHandler } = require('../utils/api');
-const { createPayment, confirmSandboxPayment } = require('../services/paymentService');
+const {
+  createPayment,
+  createVnpayCheckoutUrl,
+  confirmSandboxPayment,
+  confirmVnpayPayment,
+} = require('../services/paymentService');
 
-function sanitizePayment(payment, { includeSandboxToken = false } = {}) {
+function sanitizePayment(payment, { includeSandboxToken = false, extra = {} } = {}) {
   const obj = payment.toObject ? payment.toObject() : { ...payment };
   if (!includeSandboxToken) {
     delete obj.sandboxToken;
   }
   delete obj.rawCallback;
-  return obj;
+  return { ...obj, ...extra };
 }
 
 const createValidators = [
@@ -23,6 +28,20 @@ const confirmValidators = [
   body('paymentId').isMongoId(),
   body('sandboxToken').isString().notEmpty(),
 ];
+
+function getApiBaseUrl(req) {
+  const forwardedProto = req.get('x-forwarded-proto');
+  const proto = forwardedProto ? forwardedProto.split(',')[0] : req.protocol;
+  return `${proto}://${req.get('host')}`;
+}
+
+function getClientBaseUrl(req) {
+  const origin = req.get('origin');
+  if (origin) return origin;
+  const referer = req.get('referer');
+  if (referer) return new URL(referer).origin;
+  return 'http://localhost:3000';
+}
 
 const create = asyncHandler(async (req, res) => {
   const { purpose, orderId, donationId } = req.body;
@@ -41,6 +60,19 @@ const create = asyncHandler(async (req, res) => {
     donationId,
   });
 
+  const clientReturnUrl = `${getClientBaseUrl(req)}/payments/${payment._id}/checkout`;
+  if (payment.clientReturnUrl !== clientReturnUrl || payment.provider !== 'vnpay') {
+    payment.clientReturnUrl = clientReturnUrl;
+    payment.provider = 'vnpay';
+    await payment.save();
+  }
+
+  const checkoutUrl = createVnpayCheckoutUrl({
+    payment,
+    returnUrl: `${getApiBaseUrl(req)}/api/payments/vnpay/return`,
+    ipAddr: req.headers['x-forwarded-for'] || req.socket.remoteAddress,
+  });
+
   return success(
     res,
     {
@@ -52,11 +84,10 @@ const create = asyncHandler(async (req, res) => {
         currency: payment.currency,
         status: payment.status,
         provider: payment.provider,
-        sandboxToken: payment.sandboxToken,
+        checkoutUrl,
         order: payment.order,
         donation: payment.donation,
-        checkoutHint:
-          'Sandbox mode: call POST /api/payments/sandbox/confirm with paymentId + sandboxToken',
+        checkoutHint: 'Redirect the user to checkoutUrl to pay through VNPay',
       },
     },
     'Payment created',
@@ -90,6 +121,34 @@ const sandboxWebhook = asyncHandler(async (req, res) => {
   return success(res, { payment: sanitizePayment(payment) }, 'Webhook processed');
 });
 
+const vnpayReturn = asyncHandler(async (req, res) => {
+  const payment = await confirmVnpayPayment({ query: req.query });
+  const redirectUrl = new URL(
+    payment.clientReturnUrl || `http://localhost:3000/payments/${payment._id}/checkout`
+  );
+  redirectUrl.searchParams.set('vnpay', payment.status === 'success' ? 'success' : 'failed');
+  if (payment.failureReason) redirectUrl.searchParams.set('reason', payment.failureReason);
+  return res.redirect(redirectUrl.toString());
+});
+
+const vnpayIpn = asyncHandler(async (req, res) => {
+  try {
+    const payment = await confirmVnpayPayment({ query: req.query });
+    return res.json({
+      RspCode: '00',
+      Message: 'Confirm Success',
+      paymentId: payment._id,
+      status: payment.status,
+    });
+  } catch (err) {
+    const statusCode = err.statusCode === 404 ? '01' : err.statusCode === 400 ? '97' : '99';
+    return res.json({
+      RspCode: statusCode,
+      Message: err.message || 'Confirm Failed',
+    });
+  }
+});
+
 const getById = asyncHandler(async (req, res) => {
   const payment = await Payment.findById(req.params.id)
     .populate('order', 'orderCode status totalAmount')
@@ -102,9 +161,23 @@ const getById = asyncHandler(async (req, res) => {
   const isStaff = [ROLES.ADMIN, ROLES.EMPLOYEE].includes(req.user.role);
   if (!isOwner && !isStaff) throw new ApiError(403, 'Forbidden');
 
+  let checkoutUrl;
+  if (isOwner && payment.status === 'pending' && payment.provider === 'vnpay') {
+    const clientReturnUrl = `${getClientBaseUrl(req)}/payments/${payment._id}/checkout`;
+    checkoutUrl = createVnpayCheckoutUrl({
+      payment,
+      returnUrl: `${getApiBaseUrl(req)}/api/payments/vnpay/return`,
+      ipAddr: req.headers['x-forwarded-for'] || req.socket.remoteAddress,
+    });
+    if (payment.clientReturnUrl !== clientReturnUrl) {
+      await Payment.findByIdAndUpdate(payment._id, { clientReturnUrl });
+    }
+  }
+
   return success(res, {
     payment: sanitizePayment(payment, {
       includeSandboxToken: isOwner && payment.status === 'pending',
+      extra: checkoutUrl ? { checkoutUrl } : {},
     }),
   });
 });
@@ -137,6 +210,8 @@ module.exports = {
   create,
   sandboxConfirm,
   sandboxWebhook,
+  vnpayReturn,
+  vnpayIpn,
   getById,
   myPayments,
   listAll,

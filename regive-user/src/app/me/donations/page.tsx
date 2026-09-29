@@ -51,7 +51,7 @@ export default function MyDonationsPage() {
         donationId,
       });
       const paymentId = payment.id || payment._id;
-      window.location.href = `/payments/${paymentId}/checkout`;
+      window.location.href = payment.checkoutUrl || `/payments/${paymentId}/checkout`;
     } catch (err: any) {
       setError(err.message || 'Không thể tạo phiên thanh toán');
       setPayingId(null);

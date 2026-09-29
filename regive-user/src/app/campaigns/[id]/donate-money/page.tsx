@@ -65,7 +65,7 @@ function DonateMoneyContent() {
 
       // 3. Redirect to Sandbox Checkout
       const paymentId = payment.id || payment._id;
-      router.push(`/payments/${paymentId}/checkout`);
+      window.location.href = payment.checkoutUrl || `/payments/${paymentId}/checkout`;
     } catch (err: any) {
       setError(err.message || 'Có lỗi xảy ra khi tạo giao dịch quyên góp');
       setSubmitting(false);

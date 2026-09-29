@@ -19,6 +19,12 @@ const config = {
   nodeEnv: process.env.NODE_ENV || 'development',
   aiProvider: process.env.AI_PROVIDER || 'mock',
   aiApiKey: process.env.AI_API_KEY || '',
+  vnpay: {
+    url: process.env.VN_PAY_URL || '',
+    merchantId: process.env.VN_PAY_MERCHANT_ID || '',
+    hashSecret: process.env.VN_PAY_HASH_SECRET || process.env.VN_PAY_HASH_KEY || '',
+    hashKey: process.env.VN_PAY_HASH_KEY || '',
+  },
 };
 
 module.exports = config;

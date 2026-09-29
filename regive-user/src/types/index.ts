@@ -353,6 +353,7 @@ export type Payment = {
   status: PaymentStatus;
   provider: string;
   sandboxToken?: string;
+  checkoutUrl?: string;
   order?: {
     _id?: string;
     orderCode?: string;
@@ -419,4 +420,3 @@ export type TransparencyLedgerData = {
   };
   transactions: TransparencyTransaction[];
 };
-

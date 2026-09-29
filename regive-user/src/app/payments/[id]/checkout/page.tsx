@@ -90,6 +90,14 @@ export default function PaymentCheckoutPage() {
     }
   };
 
+  const handleVnpayCheckout = () => {
+    if (!payment?.checkoutUrl) {
+      message.error('Khong the tao lien ket thanh toan VNPay');
+      return;
+    }
+    window.location.href = payment.checkoutUrl;
+  };
+
   if (loading) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-16">
@@ -201,7 +209,30 @@ export default function PaymentCheckoutPage() {
                 </div>
               </div>
 
-              {/* Payment Methods Simulation */}
+              {/* Payment Methods */}
+              {payment?.checkoutUrl ? (
+                <div className="space-y-4 rounded-2xl border border-emerald-200 bg-emerald-50/70 p-5">
+                  <div className="flex items-start gap-3">
+                    <ShieldCheck className="w-5 h-5 text-emerald-700 shrink-0 mt-0.5" />
+                    <div>
+                      <h2 className="font-black text-gray-900">Thanh toan qua VNPay</h2>
+                      <p className="text-xs text-gray-600 leading-relaxed mt-1">
+                        Ban se duoc chuyen sang VNPay de hoan tat giao dich. Sau khi VNPay xac nhan, ReGive tu dong cap nhat don hang hoac khoan quyen gop.
+                      </p>
+                    </div>
+                  </div>
+                  <Button
+                    type="primary"
+                    size="large"
+                    loading={submitting}
+                    onClick={handleVnpayCheckout}
+                    className="w-full h-12 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-lg shadow-emerald-600/25"
+                    icon={<CreditCard className="w-4 h-4" />}
+                  >
+                    Thanh toan qua VNPay ({formatVND(payment?.amount)})
+                  </Button>
+                </div>
+              ) : (
               <Tabs
                 defaultActiveKey="vietqr"
                 items={[
@@ -323,6 +354,7 @@ export default function PaymentCheckoutPage() {
                   },
                 ]}
               />
+              )}
 
               <div className="flex items-center justify-center gap-2 text-xs text-gray-400 text-center pt-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-600" />
