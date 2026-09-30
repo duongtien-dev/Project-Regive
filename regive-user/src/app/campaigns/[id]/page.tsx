@@ -125,11 +125,9 @@ export default function CampaignDetailPage() {
   const diffDays = Math.ceil((end - now) / (1000 * 60 * 60 * 24));
   const daysLeftText = diffDays > 0 ? `Còn ${diffDays} ngày` : 'Đã kết thúc thời gian';
 
-  const isCreatorOrStaff =
+  const isCreator =
     user &&
-    (user.role === 'ADMIN' ||
-      user.role === 'EMPLOYEE' ||
-      (typeof campaign.createdBy === 'object' && campaign.createdBy?._id === user.id) ||
+    ((typeof campaign.createdBy === 'object' && campaign.createdBy?._id === user.id) ||
       campaign.createdBy === user.id);
 
   return (
@@ -144,7 +142,7 @@ export default function CampaignDetailPage() {
           <span>Quay lại danh sách</span>
         </Link>
         <div className="flex items-center gap-2">
-          {isCreatorOrStaff && (
+          {isCreator && (
             <Button
               icon={<Settings className="w-4 h-4" />}
               onClick={() => setEditModalOpen(true)}
@@ -327,7 +325,7 @@ export default function CampaignDetailPage() {
                   label: `Nhật ký thực địa (${campaign.activities?.length || 0})`,
                   children: (
                     <div className="space-y-6 pt-4">
-                      {isCreatorOrStaff && (
+                      {isCreator && (
                         <div className="flex justify-end">
                           <Button
                             type="primary"

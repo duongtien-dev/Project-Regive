@@ -48,7 +48,7 @@ export default function NewSupportRequestPage() {
   return (
     <AuthGuard>
       <RoleGuard
-        allowedRoles={['BENEFICIARY', 'ADMIN']}
+        allowedRoles={['BENEFICIARY']}
         fallbackTitle="Tính Năng Dành Cho Người Thụ Hưởng"
         fallbackMessage="Chỉ tài khoản đăng ký với vai trò Người thụ hưởng (BENEFICIARY) mới có thể gửi yêu cầu hỗ trợ."
       >

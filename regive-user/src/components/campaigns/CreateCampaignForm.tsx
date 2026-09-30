@@ -114,7 +114,7 @@ export const CreateCampaignForm: React.FC<CreateCampaignFormProps> = ({ onSucces
       message.success('Đề xuất chiến dịch thiện nguyện thành công!');
       form.resetFields();
       onSuccess?.(created);
-      router.push(created?._id ? `/campaigns/${created._id}` : '/campaigns');
+      router.push('/campaigns');
     } catch (err: unknown) {
       setError(getErrorMessage(err));
     } finally {
@@ -130,7 +130,7 @@ export const CreateCampaignForm: React.FC<CreateCampaignFormProps> = ({ onSucces
           <span>Đề xuất chiến dịch</span>
         </div>
         <h2 className="text-xl sm:text-2xl font-black text-gray-950">
-          {user?.role === 'ADMIN' ? 'Khởi tạo chiến dịch thiện nguyện mới' : 'Đề xuất chiến dịch thiện nguyện mới'}
+          Đề xuất chiến dịch thiện nguyện mới
         </h2>
         <p className="text-sm text-gray-600 mt-1 max-w-3xl">
           Đăng ký thông tin chiến dịch gây quỹ, kêu gọi hiện vật và kết nối mạng lưới tình nguyện viên.
@@ -332,7 +332,7 @@ export const CreateCampaignForm: React.FC<CreateCampaignFormProps> = ({ onSucces
               size="large"
               className="h-12 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-600/20"
             >
-              {user?.role === 'ADMIN' ? 'Khởi tạo & kích hoạt chiến dịch' : 'Gửi đề xuất phê duyệt'}
+              Gửi đề xuất phê duyệt
             </Button>
           </div>
         </Form>
