@@ -19,7 +19,7 @@ const MODULES = [
 function health(_req, res) {
   res.json({
     success: true,
-    message: 'ReGive API is running',
+    message: 'API ReGive đang hoạt động',
     data: {
       service: 'regive-backend',
       version: require('../../package.json').version,
@@ -39,10 +39,10 @@ function ready(_req, res) {
   const ok = state === 1;
   res.status(ok ? 200 : 503).json({
     success: ok,
-    message: ok ? 'Ready' : 'Not ready',
+    message: ok ? 'Sẵn sàng' : 'Chưa sẵn sàng',
     data: {
       mongoReadyState: state,
-      mongoStatus: ['disconnected', 'connected', 'connecting', 'disconnecting'][state] || 'unknown',
+      mongoStatus: ['đã ngắt kết nối', 'đã kết nối', 'đang kết nối', 'đang ngắt kết nối'][state] || 'không xác định',
     },
   });
 }

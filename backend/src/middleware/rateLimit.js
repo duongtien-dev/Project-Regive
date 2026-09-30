@@ -7,7 +7,7 @@ const authLimiter = rateLimit({
   legacyHeaders: false,
   message: {
     success: false,
-    message: 'Too many auth attempts. Please try again later.',
+    message: 'Bạn đã thử đăng nhập quá nhiều lần. Vui lòng thử lại sau.',
   },
 });
 
@@ -18,7 +18,7 @@ const apiLimiter = rateLimit({
   legacyHeaders: false,
   message: {
     success: false,
-    message: 'Too many requests. Please slow down.',
+    message: 'Bạn gửi quá nhiều yêu cầu. Vui lòng thử chậm lại.',
   },
 });
 

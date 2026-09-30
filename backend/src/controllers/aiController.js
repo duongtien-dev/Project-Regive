@@ -39,7 +39,7 @@ function decisionsDiffer(suggestion, finalDecision) {
 
 const assessProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.body.productId);
-  if (!product) throw new ApiError(404, 'Product not found');
+  if (!product) throw new ApiError(404, 'Không tìm thấy sản phẩm');
 
   const images =
     req.body.images && req.body.images.length > 0 ? req.body.images : product.images || [];
@@ -71,7 +71,7 @@ const assessProduct = asyncHandler(async (req, res) => {
       status: AI_ASSESSMENT_STATUS.FAILED,
       provider: 'none',
       input,
-      errorMessage: err.message || 'AI assessment failed',
+      errorMessage: err.message || 'Đánh giá AI thất bại',
       rawResponse: { error: true },
     });
 
@@ -80,9 +80,9 @@ const assessProduct = asyncHandler(async (req, res) => {
       {
         assessment,
         fallbackHint:
-          'AI failed. Employee/Admin can still assess manually via POST /api/products/:id/assess',
+          'AI thất bại. Nhân viên/Admin vẫn có thể đánh giá thủ công qua POST /api/products/:id/assess',
       },
-      'AI assessment failed — use manual assessment',
+      'Đánh giá AI thất bại - vui lòng đánh giá thủ công',
       202
     );
   }
@@ -90,7 +90,7 @@ const assessProduct = asyncHandler(async (req, res) => {
   // Attach latest AI suggestion snapshot on product without applying authority
   product.assessmentNote = [
     product.assessmentNote,
-    `[AI:${assessment._id}] pending human review`,
+    `[AI:${assessment._id}] đang chờ người phụ trách duyệt`,
   ]
     .filter(Boolean)
     .join('\n')
@@ -103,9 +103,9 @@ const assessProduct = asyncHandler(async (req, res) => {
     {
       assessment,
       reviewRequired: true,
-      note: 'AI result is suggestion only. Confirm/override before applying to product. AI never auto-publishes.',
+      note: 'Kết quả AI chỉ là gợi ý. Vui lòng xác nhận hoặc chỉnh sửa trước khi áp dụng cho sản phẩm. AI không tự động đăng bán.',
     },
-    'AI assessment suggested',
+    'AI đã tạo gợi ý đánh giá',
     201
   );
 });
@@ -123,7 +123,7 @@ const getById = asyncHandler(async (req, res) => {
     .populate('product')
     .populate('requestedBy', 'fullName email role')
     .populate('reviewedBy', 'fullName email role');
-  if (!assessment) throw new ApiError(404, 'AI assessment not found');
+  if (!assessment) throw new ApiError(404, 'Không tìm thấy đánh giá AI');
   return success(res, { assessment });
 });
 
@@ -137,16 +137,16 @@ const listPending = asyncHandler(async (_req, res) => {
 
 const confirm = asyncHandler(async (req, res) => {
   const assessment = await AiAssessment.findById(req.params.id);
-  if (!assessment) throw new ApiError(404, 'AI assessment not found');
+  if (!assessment) throw new ApiError(404, 'Không tìm thấy đánh giá AI');
   if (assessment.status !== AI_ASSESSMENT_STATUS.SUGGESTED) {
-    throw new ApiError(400, `Assessment cannot be confirmed from status ${assessment.status}`);
+    throw new ApiError(400, `Không thể xác nhận đánh giá từ trạng thái ${assessment.status}`);
   }
   if (assessment.status === AI_ASSESSMENT_STATUS.FAILED) {
-    throw new ApiError(400, 'Failed assessment cannot be confirmed');
+    throw new ApiError(400, 'Không thể xác nhận đánh giá đã thất bại');
   }
 
   const product = await Product.findById(assessment.product);
-  if (!product) throw new ApiError(404, 'Product not found');
+  if (!product) throw new ApiError(404, 'Không tìm thấy sản phẩm');
 
   const finalDecision = {
     category: req.body.category ?? assessment.suggestion.category,
@@ -211,8 +211,8 @@ const confirm = asyncHandler(async (req, res) => {
 
   await createNotification({
     userId: req.user._id,
-    title: 'AI assessment applied',
-    message: `Assessment ${assessment.status} applied to product ${product.name}. Marketplace listing still requires publish.`,
+    title: 'Đã áp dụng đánh giá AI',
+    message: `Đánh giá ${assessment.status} đã được áp dụng cho sản phẩm ${product.name}. Sản phẩm vẫn cần được đăng bán thủ công trên marketplace.`,
     type: 'system',
     relatedId: assessment._id.toString(),
   });
@@ -223,17 +223,17 @@ const confirm = asyncHandler(async (req, res) => {
       assessment,
       product,
       listedOnMarketplace: product.listedOnMarketplace,
-      note: 'Human review applied. Use POST /api/products/:id/publish to list if eligible.',
+      note: 'Đã áp dụng kết quả duyệt của người phụ trách. Dùng POST /api/products/:id/publish để đăng bán nếu đủ điều kiện.',
     },
-    overridden ? 'AI assessment overridden and applied' : 'AI assessment confirmed and applied'
+    overridden ? 'Đã chỉnh sửa và áp dụng đánh giá AI' : 'Đã xác nhận và áp dụng đánh giá AI'
   );
 });
 
 const reject = asyncHandler(async (req, res) => {
   const assessment = await AiAssessment.findById(req.params.id);
-  if (!assessment) throw new ApiError(404, 'AI assessment not found');
+  if (!assessment) throw new ApiError(404, 'Không tìm thấy đánh giá AI');
   if (assessment.status !== AI_ASSESSMENT_STATUS.SUGGESTED) {
-    throw new ApiError(400, `Assessment cannot be rejected from status ${assessment.status}`);
+    throw new ApiError(400, `Không thể từ chối đánh giá từ trạng thái ${assessment.status}`);
   }
 
   assessment.status = AI_ASSESSMENT_STATUS.REJECTED;
@@ -242,7 +242,7 @@ const reject = asyncHandler(async (req, res) => {
   assessment.appliedToProduct = false;
   await assessment.save();
 
-  return success(res, { assessment }, 'AI assessment rejected — product unchanged');
+  return success(res, { assessment }, 'Đã từ chối đánh giá AI - sản phẩm không thay đổi');
 });
 
 const previewDonation = asyncHandler(async (req, res) => {
@@ -265,7 +265,7 @@ const previewDonation = asyncHandler(async (req, res) => {
       model: aiResult.rawResponse?.engine || aiResult.rawResponse?.requestedModel,
       fallbackReason: aiResult.rawResponse?.fallbackReason,
     },
-    'AI donation preview generated successfully'
+    'Tạo bản xem trước đánh giá quyên góp bằng AI thành công'
   );
 });
 

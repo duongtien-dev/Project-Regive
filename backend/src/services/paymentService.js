@@ -50,7 +50,7 @@ function buildSignedQuery(params) {
 function signVnpayParams(params) {
   const secret = config.vnpay.hashSecret;
   if (!config.vnpay.url || !config.vnpay.merchantId || !secret) {
-    throw new ApiError(500, 'VNPay is not configured');
+    throw new ApiError(500, 'VNPay chưa được cấu hình');
   }
 
   const signData = buildSignedQuery(params);
@@ -74,12 +74,12 @@ function verifyVnpaySignature(query) {
 async function createPayment({ purpose, payerId, orderId, donationId, clientReturnUrl = null }) {
   if (purpose === PAYMENT_PURPOSE.ORDER) {
     const order = await Order.findById(orderId);
-    if (!order) throw new ApiError(404, 'Order not found');
+    if (!order) throw new ApiError(404, 'Không tìm thấy đơn hàng');
     if (order.buyer.toString() !== payerId.toString()) {
-      throw new ApiError(403, 'Order does not belong to payer');
+      throw new ApiError(403, 'Đơn hàng không thuộc về người thanh toán');
     }
     if (order.status !== ORDER_STATUS.PENDING) {
-      throw new ApiError(400, 'Order is not payable');
+      throw new ApiError(400, 'Đơn hàng hiện không thể thanh toán');
     }
 
     const existing = await Payment.findOne({
@@ -102,15 +102,15 @@ async function createPayment({ purpose, payerId, orderId, donationId, clientRetu
 
   if (purpose === PAYMENT_PURPOSE.DONATION) {
     const donation = await Donation.findById(donationId);
-    if (!donation) throw new ApiError(404, 'Donation not found');
+    if (!donation) throw new ApiError(404, 'Không tìm thấy quyên góp');
     if (donation.donor.toString() !== payerId.toString()) {
-      throw new ApiError(403, 'Donation does not belong to payer');
+      throw new ApiError(403, 'Quyên góp không thuộc về người thanh toán');
     }
     if (donation.type !== DONATION_TYPES.MONEY) {
-      throw new ApiError(400, 'Only money donations can be paid online');
+      throw new ApiError(400, 'Chỉ quyên góp bằng tiền mới có thể thanh toán trực tuyến');
     }
     if (![DONATION_STATUS.PENDING, DONATION_STATUS.CONFIRMED].includes(donation.status)) {
-      throw new ApiError(400, 'Donation is not payable');
+      throw new ApiError(400, 'Quyên góp hiện không thể thanh toán');
     }
 
     const existing = await Payment.findOne({
@@ -131,7 +131,7 @@ async function createPayment({ purpose, payerId, orderId, donationId, clientRetu
     });
   }
 
-  throw new ApiError(400, 'Invalid payment purpose');
+  throw new ApiError(400, 'Mục đích thanh toán không hợp lệ');
 }
 
 function createVnpayCheckoutUrl({ payment, returnUrl, ipAddr }) {
@@ -161,7 +161,7 @@ async function completePayment({ paymentId, paymentCode, providerRef, rawCallbac
   const lookup = paymentId ? { _id: paymentId } : { paymentCode };
   const payment = await Payment.findOne(lookup);
   if (!payment) {
-    throw new ApiError(404, 'Payment not found');
+    throw new ApiError(404, 'Không tìm thấy thanh toán');
   }
 
   // Idempotent success
@@ -170,7 +170,7 @@ async function completePayment({ paymentId, paymentCode, providerRef, rawCallbac
   }
 
   if (payment.status !== PAYMENT_STATUS.PENDING) {
-    throw new ApiError(400, `Payment cannot be confirmed from status ${payment.status}`);
+    throw new ApiError(400, `Không thể xác nhận thanh toán từ trạng thái ${payment.status}`);
   }
 
   // Mark success first to reduce double-confirm race (best-effort without replica-set txn)
@@ -190,14 +190,14 @@ async function completePayment({ paymentId, paymentCode, providerRef, rawCallbac
   if (!claimed) {
     const latest = await Payment.findById(paymentId);
     if (latest && latest.status === PAYMENT_STATUS.SUCCESS) return latest;
-    throw new ApiError(409, 'Payment already processed');
+    throw new ApiError(409, 'Thanh toán đã được xử lý');
   }
 
   if (claimed.purpose === PAYMENT_PURPOSE.ORDER) {
     const order = await Order.findById(claimed.order);
-    if (!order) throw new ApiError(404, 'Order not found');
+    if (!order) throw new ApiError(404, 'Không tìm thấy đơn hàng');
     if (order.status === ORDER_STATUS.CANCELLED) {
-      throw new ApiError(400, 'Order was cancelled');
+      throw new ApiError(400, 'Đơn hàng đã bị hủy');
     }
 
     if (order.status === ORDER_STATUS.PENDING) {
@@ -207,7 +207,7 @@ async function completePayment({ paymentId, paymentCode, providerRef, rawCallbac
           type: INVENTORY_TX_TYPE.OUT,
           quantity: item.quantity,
           userId: claimed.payer,
-          reason: `Sold via order ${order.orderCode}`,
+          reason: `Bán qua đơn hàng ${order.orderCode}`,
           referenceType: 'order',
           referenceId: order._id.toString(),
         });
@@ -226,7 +226,7 @@ async function completePayment({ paymentId, paymentCode, providerRef, rawCallbac
         status: ORDER_STATUS.PAID,
         at: new Date(),
         by: claimed.payer,
-        note: 'Payment VNPay success',
+        note: 'Thanh toán VNPay thành công',
       });
       await order.save();
 
@@ -255,7 +255,7 @@ async function completePayment({ paymentId, paymentCode, providerRef, rawCallbac
 
   if (claimed.purpose === PAYMENT_PURPOSE.DONATION) {
     const donation = await Donation.findById(claimed.donation);
-    if (!donation) throw new ApiError(404, 'Donation not found');
+    if (!donation) throw new ApiError(404, 'Không tìm thấy quyên góp');
 
     if (donation.status !== DONATION_STATUS.COMPLETED) {
       donation.status = DONATION_STATUS.COMPLETED;
@@ -281,8 +281,8 @@ async function completePayment({ paymentId, paymentCode, providerRef, rawCallbac
 
 async function confirmSandboxPayment({ paymentId, sandboxToken: token, rawCallback = null }) {
   const payment = await Payment.findById(paymentId);
-  if (!payment) throw new ApiError(404, 'Payment not found');
-  if (payment.sandboxToken !== token) throw new ApiError(400, 'Invalid sandbox token');
+  if (!payment) throw new ApiError(404, 'Không tìm thấy thanh toán');
+  if (payment.sandboxToken !== token) throw new ApiError(400, 'sandboxToken không hợp lệ');
 
   return completePayment({
     paymentId,
@@ -294,17 +294,17 @@ async function confirmSandboxPayment({ paymentId, sandboxToken: token, rawCallba
 
 async function confirmVnpayPayment({ query }) {
   if (!verifyVnpaySignature(query)) {
-    throw new ApiError(400, 'Invalid VNPay signature');
+    throw new ApiError(400, 'Chữ ký VNPay không hợp lệ');
   }
 
   const responseCode = query.vnp_ResponseCode;
   const transactionStatus = query.vnp_TransactionStatus;
   const payment = await Payment.findOne({ paymentCode: query.vnp_TxnRef });
-  if (!payment) throw new ApiError(404, 'Payment not found');
+  if (!payment) throw new ApiError(404, 'Không tìm thấy thanh toán');
 
   if (responseCode !== '00' || transactionStatus !== '00') {
     payment.status = PAYMENT_STATUS.FAILED;
-    payment.failureReason = `VNPay response ${responseCode || 'unknown'}`;
+    payment.failureReason = `Phản hồi VNPay ${responseCode || 'không xác định'}`;
     payment.providerRef = query.vnp_TransactionNo || query.vnp_BankTranNo || null;
     payment.rawCallback = query;
     await payment.save();
@@ -313,7 +313,7 @@ async function confirmVnpayPayment({ query }) {
 
   const expectedAmount = Math.round(payment.amount * 100);
   if (Number(query.vnp_Amount) !== expectedAmount) {
-    throw new ApiError(400, 'VNPay amount mismatch');
+    throw new ApiError(400, 'Số tiền VNPay không khớp');
   }
 
   return completePayment({

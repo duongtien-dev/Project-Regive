@@ -6,7 +6,7 @@ class ApiError extends Error {
   }
 }
 
-function success(res, data = null, message = 'OK', statusCode = 200) {
+function success(res, data = null, message = 'Thành công', statusCode = 200) {
   return res.status(statusCode).json({
     success: true,
     message,

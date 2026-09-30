@@ -20,16 +20,16 @@ const markRead = asyncHandler(async (req, res) => {
     user: req.user._id,
   });
   if (!notification) {
-    throw new ApiError(404, 'Notification not found');
+    throw new ApiError(404, 'Không tìm thấy thông báo');
   }
   notification.isRead = true;
   await notification.save();
-  return success(res, { notification }, 'Marked as read');
+  return success(res, { notification }, 'Đã đánh dấu thông báo là đã đọc');
 });
 
 const markAllRead = asyncHandler(async (req, res) => {
   await Notification.updateMany({ user: req.user._id, isRead: false }, { isRead: true });
-  return success(res, null, 'All notifications marked as read');
+  return success(res, null, 'Đã đánh dấu tất cả thông báo là đã đọc');
 });
 
 module.exports = {

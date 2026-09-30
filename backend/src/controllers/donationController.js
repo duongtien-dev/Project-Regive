@@ -32,24 +32,24 @@ const statusValidators = [
 
 const create = asyncHandler(async (req, res) => {
   if (![ROLES.USER, ROLES.ADMIN].includes(req.user.role)) {
-    throw new ApiError(403, 'Only USER can create donations');
+    throw new ApiError(403, 'Chỉ tài khoản USER mới có thể tạo quyên góp');
   }
 
   const { campaignId, type, amount, note, isAnonymous, productInfo } = req.body;
   const campaign = await Campaign.findById(campaignId);
   if (!campaign || campaign.status !== CAMPAIGN_STATUS.ACTIVE) {
-    throw new ApiError(400, 'Campaign is not available for donation');
+    throw new ApiError(400, 'Chiến dịch hiện không thể nhận quyên góp');
   }
 
   if (type === DONATION_TYPES.MONEY) {
     if (!amount || amount <= 0) {
-      throw new ApiError(400, 'amount is required for money donation');
+      throw new ApiError(400, 'Vui lòng nhập số tiền quyên góp');
     }
   }
 
   if (type === DONATION_TYPES.PRODUCT) {
     if (!productInfo || !productInfo.name) {
-      throw new ApiError(400, 'productInfo.name is required for product donation');
+      throw new ApiError(400, 'Vui lòng nhập tên sản phẩm quyên góp');
     }
   }
 
@@ -77,13 +77,13 @@ const create = asyncHandler(async (req, res) => {
 
   await createNotification({
     userId: req.user._id,
-    title: 'Donation received',
-    message: `Donation ${donation._id} is pending confirmation.`,
+    title: 'Đã tiếp nhận quyên góp',
+    message: `Quyên góp ${donation._id} đang chờ xác nhận.`,
     type: 'donation',
     relatedId: donation._id.toString(),
   });
 
-  return success(res, { donation }, 'Donation created', 201);
+  return success(res, { donation }, 'Tạo quyên góp thành công', 201);
 });
 
 const myDonations = asyncHandler(async (req, res) => {
@@ -114,13 +114,13 @@ const getById = asyncHandler(async (req, res) => {
     .populate('processedBy', 'fullName email');
 
   if (!donation) {
-    throw new ApiError(404, 'Donation not found');
+    throw new ApiError(404, 'Không tìm thấy quyên góp');
   }
 
   const isOwner = donation.donor._id.toString() === req.user._id.toString();
   const isStaff = [ROLES.ADMIN, ROLES.EMPLOYEE].includes(req.user.role);
   if (!isOwner && !isStaff) {
-    throw new ApiError(403, 'Forbidden');
+    throw new ApiError(403, 'Bạn không có quyền truy cập');
   }
 
   return success(res, { donation });
@@ -129,7 +129,7 @@ const getById = asyncHandler(async (req, res) => {
 const updateStatus = asyncHandler(async (req, res) => {
   const donation = await Donation.findById(req.params.id).populate('campaign');
   if (!donation) {
-    throw new ApiError(404, 'Donation not found');
+    throw new ApiError(404, 'Không tìm thấy quyên góp');
   }
 
   const prev = donation.status;
@@ -150,13 +150,13 @@ const updateStatus = asyncHandler(async (req, res) => {
 
   await createNotification({
     userId: donation.donor,
-    title: 'Donation status updated',
-    message: `Your donation status changed to ${donation.status}.`,
+    title: 'Cập nhật trạng thái quyên góp',
+    message: `Trạng thái quyên góp của bạn đã chuyển sang ${donation.status}.`,
     type: 'donation',
     relatedId: donation._id.toString(),
   });
 
-  return success(res, { donation }, 'Donation status updated');
+  return success(res, { donation }, 'Cập nhật trạng thái quyên góp thành công');
 });
 
 module.exports = {

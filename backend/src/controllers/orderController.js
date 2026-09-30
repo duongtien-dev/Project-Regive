@@ -32,13 +32,13 @@ const statusValidators = [
 
 const create = asyncHandler(async (req, res) => {
   if (req.user.role !== ROLES.USER && req.user.role !== ROLES.ADMIN) {
-    throw new ApiError(403, 'Only USER can place orders');
+    throw new ApiError(403, 'Chỉ tài khoản USER mới có thể đặt hàng');
   }
 
   const quantity = req.body.quantity || 1;
   const product = await Product.findById(req.body.productId);
   if (!product || !product.listedOnMarketplace || product.status !== PRODUCT_STATUS.LISTED) {
-    throw new ApiError(400, 'Product is not available on marketplace');
+    throw new ApiError(400, 'Sản phẩm hiện không có trên marketplace');
   }
 
   const listCheck = canListProduct(product);
@@ -47,7 +47,7 @@ const create = asyncHandler(async (req, res) => {
   }
 
   if (product.stockQuantity < quantity) {
-    throw new ApiError(400, 'Insufficient stock');
+    throw new ApiError(400, 'Số lượng tồn kho không đủ');
   }
 
   const order = await Order.create({
@@ -72,7 +72,7 @@ const create = asyncHandler(async (req, res) => {
         status: ORDER_STATUS.PENDING,
         at: new Date(),
         by: req.user._id,
-        note: 'Order created',
+        note: 'Đơn hàng đã được tạo',
       },
     ],
   });
@@ -85,7 +85,7 @@ const create = asyncHandler(async (req, res) => {
     relatedId: order._id.toString(),
   });
 
-  return success(res, { order }, 'Order created', 201);
+  return success(res, { order }, 'Tạo đơn hàng thành công', 201);
 });
 
 const myOrders = asyncHandler(async (req, res) => {
@@ -117,18 +117,18 @@ const getById = asyncHandler(async (req, res) => {
     .populate('payment', 'paymentCode status amount paidAt provider')
     .populate('processedBy', 'fullName email');
 
-  if (!order) throw new ApiError(404, 'Order not found');
+  if (!order) throw new ApiError(404, 'Không tìm thấy đơn hàng');
 
   const isOwner = order.buyer._id.toString() === req.user._id.toString();
   const isStaff = [ROLES.ADMIN, ROLES.EMPLOYEE].includes(req.user.role);
-  if (!isOwner && !isStaff) throw new ApiError(403, 'Forbidden');
+  if (!isOwner && !isStaff) throw new ApiError(403, 'Bạn không có quyền truy cập');
 
   return success(res, { order });
 });
 
 const updateStatus = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id);
-  if (!order) throw new ApiError(404, 'Order not found');
+  if (!order) throw new ApiError(404, 'Không tìm thấy đơn hàng');
 
   const next = req.body.status;
   const current = order.status;
@@ -141,7 +141,7 @@ const updateStatus = asyncHandler(async (req, res) => {
   };
 
   if (!allowed[current] || !allowed[current].includes(next)) {
-    throw new ApiError(400, `Cannot change order from ${current} to ${next}`);
+    throw new ApiError(400, `Không thể chuyển đơn hàng từ ${current} sang ${next}`);
   }
 
   order.status = next;
@@ -162,15 +162,15 @@ const updateStatus = asyncHandler(async (req, res) => {
     relatedId: order._id.toString(),
   });
 
-  return success(res, { order }, 'Order status updated');
+  return success(res, { order }, 'Cập nhật trạng thái đơn hàng thành công');
 });
 
 const cancelOrder = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id);
-  if (!order) throw new ApiError(404, 'Order not found');
+  if (!order) throw new ApiError(404, 'Không tìm thấy đơn hàng');
 
   const isOwner = order.buyer.toString() === req.user._id.toString();
-  if (!isOwner) throw new ApiError(403, 'Forbidden');
+  if (!isOwner) throw new ApiError(403, 'Bạn không có quyền truy cập');
 
   if (order.status !== ORDER_STATUS.PENDING) {
     throw new ApiError(400, 'Chỉ có thể hủy đơn hàng đang chờ thanh toán');

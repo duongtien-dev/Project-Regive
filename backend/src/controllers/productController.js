@@ -37,23 +37,23 @@ const idParam = [param('id').isMongoId()];
 
 const intakeFromDonation = asyncHandler(async (req, res) => {
   const donation = await Donation.findById(req.body.donationId);
-  if (!donation) throw new ApiError(404, 'Donation not found');
+  if (!donation) throw new ApiError(404, 'Không tìm thấy quyên góp');
   if (donation.type !== DONATION_TYPES.PRODUCT) {
-    throw new ApiError(400, 'Only product donations can be converted to products');
+    throw new ApiError(400, 'Chỉ quyên góp sản phẩm mới có thể chuyển thành sản phẩm');
   }
   if ([DONATION_STATUS.REJECTED].includes(donation.status)) {
-    throw new ApiError(400, 'Rejected donation cannot be intake');
+    throw new ApiError(400, 'Không thể tiếp nhận quyên góp đã bị từ chối');
   }
 
   const existing = await Product.findOne({ donation: donation._id });
   if (existing) {
-    throw new ApiError(409, 'Product already created from this donation', {
+    throw new ApiError(409, 'Sản phẩm đã được tạo từ quyên góp này', {
       productId: existing._id,
     });
   }
 
   const product = await Product.create({
-    name: req.body.name || donation.productInfo?.name || 'Donated product',
+    name: req.body.name || donation.productInfo?.name || 'Sản phẩm quyên góp',
     description: req.body.description || donation.productInfo?.description || '',
     category: req.body.category || 'other',
     images: req.body.images || [],
@@ -71,12 +71,12 @@ const intakeFromDonation = asyncHandler(async (req, res) => {
     await donation.save();
   }
 
-  return success(res, { product }, 'Product intake created', 201);
+  return success(res, { product }, 'Tiếp nhận sản phẩm thành công', 201);
 });
 
 const assess = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
-  if (!product) throw new ApiError(404, 'Product not found');
+  if (!product) throw new ApiError(404, 'Không tìm thấy sản phẩm');
 
   product.condition = req.body.condition;
   product.quality = req.body.quality;
@@ -109,7 +109,7 @@ const assess = asyncHandler(async (req, res) => {
   product.reviewedAt = new Date();
   await product.save();
 
-  return success(res, { product }, 'Product assessed');
+  return success(res, { product }, 'Đánh giá sản phẩm thành công');
 });
 
 const listManage = asyncHandler(async (req, res) => {
@@ -135,11 +135,11 @@ const getById = asyncHandler(async (req, res) => {
     .populate('createdBy', 'fullName email')
     .populate('reviewedBy', 'fullName email');
 
-  if (!product) throw new ApiError(404, 'Product not found');
+  if (!product) throw new ApiError(404, 'Không tìm thấy sản phẩm');
 
   const isStaff = [ROLES.ADMIN, ROLES.EMPLOYEE].includes(req.user?.role);
   if (!product.listedOnMarketplace && !isStaff) {
-    throw new ApiError(404, 'Product not found');
+    throw new ApiError(404, 'Không tìm thấy sản phẩm');
   }
 
   return success(res, { product });
@@ -174,13 +174,13 @@ const getMarketplaceDetail = asyncHandler(async (req, res) => {
     .populate('latestAiAssessment', 'suggestion status')
     .select('-assessmentNote');
 
-  if (!product) throw new ApiError(404, 'Marketplace product not found');
+  if (!product) throw new ApiError(404, 'Không tìm thấy sản phẩm trên marketplace');
   return success(res, { product });
 });
 
 const publish = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
-  if (!product) throw new ApiError(404, 'Product not found');
+  if (!product) throw new ApiError(404, 'Không tìm thấy sản phẩm');
 
   const check = canListProduct(product);
   if (!check.ok) throw new ApiError(400, check.reason);
@@ -190,24 +190,24 @@ const publish = asyncHandler(async (req, res) => {
   product.status = PRODUCT_STATUS.LISTED;
   await product.save();
 
-  return success(res, { product }, 'Product listed on marketplace');
+  return success(res, { product }, 'Đăng bán sản phẩm trên marketplace thành công');
 });
 
 const unpublish = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
-  if (!product) throw new ApiError(404, 'Product not found');
+  if (!product) throw new ApiError(404, 'Không tìm thấy sản phẩm');
 
   product.listedOnMarketplace = false;
   product.status =
     product.stockQuantity > 0 ? PRODUCT_STATUS.IN_STOCK : PRODUCT_STATUS.SOLD_OUT;
   await product.save();
 
-  return success(res, { product }, 'Product unpublished');
+  return success(res, { product }, 'Gỡ sản phẩm khỏi marketplace thành công');
 });
 
 const updateProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
-  if (!product) throw new ApiError(404, 'Product not found');
+  if (!product) throw new ApiError(404, 'Không tìm thấy sản phẩm');
 
   const fields = [
     'name',
@@ -224,7 +224,7 @@ const updateProduct = asyncHandler(async (req, res) => {
   });
 
   await product.save();
-  return success(res, { product }, 'Product updated');
+  return success(res, { product }, 'Cập nhật sản phẩm thành công');
 });
 
 module.exports = {

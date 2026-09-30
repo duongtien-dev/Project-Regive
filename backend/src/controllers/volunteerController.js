@@ -29,12 +29,12 @@ const reviewValidators = [
 
 const register = asyncHandler(async (req, res) => {
   if (req.user.role !== ROLES.USER && req.user.role !== ROLES.ADMIN) {
-    throw new ApiError(403, 'Only USER can register as volunteer');
+    throw new ApiError(403, 'Chỉ tài khoản USER mới có thể đăng ký tình nguyện');
   }
 
   const campaign = await Campaign.findById(req.body.campaignId);
   if (!campaign || campaign.status !== CAMPAIGN_STATUS.ACTIVE) {
-    throw new ApiError(400, 'Campaign is not available for volunteering');
+    throw new ApiError(400, 'Chiến dịch hiện không nhận đăng ký tình nguyện');
   }
 
   const existing = await VolunteerRegistration.findOne({
@@ -42,7 +42,7 @@ const register = asyncHandler(async (req, res) => {
     campaign: req.body.campaignId,
   });
   if (existing) {
-    throw new ApiError(409, 'Already registered for this campaign');
+    throw new ApiError(409, 'Bạn đã đăng ký tình nguyện cho chiến dịch này');
   }
 
   const registration = await VolunteerRegistration.create({
@@ -54,13 +54,13 @@ const register = asyncHandler(async (req, res) => {
 
   await createNotification({
     userId: req.user._id,
-    title: 'Volunteer registration submitted',
-    message: 'Your volunteer registration is pending review.',
+    title: 'Đã gửi đăng ký tình nguyện',
+    message: 'Đăng ký tình nguyện của bạn đang chờ xét duyệt.',
     type: 'volunteer',
     relatedId: registration._id.toString(),
   });
 
-  return success(res, { registration }, 'Volunteer registered', 201);
+  return success(res, { registration }, 'Đăng ký tình nguyện thành công', 201);
 });
 
 const myRegistrations = asyncHandler(async (req, res) => {
@@ -86,7 +86,7 @@ const listAll = asyncHandler(async (req, res) => {
 const review = asyncHandler(async (req, res) => {
   const registration = await VolunteerRegistration.findById(req.params.id);
   if (!registration) {
-    throw new ApiError(404, 'Volunteer registration not found');
+    throw new ApiError(404, 'Không tìm thấy đăng ký tình nguyện');
   }
 
   registration.status = req.body.status;
@@ -105,13 +105,13 @@ const review = asyncHandler(async (req, res) => {
 
   await createNotification({
     userId: registration.user,
-    title: 'Volunteer registration updated',
-    message: `Your volunteer status is now ${registration.status}.`,
+    title: 'Cập nhật đăng ký tình nguyện',
+    message: `Trạng thái tình nguyện của bạn hiện là ${registration.status}.`,
     type: 'volunteer',
     relatedId: registration._id.toString(),
   });
 
-  return success(res, { registration }, 'Volunteer registration reviewed');
+  return success(res, { registration }, 'Duyệt đăng ký tình nguyện thành công');
 });
 
 module.exports = {

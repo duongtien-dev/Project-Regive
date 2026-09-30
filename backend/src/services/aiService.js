@@ -134,7 +134,7 @@ function buildImpactMetrics(category, suggestedPrice, rawMetrics = {}) {
     co2SavedKg,
     quote:
       String(rawMetrics.quote || '').trim().slice(0, 300) ||
-      `Mon do nay co the tao ra khoang ${fallbackMeals} bua an hoac ${fallbackNotebooks} cuon vo cho tre em vung cao.`,
+      `Món đồ này có thể tạo ra khoảng ${fallbackMeals} bữa ăn hoặc ${fallbackNotebooks} cuốn vở cho trẻ em vùng cao.`,
   };
 }
 
@@ -159,7 +159,7 @@ function runMockAssessmentSync({ name, description, category, images, extraNote 
       suitableForMarketplace,
       confidence,
       rationale:
-        'Heuristic assessment from product text/images metadata. Human review is required before applying.',
+        'Đánh giá dựa trên thông tin văn bản và siêu dữ liệu hình ảnh của sản phẩm. Cần người phụ trách duyệt trước khi áp dụng.',
       impactMetrics: buildImpactMetrics(detectedCategory, suggestedPrice),
     },
     rawResponse: {
@@ -214,7 +214,7 @@ function normalizeAiSuggestion(raw, input) {
     confidence: clamp(raw.confidence ?? fallback.confidence, 0, 1),
     rationale:
       String(raw.rationale || '').trim().slice(0, 1000) ||
-      'Gemini suggested this result from product text and image signals. Human review is required before applying.',
+      'Gemini gợi ý kết quả này từ thông tin văn bản và tín hiệu hình ảnh của sản phẩm. Cần người phụ trách duyệt trước khi áp dụng.',
     impactMetrics: buildImpactMetrics(category, suggestedPrice, raw.impactMetrics || {}),
   };
 }
@@ -330,7 +330,7 @@ async function buildImageParts(images, signal) {
 
 async function runGeminiAssessment(input) {
   if (!config.aiApiKey) {
-    throw new Error('GEMINI_API_KEY or AI_API_KEY is required when AI_PROVIDER=gemini');
+    throw new Error('Cần cấu hình GEMINI_API_KEY hoặc AI_API_KEY khi AI_PROVIDER=gemini');
   }
 
   const controller = new AbortController();
@@ -371,7 +371,7 @@ async function runGeminiAssessment(input) {
 
     const data = await response.json().catch(() => ({}));
     if (!response.ok) {
-      throw new Error(data.error?.message || `Gemini API failed with HTTP ${response.status}`);
+      throw new Error(data.error?.message || `Gemini API thất bại với HTTP ${response.status}`);
     }
 
     const text = data.candidates?.[0]?.content?.parts

@@ -57,7 +57,7 @@ const listPublic = asyncHandler(async (req, res) => {
     .populate('createdBy', 'fullName email')
     .sort({ startDate: -1 });
 
-  // Calculate live counts of donations and volunteers for each campaign
+  // Tính số lượng quyên góp và tình nguyện viên hiện tại cho từng chiến dịch
   const campaignIds = campaigns.map((c) => c._id);
   const [donationCounts, volunteerCounts] = await Promise.all([
     Donation.aggregate([
@@ -99,12 +99,12 @@ const getById = asyncHandler(async (req, res) => {
     'fullName email role'
   );
   if (!campaign) {
-    throw new ApiError(404, 'Campaign not found');
+    throw new ApiError(404, 'Không tìm thấy chiến dịch');
   }
 
   const isStaff = req.user && ['ADMIN', 'EMPLOYEE'].includes(req.user.role);
   if (campaign.status !== CAMPAIGN_STATUS.ACTIVE && !isStaff) {
-    throw new ApiError(404, 'Campaign not found');
+    throw new ApiError(404, 'Không tìm thấy chiến dịch');
   }
 
   return success(res, { campaign });
@@ -113,7 +113,7 @@ const getById = asyncHandler(async (req, res) => {
 const listPublicDonations = asyncHandler(async (req, res) => {
   const campaign = await Campaign.findById(req.params.id);
   if (!campaign) {
-    throw new ApiError(404, 'Campaign not found');
+    throw new ApiError(404, 'Không tìm thấy chiến dịch');
   }
 
   const donations = await Donation.find({
@@ -155,7 +155,7 @@ const listPublicDonations = asyncHandler(async (req, res) => {
 const listVolunteers = asyncHandler(async (req, res) => {
   const campaign = await Campaign.findById(req.params.id);
   if (!campaign) {
-    throw new ApiError(404, 'Campaign not found');
+    throw new ApiError(404, 'Không tìm thấy chiến dịch');
   }
 
   const volunteers = await VolunteerRegistration.find({
@@ -181,18 +181,18 @@ const listVolunteers = asyncHandler(async (req, res) => {
 const addActivity = asyncHandler(async (req, res) => {
   const campaign = await Campaign.findById(req.params.id);
   if (!campaign) {
-    throw new ApiError(404, 'Campaign not found');
+    throw new ApiError(404, 'Không tìm thấy chiến dịch');
   }
 
   const isOwner = campaign.createdBy.toString() === req.user._id.toString();
   const isStaff = ['ADMIN', 'EMPLOYEE'].includes(req.user.role);
   if (!isOwner && !isStaff) {
-    throw new ApiError(403, 'Forbidden');
+    throw new ApiError(403, 'Bạn không có quyền truy cập');
   }
 
   const { title, content, image, author, date } = req.body;
   if (!title || !content) {
-    throw new ApiError(400, 'Title and content are required');
+    throw new ApiError(400, 'Vui lòng nhập tiêu đề và nội dung');
   }
 
   campaign.activities.push({
@@ -228,7 +228,7 @@ const create = asyncHandler(async (req, res) => {
   } = req.body;
 
   if (new Date(endDate) < new Date(startDate)) {
-    throw new ApiError(400, 'endDate must be after startDate');
+    throw new ApiError(400, 'Ngày kết thúc phải sau ngày bắt đầu');
   }
 
   const isStaff = ['ADMIN', 'EMPLOYEE'].includes(req.user.role);
@@ -260,13 +260,13 @@ const create = asyncHandler(async (req, res) => {
 const update = asyncHandler(async (req, res) => {
   const campaign = await Campaign.findById(req.params.id);
   if (!campaign) {
-    throw new ApiError(404, 'Campaign not found');
+    throw new ApiError(404, 'Không tìm thấy chiến dịch');
   }
 
   const isOwner = campaign.createdBy.toString() === req.user._id.toString();
   const isStaff = ['ADMIN', 'EMPLOYEE'].includes(req.user.role);
   if (!isOwner && !isStaff) {
-    throw new ApiError(403, 'Forbidden');
+    throw new ApiError(403, 'Bạn không có quyền truy cập');
   }
 
   const fields = [
@@ -294,7 +294,7 @@ const update = asyncHandler(async (req, res) => {
   });
 
   if (new Date(campaign.endDate) < new Date(campaign.startDate)) {
-    throw new ApiError(400, 'endDate must be after startDate');
+    throw new ApiError(400, 'Ngày kết thúc phải sau ngày bắt đầu');
   }
 
   await campaign.save();
@@ -304,13 +304,13 @@ const update = asyncHandler(async (req, res) => {
 const remove = asyncHandler(async (req, res) => {
   const campaign = await Campaign.findById(req.params.id);
   if (!campaign) {
-    throw new ApiError(404, 'Campaign not found');
+    throw new ApiError(404, 'Không tìm thấy chiến dịch');
   }
 
   const isOwner = campaign.createdBy.toString() === req.user._id.toString();
   const isStaff = ['ADMIN'].includes(req.user.role);
   if (!isOwner && !isStaff) {
-    throw new ApiError(403, 'Forbidden');
+    throw new ApiError(403, 'Bạn không có quyền truy cập');
   }
 
   await Campaign.findByIdAndDelete(req.params.id);

@@ -47,10 +47,10 @@ const create = asyncHandler(async (req, res) => {
   const { purpose, orderId, donationId } = req.body;
 
   if (purpose === PAYMENT_PURPOSE.ORDER && !orderId) {
-    throw new ApiError(400, 'orderId is required for order payment');
+    throw new ApiError(400, 'Vui lòng cung cấp orderId để thanh toán đơn hàng');
   }
   if (purpose === PAYMENT_PURPOSE.DONATION && !donationId) {
-    throw new ApiError(400, 'donationId is required for donation payment');
+    throw new ApiError(400, 'Vui lòng cung cấp donationId để thanh toán quyên góp');
   }
 
   const payment = await createPayment({
@@ -87,10 +87,10 @@ const create = asyncHandler(async (req, res) => {
         checkoutUrl,
         order: payment.order,
         donation: payment.donation,
-        checkoutHint: 'Redirect the user to checkoutUrl to pay through VNPay',
+        checkoutHint: 'Chuyển người dùng đến checkoutUrl để thanh toán qua VNPay',
       },
     },
-    'Payment created',
+    'Tạo thanh toán thành công',
     201
   );
 });
@@ -102,14 +102,14 @@ const sandboxConfirm = asyncHandler(async (req, res) => {
     rawCallback: req.body,
   });
 
-  return success(res, { payment: sanitizePayment(payment) }, 'Sandbox payment confirmed');
+  return success(res, { payment: sanitizePayment(payment) }, 'Xác nhận thanh toán sandbox thành công');
 });
 
 const sandboxWebhook = asyncHandler(async (req, res) => {
   const paymentId = req.body.paymentId || req.body.payment_id;
   const token = req.body.sandboxToken || req.body.token;
   if (!paymentId || !token) {
-    throw new ApiError(400, 'paymentId and sandboxToken are required');
+    throw new ApiError(400, 'Vui lòng cung cấp paymentId và sandboxToken');
   }
 
   const payment = await confirmSandboxPayment({
@@ -118,7 +118,7 @@ const sandboxWebhook = asyncHandler(async (req, res) => {
     rawCallback: req.body,
   });
 
-  return success(res, { payment: sanitizePayment(payment) }, 'Webhook processed');
+  return success(res, { payment: sanitizePayment(payment) }, 'Xử lý webhook thành công');
 });
 
 const vnpayReturn = asyncHandler(async (req, res) => {
@@ -136,7 +136,7 @@ const vnpayIpn = asyncHandler(async (req, res) => {
     const payment = await confirmVnpayPayment({ query: req.query });
     return res.json({
       RspCode: '00',
-      Message: 'Confirm Success',
+      Message: 'Xác nhận thành công',
       paymentId: payment._id,
       status: payment.status,
     });
@@ -144,7 +144,7 @@ const vnpayIpn = asyncHandler(async (req, res) => {
     const statusCode = err.statusCode === 404 ? '01' : err.statusCode === 400 ? '97' : '99';
     return res.json({
       RspCode: statusCode,
-      Message: err.message || 'Confirm Failed',
+      Message: err.message || 'Xác nhận thất bại',
     });
   }
 });
@@ -155,11 +155,11 @@ const getById = asyncHandler(async (req, res) => {
     .populate('donation', 'type amount status')
     .populate('payer', 'fullName email');
 
-  if (!payment) throw new ApiError(404, 'Payment not found');
+  if (!payment) throw new ApiError(404, 'Không tìm thấy thanh toán');
 
   const isOwner = payment.payer._id.toString() === req.user._id.toString();
   const isStaff = [ROLES.ADMIN, ROLES.EMPLOYEE].includes(req.user.role);
-  if (!isOwner && !isStaff) throw new ApiError(403, 'Forbidden');
+  if (!isOwner && !isStaff) throw new ApiError(403, 'Bạn không có quyền truy cập');
 
   let checkoutUrl;
   if (isOwner && payment.status === 'pending' && payment.provider === 'vnpay') {

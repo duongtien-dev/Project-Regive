@@ -5,13 +5,13 @@ const { ApiError, success, asyncHandler } = require('../utils/api');
 const { signToken } = require('../services/common');
 
 const registerValidators = [
-  body('email').isEmail().withMessage('Valid email required'),
-  body('password').isLength({ min: 6 }).withMessage('Password min 6 chars'),
-  body('fullName').trim().notEmpty().withMessage('fullName required'),
+  body('email').isEmail().withMessage('Email không hợp lệ'),
+  body('password').isLength({ min: 6 }).withMessage('Mật khẩu phải có ít nhất 6 ký tự'),
+  body('fullName').trim().notEmpty().withMessage('Vui lòng nhập họ tên'),
   body('role')
     .optional()
     .isIn([ROLES.USER, ROLES.BENEFICIARY])
-    .withMessage('Public register only allows USER or BENEFICIARY'),
+    .withMessage('Đăng ký công khai chỉ cho phép vai trò USER hoặc BENEFICIARY'),
 ];
 
 const loginValidators = [
@@ -31,7 +31,7 @@ const register = asyncHandler(async (req, res) => {
   const { email, password, fullName, phone, address, role } = req.body;
   const exists = await User.findOne({ email: email.toLowerCase() });
   if (exists) {
-    throw new ApiError(409, 'Email already registered');
+    throw new ApiError(409, 'Email đã được đăng ký');
   }
 
   const passwordHash = await User.hashPassword(password);
@@ -45,21 +45,21 @@ const register = asyncHandler(async (req, res) => {
   });
 
   const token = signToken(user);
-  return success(res, { user: user.toSafeObject(), token }, 'Registered', 201);
+  return success(res, { user: user.toSafeObject(), token }, 'Đăng ký thành công', 201);
 });
 
 const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email: email.toLowerCase() }).select('+passwordHash');
   if (!user || !(await user.comparePassword(password))) {
-    throw new ApiError(401, 'Invalid email or password');
+    throw new ApiError(401, 'Email hoặc mật khẩu không đúng');
   }
   if (!user.isActive) {
-    throw new ApiError(403, 'Account is inactive');
+    throw new ApiError(403, 'Tài khoản đang bị vô hiệu hóa');
   }
 
   const token = signToken(user);
-  return success(res, { user: user.toSafeObject(), token }, 'Logged in');
+  return success(res, { user: user.toSafeObject(), token }, 'Đăng nhập thành công');
 });
 
 const me = asyncHandler(async (req, res) => {
@@ -69,7 +69,7 @@ const me = asyncHandler(async (req, res) => {
 const updateProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   if (!user) {
-    throw new ApiError(404, 'User not found');
+    throw new ApiError(404, 'Không tìm thấy người dùng');
   }
 
   const { fullName, phone, address, beneficiaryInfo } = req.body;
@@ -86,7 +86,7 @@ const updateProfile = asyncHandler(async (req, res) => {
   }
 
   await user.save();
-  return success(res, { user: user.toSafeObject() }, 'Profile updated');
+  return success(res, { user: user.toSafeObject() }, 'Cập nhật hồ sơ thành công');
 });
 
 const listUsers = asyncHandler(async (req, res) => {

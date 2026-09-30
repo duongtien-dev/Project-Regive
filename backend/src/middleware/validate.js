@@ -4,7 +4,7 @@ const { ApiError } = require('../utils/api');
 function validate(req, _res, next) {
   const result = validationResult(req);
   if (!result.isEmpty()) {
-    return next(new ApiError(400, 'Validation failed', result.array()));
+    return next(new ApiError(400, 'Dữ liệu không hợp lệ', result.array()));
   }
   return next();
 }

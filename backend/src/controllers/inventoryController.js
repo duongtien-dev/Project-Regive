@@ -25,11 +25,11 @@ const stockIn = asyncHandler(async (req, res) => {
     type: INVENTORY_TX_TYPE.IN,
     quantity: req.body.quantity,
     userId: req.user._id,
-    reason: req.body.reason || 'Stock in',
+    reason: req.body.reason || 'Nhập kho',
     storageLocation: req.body.storageLocation,
     referenceType: 'manual',
   });
-  return success(res, result, 'Stock in recorded', 201);
+  return success(res, result, 'Ghi nhận nhập kho thành công', 201);
 });
 
 const stockOut = asyncHandler(async (req, res) => {
@@ -38,12 +38,12 @@ const stockOut = asyncHandler(async (req, res) => {
     type: INVENTORY_TX_TYPE.OUT,
     quantity: req.body.quantity,
     userId: req.user._id,
-    reason: req.body.reason || 'Stock out',
+    reason: req.body.reason || 'Xuất kho',
     storageLocation: req.body.storageLocation,
     referenceType: req.body.referenceType || 'manual',
     referenceId: req.body.referenceId || null,
   });
-  return success(res, result, 'Stock out recorded', 201);
+  return success(res, result, 'Ghi nhận xuất kho thành công', 201);
 });
 
 const adjust = asyncHandler(async (req, res) => {
@@ -52,11 +52,11 @@ const adjust = asyncHandler(async (req, res) => {
     type: INVENTORY_TX_TYPE.ADJUST,
     newQuantity: req.body.newQuantity,
     userId: req.user._id,
-    reason: req.body.reason || 'Stock adjust',
+    reason: req.body.reason || 'Điều chỉnh tồn kho',
     storageLocation: req.body.storageLocation,
     referenceType: 'manual',
   });
-  return success(res, result, 'Stock adjusted', 201);
+  return success(res, result, 'Điều chỉnh tồn kho thành công', 201);
 });
 
 const listTransactions = asyncHandler(async (req, res) => {

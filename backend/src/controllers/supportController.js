@@ -20,13 +20,13 @@ const reviewValidators = [
 
 const create = asyncHandler(async (req, res) => {
   if (req.user.role !== ROLES.BENEFICIARY && req.user.role !== ROLES.ADMIN) {
-    throw new ApiError(403, 'Only BENEFICIARY can create support requests');
+    throw new ApiError(403, 'Chỉ tài khoản BENEFICIARY mới có thể tạo yêu cầu hỗ trợ');
   }
 
   if (req.body.campaignId) {
     const campaign = await Campaign.findById(req.body.campaignId);
     if (!campaign) {
-      throw new ApiError(400, 'Invalid campaignId');
+      throw new ApiError(400, 'campaignId không hợp lệ');
     }
   }
 
@@ -40,13 +40,13 @@ const create = asyncHandler(async (req, res) => {
 
   await createNotification({
     userId: req.user._id,
-    title: 'Support request submitted',
-    message: 'Your support request is pending review.',
+    title: 'Đã gửi yêu cầu hỗ trợ',
+    message: 'Yêu cầu hỗ trợ của bạn đang chờ xét duyệt.',
     type: 'support',
     relatedId: supportRequest._id.toString(),
   });
 
-  return success(res, { supportRequest }, 'Support request created', 201);
+  return success(res, { supportRequest }, 'Tạo yêu cầu hỗ trợ thành công', 201);
 });
 
 const myRequests = asyncHandler(async (req, res) => {
@@ -75,13 +75,13 @@ const getById = asyncHandler(async (req, res) => {
     .populate('handledBy', 'fullName email');
 
   if (!supportRequest) {
-    throw new ApiError(404, 'Support request not found');
+    throw new ApiError(404, 'Không tìm thấy yêu cầu hỗ trợ');
   }
 
   const isOwner = supportRequest.beneficiary._id.toString() === req.user._id.toString();
   const isStaff = [ROLES.ADMIN, ROLES.EMPLOYEE].includes(req.user.role);
   if (!isOwner && !isStaff) {
-    throw new ApiError(403, 'Forbidden');
+    throw new ApiError(403, 'Bạn không có quyền truy cập');
   }
 
   return success(res, { supportRequest });
@@ -90,7 +90,7 @@ const getById = asyncHandler(async (req, res) => {
 const review = asyncHandler(async (req, res) => {
   const supportRequest = await SupportRequest.findById(req.params.id);
   if (!supportRequest) {
-    throw new ApiError(404, 'Support request not found');
+    throw new ApiError(404, 'Không tìm thấy yêu cầu hỗ trợ');
   }
 
   supportRequest.status = req.body.status;
@@ -103,23 +103,23 @@ const review = asyncHandler(async (req, res) => {
 
   await createNotification({
     userId: supportRequest.beneficiary,
-    title: 'Support request updated',
-    message: `Your support request status is now ${supportRequest.status}.`,
+    title: 'Cập nhật yêu cầu hỗ trợ',
+    message: `Trạng thái yêu cầu hỗ trợ của bạn hiện là ${supportRequest.status}.`,
     type: 'support',
     relatedId: supportRequest._id.toString(),
   });
 
-  return success(res, { supportRequest }, 'Support request reviewed');
+  return success(res, { supportRequest }, 'Duyệt yêu cầu hỗ trợ thành công');
 });
 
 const confirmReceived = asyncHandler(async (req, res) => {
   const supportRequest = await SupportRequest.findById(req.params.id);
   if (!supportRequest) {
-    throw new ApiError(404, 'Support request not found');
+    throw new ApiError(404, 'Không tìm thấy yêu cầu hỗ trợ');
   }
 
   if (supportRequest.beneficiary.toString() !== req.user._id.toString()) {
-    throw new ApiError(403, 'Forbidden');
+    throw new ApiError(403, 'Bạn không có quyền truy cập');
   }
 
   if (
@@ -127,7 +127,7 @@ const confirmReceived = asyncHandler(async (req, res) => {
       supportRequest.status
     )
   ) {
-    throw new ApiError(400, 'Support request is not ready for receive confirmation');
+    throw new ApiError(400, 'Yêu cầu hỗ trợ chưa sẵn sàng để xác nhận đã nhận');
   }
 
   supportRequest.receivedConfirmed = true;
@@ -137,7 +137,7 @@ const confirmReceived = asyncHandler(async (req, res) => {
   }
   await supportRequest.save();
 
-  return success(res, { supportRequest }, 'Support received confirmed');
+  return success(res, { supportRequest }, 'Xác nhận đã nhận hỗ trợ thành công');
 });
 
 module.exports = {
