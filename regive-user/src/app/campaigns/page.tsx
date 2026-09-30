@@ -1,19 +1,13 @@
 'use client';
 
 import React, { useEffect, useState, useMemo } from 'react';
-import { Input, Select, Button, Alert, Tag } from 'antd';
+import Link from 'next/link';
+import { Input, Select, Button, Alert } from 'antd';
 import {
   Search,
-  Filter,
   RefreshCw,
-  Heart,
   Plus,
   Sparkles,
-  TrendingUp,
-  MapPin,
-  Calendar,
-  Grid,
-  List,
 } from 'lucide-react';
 import { campaignService } from '@/services/campaignService';
 import { Campaign } from '@/types';
@@ -23,9 +17,7 @@ import { EmptyState } from '@/components/shared/EmptyState';
 import { CampaignQuickViewDrawer } from '@/components/campaigns/CampaignQuickViewDrawer';
 import { QuickDonateModal } from '@/components/campaigns/QuickDonateModal';
 import { QuickVolunteerModal } from '@/components/campaigns/QuickVolunteerModal';
-import { CreateCampaignModal } from '@/components/campaigns/CreateCampaignModal';
 import { formatVND } from '@/lib/format';
-import { useAuthStore } from '@/store/useAuthStore';
 
 const CAUSE_CATEGORIES = [
   { id: 'all', label: 'Tất cả chiến dịch' },
@@ -38,7 +30,6 @@ const CAUSE_CATEGORIES = [
 ];
 
 export default function CampaignsPage() {
-  const { user } = useAuthStore();
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -54,7 +45,6 @@ export default function CampaignsPage() {
   const [quickViewCampaign, setQuickViewCampaign] = useState<Campaign | null>(null);
   const [donateModalCampaign, setDonateModalCampaign] = useState<Campaign | null>(null);
   const [volunteerModalCampaign, setVolunteerModalCampaign] = useState<Campaign | null>(null);
-  const [createModalOpen, setCreateModalOpen] = useState(false);
 
   const fetchCampaigns = async () => {
     try {
@@ -123,10 +113,6 @@ export default function CampaignsPage() {
       });
   }, [campaigns, searchQuery, selectedCategory, locationFilter, statusFilter, sortBy]);
 
-  const handleCreateSuccess = (newCamp: Campaign) => {
-    setCampaigns((prev) => [newCamp, ...prev]);
-  };
-
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       {/* Page Header with Action Button & Live Stats */}
@@ -146,15 +132,13 @@ export default function CampaignsPage() {
           </div>
 
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
-            <Button
-              type="primary"
-              size="large"
-              icon={<Plus className="w-4 h-4" />}
-              onClick={() => setCreateModalOpen(true)}
-              className="h-12 px-6 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-500/30 border-0"
+            <Link
+              href="/campaigns/create"
+              className="inline-flex h-12 items-center justify-center gap-2 px-6 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-500/30 border-0 transition-colors"
             >
-              + Đề xuất chiến dịch mới
-            </Button>
+              <Plus className="w-4 h-4" />
+              <span>Đề xuất chiến dịch mới</span>
+            </Link>
           </div>
         </div>
 
@@ -320,13 +304,6 @@ export default function CampaignsPage() {
         open={Boolean(volunteerModalCampaign)}
         onClose={() => setVolunteerModalCampaign(null)}
         onSuccess={() => fetchCampaigns()}
-      />
-
-      {/* Modal: Create / Propose Campaign */}
-      <CreateCampaignModal
-        open={createModalOpen}
-        onClose={() => setCreateModalOpen(false)}
-        onSuccess={handleCreateSuccess}
       />
     </div>
   );

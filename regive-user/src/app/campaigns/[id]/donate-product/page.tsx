@@ -247,6 +247,20 @@ export default function DonateProductPage() {
                           <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-teal-100 text-teal-800">
                             Độ tin cậy {(aiResult.assessment.confidence * 100).toFixed(0)}%
                           </span>
+                          {aiResult.provider && (
+                            <span
+                              className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+                                aiResult.provider === 'gemini'
+                                  ? 'bg-blue-100 text-blue-800'
+                                  : 'bg-amber-100 text-amber-800'
+                              }`}
+                              title={aiResult.fallbackReason || undefined}
+                            >
+                              {aiResult.provider === 'gemini'
+                                ? `Gemini${aiResult.model ? ` · ${aiResult.model}` : ''}`
+                                : 'AI fallback'}
+                            </span>
+                          )}
                         </span>
                         <Button
                           type="dashed"
@@ -257,6 +271,12 @@ export default function DonateProductPage() {
                           Áp dụng thông số này
                         </Button>
                       </div>
+
+                      {aiResult.fallbackReason && (
+                        <div className="rounded-lg border border-amber-200 bg-amber-50 p-2 text-[11px] leading-relaxed text-amber-900">
+                          Gemini tạm thời không trả kết quả, hệ thống đang dùng bộ đánh giá dự phòng. Lý do: {aiResult.fallbackReason}
+                        </div>
+                      )}
 
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                         <div className="p-2 bg-slate-50 rounded-lg">

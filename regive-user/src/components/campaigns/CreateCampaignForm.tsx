@@ -2,27 +2,40 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  Modal,
-  Form,
-  Input,
-  InputNumber,
-  Select,
-  DatePicker,
-  Button,
-  Alert,
-  message,
-  Space,
-} from 'antd';
-import { Plus, Trash2, Sparkles, Building, Phone, Mail } from 'lucide-react';
+import { Alert, Button, DatePicker, Form, Input, InputNumber, message, Select, Space } from 'antd';
+import type { Dayjs } from 'dayjs';
+import { Plus, Sparkles, Trash2 } from 'lucide-react';
 import { campaignService } from '@/services/campaignService';
-import { Campaign } from '@/types';
 import { useAuthStore } from '@/store/useAuthStore';
+import { Campaign } from '@/types';
 
-interface CreateCampaignModalProps {
-  open: boolean;
-  onClose: () => void;
-  onSuccess: (newCampaign: Campaign) => void;
+interface CreateCampaignFormProps {
+  onSuccess?: (newCampaign: Campaign) => void;
+}
+
+interface TargetItemInput {
+  name?: string;
+  targetQty?: number | null;
+  unit?: string;
+}
+
+interface CreateCampaignFormValues {
+  title: string;
+  shortDescription?: string;
+  description: string;
+  goal: string;
+  location: string;
+  category?: string;
+  targetAmount?: number | null;
+  dateRange: [Dayjs, Dayjs];
+  bannerImage?: string;
+  organization?: string;
+  representative?: string;
+  phone?: string;
+  email?: string;
+  volunteerConditions?: string;
+  targetItems?: TargetItemInput[];
+  tagsString?: string;
 }
 
 const CATEGORY_OPTIONS = [
@@ -35,21 +48,21 @@ const CATEGORY_OPTIONS = [
   { value: 'other', label: 'Khác' },
 ];
 
-export const CreateCampaignModal: React.FC<CreateCampaignModalProps> = ({
-  open,
-  onClose,
-  onSuccess,
-}) => {
+export const CreateCampaignForm: React.FC<CreateCampaignFormProps> = ({ onSuccess }) => {
   const router = useRouter();
   const { user } = useAuthStore();
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<CreateCampaignFormValues>();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (values: any) => {
+  const getErrorMessage = (err: unknown) => {
+    return err instanceof Error ? err.message : 'Không thể tạo chiến dịch';
+  };
+
+  const handleSubmit = async (values: CreateCampaignFormValues) => {
     if (!user) {
       message.info('Vui lòng đăng nhập để đề xuất chiến dịch');
-      router.push(`/login?redirect=${encodeURIComponent(window.location.pathname)}`);
+      router.push(`/login?redirect=${encodeURIComponent('/campaigns/create')}`);
       return;
     }
 
@@ -58,8 +71,8 @@ export const CreateCampaignModal: React.FC<CreateCampaignModalProps> = ({
       setError(null);
 
       const targetItems = (values.targetItems || [])
-        .filter((it: any) => it && it.name && it.targetQty)
-        .map((it: any) => ({
+        .filter((it): it is TargetItemInput & { name: string; targetQty: number } => Boolean(it?.name && it?.targetQty))
+        .map((it) => ({
           name: it.name.trim(),
           targetQty: Number(it.targetQty),
           receivedQty: 0,
@@ -68,9 +81,9 @@ export const CreateCampaignModal: React.FC<CreateCampaignModalProps> = ({
 
       const tags = values.tagsString
         ? values.tagsString
-            .split(',')
-            .map((t: string) => t.trim())
-            .filter(Boolean)
+          .split(',')
+          .map((t: string) => t.trim())
+          .filter(Boolean)
         : [];
 
       const payload: Partial<Campaign> = {
@@ -100,36 +113,40 @@ export const CreateCampaignModal: React.FC<CreateCampaignModalProps> = ({
       const created = await campaignService.create(payload);
       message.success('Đề xuất chiến dịch thiện nguyện thành công!');
       form.resetFields();
-      onSuccess(created);
-      onClose();
-    } catch (err: any) {
-      setError(err.message || 'Không thể tạo chiến dịch');
+      onSuccess?.(created);
+      router.push(created?._id ? `/campaigns/${created._id}` : '/campaigns');
+    } catch (err: unknown) {
+      setError(getErrorMessage(err));
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <Modal
-      title={
-        <div className="pb-3 border-b border-gray-100">
-          <h3 className="font-bold text-lg text-gray-900">
-            {user?.role === 'ADMIN' ? 'Khởi Tạo Chiến Dịch Thiện Nguyện Mới' : 'Đề Xuất Chiến Dịch Thiện Nguyện Mới'}
-          </h3>
-          <p className="text-xs text-gray-500 font-normal mt-0.5">
-            Đăng ký thông tin chiến dịch gây quỹ, kêu gọi hiện vật và kết nối mạng lưới tình nguyện viên.
-          </p>
+    <section className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      <div className="px-5 sm:px-7 py-5 border-b border-gray-100 bg-slate-50/70">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-100 mb-3">
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>Đề xuất chiến dịch</span>
         </div>
-      }
-      open={open}
-      onCancel={onClose}
-      footer={null}
-      destroyOnClose
-      width={720}
-      className="rounded-2xl"
-    >
-      <div className="py-4 space-y-4">
-        {error && <Alert message="Lỗi tạo chiến dịch" description={error} type="error" showIcon />}
+        <h2 className="text-xl sm:text-2xl font-black text-gray-950">
+          {user?.role === 'ADMIN' ? 'Khởi tạo chiến dịch thiện nguyện mới' : 'Đề xuất chiến dịch thiện nguyện mới'}
+        </h2>
+        <p className="text-sm text-gray-600 mt-1 max-w-3xl">
+          Đăng ký thông tin chiến dịch gây quỹ, kêu gọi hiện vật và kết nối mạng lưới tình nguyện viên.
+        </p>
+      </div>
+
+      <div className="p-5 sm:p-7">
+        {error && (
+          <Alert
+            message="Lỗi tạo chiến dịch"
+            description={error}
+            type="error"
+            showIcon
+            className="mb-5"
+          />
+        )}
 
         <Form
           form={form}
@@ -150,7 +167,7 @@ export const CreateCampaignModal: React.FC<CreateCampaignModalProps> = ({
             name="title"
             rules={[{ required: true, message: 'Vui lòng nhập tên chiến dịch' }]}
           >
-            <Input placeholder="Ví dụ: Áo Ấm Cho Em — Mùa Đông Vùng Cao 2026" size="large" className="!rounded-xl" />
+            <Input placeholder="Ví dụ: Áo Ấm Cho Em - Mùa Đông Vùng Cao 2026" size="large" className="!rounded-xl" />
           </Form.Item>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -183,7 +200,7 @@ export const CreateCampaignModal: React.FC<CreateCampaignModalProps> = ({
                 formatter={(val) => `${val}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 placeholder="Ví dụ: 100,000,000"
                 size="large"
-                className="w-full !rounded-xl"
+                className="!w-full !rounded-xl"
               />
             </Form.Item>
 
@@ -197,7 +214,7 @@ export const CreateCampaignModal: React.FC<CreateCampaignModalProps> = ({
           </div>
 
           <Form.Item
-            label="Mục tiêu cụ thể (Hiển thị nổi bật)"
+            label="Mục tiêu cụ thể"
             name="goal"
             rules={[{ required: true, message: 'Vui lòng nhập mục tiêu ngắn hạn' }]}
           >
@@ -213,28 +230,27 @@ export const CreateCampaignModal: React.FC<CreateCampaignModalProps> = ({
           </Form.Item>
 
           <Form.Item
-            label="Nội dung câu chuyện & Kế hoạch chi tiết"
+            label="Nội dung câu chuyện & kế hoạch chi tiết"
             name="description"
             rules={[{ required: true, message: 'Vui lòng viết mô tả chi tiết' }]}
           >
             <Input.TextArea
-              rows={4}
-              placeholder="Hoàn cảnh thực tế của bà con/các em, lịch trình chuyến đi, các đợt phát quà..."
+              rows={5}
+              placeholder="Hoàn cảnh thực tế, lịch trình chuyến đi, các đợt phát quà..."
               className="!rounded-xl"
             />
           </Form.Item>
 
-          <Form.Item label="Link ảnh bìa Banner chất lượng cao (URL)" name="bannerImage">
+          <Form.Item label="Link ảnh bìa banner chất lượng cao (URL)" name="bannerImage">
             <Input placeholder="https://images.unsplash.com/..." size="large" className="!rounded-xl" />
           </Form.Item>
 
-          {/* Organization & Contact Details */}
-          <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-3">
-            <h4 className="font-bold text-xs uppercase tracking-wider text-gray-700">
-              Thông tin đơn vị tổ chức & Đầu mối liên hệ
-            </h4>
+          <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-3 mb-6">
+            <h3 className="font-bold text-xs uppercase tracking-wider text-gray-700">
+              Thông tin đơn vị tổ chức & đầu mối liên hệ
+            </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <Form.Item label="Tên tổ chức / Đội nhóm" name="organization" className="!mb-2">
+              <Form.Item label="Tên tổ chức / đội nhóm" name="organization" className="!mb-2">
                 <Input placeholder="Ví dụ: CLB Trái Tim Hồng" className="!rounded-xl" />
               </Form.Item>
               <Form.Item label="Đại diện liên hệ" name="representative" className="!mb-2">
@@ -249,8 +265,7 @@ export const CreateCampaignModal: React.FC<CreateCampaignModalProps> = ({
             </div>
           </div>
 
-          {/* Volunteer Conditions */}
-          <Form.Item label="Tiêu chuẩn / Điều kiện tham gia của Tình nguyện viên" name="volunteerConditions">
+          <Form.Item label="Tiêu chuẩn / điều kiện tham gia của tình nguyện viên" name="volunteerConditions">
             <Input.TextArea
               rows={2}
               placeholder="Ví dụ: Trên 18 tuổi, có sức khỏe dẻo dai, ưu tiên có kinh nghiệm đi đường đèo dốc..."
@@ -258,31 +273,31 @@ export const CreateCampaignModal: React.FC<CreateCampaignModalProps> = ({
             />
           </Form.Item>
 
-          {/* Dynamic Target Physical Items Needed */}
-          <div className="p-4 bg-teal-50/60 rounded-2xl border border-teal-100 space-y-2">
-            <div className="flex items-center justify-between">
-              <h4 className="font-bold text-xs uppercase tracking-wider text-teal-900">
+          <div className="p-4 bg-teal-50/60 rounded-2xl border border-teal-100 space-y-2 mb-6">
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="font-bold text-xs uppercase tracking-wider text-teal-900">
                 Vật phẩm hiện vật cần kêu gọi
-              </h4>
-              <span className="text-[11px] text-teal-700">(Không bắt buộc)</span>
+              </h3>
+              <span className="text-[11px] text-teal-700 whitespace-nowrap">Không bắt buộc</span>
             </div>
             <Form.List name="targetItems">
               {(fields, { add, remove }) => (
                 <div className="space-y-2">
                   {fields.map(({ key, name, ...restField }) => (
-                    <Space key={key} className="flex w-full" align="baseline">
+                    <Space key={key} className="flex w-full flex-wrap" align="baseline">
                       <Form.Item {...restField} name={[name, 'name']} className="!mb-1">
-                        <Input placeholder="Tên vật phẩm (vd: Áo khoác)" className="!rounded-xl w-44" />
+                        <Input placeholder="Tên vật phẩm" className="!rounded-xl w-44" />
                       </Form.Item>
                       <Form.Item {...restField} name={[name, 'targetQty']} className="!mb-1">
                         <InputNumber min={1} placeholder="Số lượng" className="!rounded-xl w-28" />
                       </Form.Item>
                       <Form.Item {...restField} name={[name, 'unit']} className="!mb-1">
-                        <Input placeholder="Đơn vị (cái, bộ)" className="!rounded-xl w-24" />
+                        <Input placeholder="Đơn vị" className="!rounded-xl w-24" />
                       </Form.Item>
                       <Button
                         type="text"
                         danger
+                        aria-label="Xóa vật phẩm"
                         icon={<Trash2 className="w-4 h-4" />}
                         onClick={() => remove(name)}
                       />
@@ -295,7 +310,7 @@ export const CreateCampaignModal: React.FC<CreateCampaignModalProps> = ({
                     icon={<Plus className="w-4 h-4" />}
                     className="rounded-xl border-teal-300 text-teal-800"
                   >
-                    + Thêm vật phẩm kêu gọi
+                    Thêm vật phẩm kêu gọi
                   </Button>
                 </div>
               )}
@@ -306,17 +321,22 @@ export const CreateCampaignModal: React.FC<CreateCampaignModalProps> = ({
             <Input placeholder="Vùng cao, Áo ấm, Bão lũ, Khẩn cấp..." size="large" className="!rounded-xl" />
           </Form.Item>
 
-          <Button
-            type="primary"
-            htmlType="submit"
-            loading={submitting}
-            size="large"
-            className="w-full h-12 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-600/20"
-          >
-            {user?.role === 'ADMIN' ? 'Khởi Tạo & Kích Hoạt Chiến Dịch' : 'Gửi Đề Xuất Phê Duyệt'}
-          </Button>
+          <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-2">
+            <Button size="large" className="rounded-xl" onClick={() => router.push('/campaigns')}>
+              Hủy
+            </Button>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={submitting}
+              size="large"
+              className="h-12 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-600/20"
+            >
+              {user?.role === 'ADMIN' ? 'Khởi tạo & kích hoạt chiến dịch' : 'Gửi đề xuất phê duyệt'}
+            </Button>
+          </div>
         </Form>
       </div>
-    </Modal>
+    </section>
   );
 };

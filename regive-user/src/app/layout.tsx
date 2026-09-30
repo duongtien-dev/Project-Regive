@@ -1,9 +1,17 @@
 import type { Metadata } from "next";
+import { Be_Vietnam_Pro } from "next/font/google";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Providers } from "./providers";
 import { AppHeader } from "@/components/layout/AppHeader";
 import { AppFooter } from "@/components/layout/AppFooter";
 import "./globals.css";
+
+const beVietnamPro = Be_Vietnam_Pro({
+  subsets: ["latin", "vietnamese"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  display: "swap",
+  variable: "--font-be-vietnam-pro",
+});
 
 export const metadata: Metadata = {
   title: "ReGive — Nền Tảng Trao Tặng & Thiện Nguyện Tuần Hoàn",
@@ -17,11 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="vi" className="h-full antialiased">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      </head>
+    <html lang="vi" className={`${beVietnamPro.variable} h-full antialiased`}>
       <body className="min-h-dvh flex flex-col" style={{ background: 'var(--clay-bg)', color: 'var(--clay-navy)' }}>
         <AntdRegistry>
           <Providers>

@@ -261,6 +261,9 @@ const previewDonation = asyncHandler(async (req, res) => {
     {
       assessment: aiResult.suggestion,
       impactMetrics: aiResult.suggestion.impactMetrics,
+      provider: aiResult.provider,
+      model: aiResult.rawResponse?.engine || aiResult.rawResponse?.requestedModel,
+      fallbackReason: aiResult.rawResponse?.fallbackReason,
     },
     'AI donation preview generated successfully'
   );

@@ -262,6 +262,9 @@ export type Product = {
 };
 
 export type AiDonationPreview = {
+  provider?: string;
+  model?: string;
+  fallbackReason?: string;
   assessment: {
     category: string;
     condition: ProductCondition;

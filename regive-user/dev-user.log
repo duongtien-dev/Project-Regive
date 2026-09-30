@@ -1,0 +1,14 @@
+
+> regive-user@0.1.0 dev
+> next dev --hostname 127.0.0.1 --port 3000
+
+▲ Next.js 16.3.6 (Turbopack)
+- Local:         http://127.0.0.1:3000
+- Network:       http://127.0.0.1:3000
+- Environments: .env.local
+✓ Ready in 1847ms
+✓ Running next.config.ts took 50ms
+
+✓ Finished filesystem cache database compaction in 10.5s
+ GET / 200 in 1312ms (next.js: 470ms, application-code: 842ms)
+[?25h
