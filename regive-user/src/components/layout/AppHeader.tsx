@@ -503,7 +503,7 @@ export const AppHeader: React.FC = () => {
         onClose={() => setMobileOpen(false)}
         open={mobileOpen}
         closeIcon={<X className="w-5 h-5" />}
-        width={300}
+        size={300}
       >
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           {navLinks.map((link) => {
