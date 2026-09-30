@@ -1,7 +1,16 @@
 import { create } from 'zustand';
-import { User } from '@/types';
+import { Role, User } from '@/types';
 import { authService, LoginPayload, RegisterPayload, UpdateProfilePayload } from '@/services/authService';
 import { tokenStorage } from '@/services/apiClient';
+
+const USER_APP_ROLES: ReadonlyArray<Role> = ['USER', 'BENEFICIARY'];
+
+const ensureUserAppRole = (user: User) => {
+  if (!USER_APP_ROLES.includes(user.role)) {
+    tokenStorage.remove();
+    throw new Error('Tài khoản quản trị hoặc nhân viên vui lòng đăng nhập tại trang admin.');
+  }
+};
 
 interface AuthState {
   user: User | null;
@@ -15,7 +24,7 @@ interface AuthState {
   updateProfile: (payload: UpdateProfilePayload) => Promise<User>;
 }
 
-export const useAuthStore = create<AuthState>((set, get) => ({
+export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   token: null,
   loading: false,
@@ -30,6 +39,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ loading: true, token });
     try {
       const user = await authService.getMe();
+      ensureUserAppRole(user);
       set({ user, token, loading: false, initialized: true });
     } catch {
       tokenStorage.remove();
@@ -41,6 +51,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ loading: true });
     try {
       const { user, token } = await authService.login(payload);
+      ensureUserAppRole(user);
       tokenStorage.set(token);
       set({ user, token, loading: false, initialized: true });
       return user;

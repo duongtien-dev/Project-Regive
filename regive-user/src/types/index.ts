@@ -1,4 +1,4 @@
-export type Role = 'USER' | 'BENEFICIARY' | 'EMPLOYEE' | 'ADMIN';
+export type Role = 'USER' | 'BENEFICIARY';
 
 export type BeneficiaryInfo = {
   householdSize?: number | null;
