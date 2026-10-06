@@ -1,0 +1,365 @@
+/* ──────────────────────────────────────────────────────────────────
+   REGIVE THEME SYSTEM (CSS Variables & Tailwind v4 Theme Tokens)
+   Supports:
+   - Primary: p-s50, p-s100, ..., p-s900 (text-p-s600, bg-p-s50, etc.)
+   - Neutral: n-s50, n-s100, ..., n-s900 (text-n-s800, bg-n-s50, etc.)
+   - Secondary / Accent: sec-s50, ..., sec-s900 (text-sec-s600, etc.)
+   - Semantic: s-s* (success), w-s* (warning), e-s* (error), i-s* (info)
+   - Multi-theme switching: .theme-default, .theme-purple, .theme-red, .theme-dark
+────────────────────────────────────────────────────────────────── */
+
+@theme {
+  /* Primary brand scale */
+  --color-primary: var(--clk-color-primary);
+  --color-primary-hover: var(--clk-color-primary-hover);
+  --color-primary-300: var(--clk-color-primary-300);
+  --color-primary-400: var(--clk-color-primary-400);
+  --color-primary-600: var(--clk-color-primary-600);
+
+  --color-p-s50: var(--clk-color-p-s50);
+  --color-p-s100: var(--clk-color-p-s100);
+  --color-p-s200: var(--clk-color-p-s200);
+  --color-p-s300: var(--clk-color-p-s300);
+  --color-p-s400: var(--clk-color-p-s400);
+  --color-p-s500: var(--clk-color-p-s500);
+  --color-p-s600: var(--clk-color-p-s600);
+  --color-p-s700: var(--clk-color-p-s700);
+  --color-p-s800: var(--clk-color-p-s800);
+  --color-p-s900: var(--clk-color-p-s900);
+  --color-p-s950: var(--clk-color-p-s950);
+
+  /* Neutral scale */
+  --color-n-s50: var(--clk-color-n-s50);
+  --color-n-s100: var(--clk-color-n-s100);
+  --color-n-s200: var(--clk-color-n-s200);
+  --color-n-s300: var(--clk-color-n-s300);
+  --color-n-s400: var(--clk-color-n-s400);
+  --color-n-s500: var(--clk-color-n-s500);
+  --color-n-s600: var(--clk-color-n-s600);
+  --color-n-s700: var(--clk-color-n-s700);
+  --color-n-s800: var(--clk-color-n-s800);
+  --color-n-s900: var(--clk-color-n-s900);
+  --color-n-s950: var(--clk-color-n-s950);
+
+  /* Secondary scale (Warm Coral) */
+  --color-sec-s50: var(--clk-color-sec-s50);
+  --color-sec-s100: var(--clk-color-sec-s100);
+  --color-sec-s200: var(--clk-color-sec-s200);
+  --color-sec-s300: var(--clk-color-sec-s300);
+  --color-sec-s400: var(--clk-color-sec-s400);
+  --color-sec-s500: var(--clk-color-sec-s500);
+  --color-sec-s600: var(--clk-color-sec-s600);
+  --color-sec-s700: var(--clk-color-sec-s700);
+  --color-sec-s800: var(--clk-color-sec-s800);
+  --color-sec-s900: var(--clk-color-sec-s900);
+
+  /* Semantic - Success (s-s*) */
+  --color-s-s50: var(--clk-color-s-s50);
+  --color-s-s100: var(--clk-color-s-s100);
+  --color-s-s200: var(--clk-color-s-s200);
+  --color-s-s300: var(--clk-color-s-s300);
+  --color-s-s400: var(--clk-color-s-s400);
+  --color-s-s500: var(--clk-color-s-s500);
+  --color-s-s600: var(--clk-color-s-s600);
+  --color-s-s700: var(--clk-color-s-s700);
+  --color-s-s800: var(--clk-color-s-s800);
+  --color-s-s900: var(--clk-color-s-s900);
+
+  /* Semantic - Warning (w-s*) */
+  --color-w-s50: var(--clk-color-w-s50);
+  --color-w-s100: var(--clk-color-w-s100);
+  --color-w-s200: var(--clk-color-w-s200);
+  --color-w-s300: var(--clk-color-w-s300);
+  --color-w-s400: var(--clk-color-w-s400);
+  --color-w-s500: var(--clk-color-w-s500);
+  --color-w-s600: var(--clk-color-w-s600);
+  --color-w-s700: var(--clk-color-w-s700);
+  --color-w-s800: var(--clk-color-w-s800);
+  --color-w-s900: var(--clk-color-w-s900);
+
+  /* Semantic - Error / Danger (e-s*) */
+  --color-e-s50: var(--clk-color-e-s50);
+  --color-e-s100: var(--clk-color-e-s100);
+  --color-e-s200: var(--clk-color-e-s200);
+  --color-e-s300: var(--clk-color-e-s300);
+  --color-e-s400: var(--clk-color-e-s400);
+  --color-e-s500: var(--clk-color-e-s500);
+  --color-e-s600: var(--clk-color-e-s600);
+  --color-e-s700: var(--clk-color-e-s700);
+  --color-e-s800: var(--clk-color-e-s800);
+  --color-e-s900: var(--clk-color-e-s900);
+
+  /* Semantic - Info / Sky (i-s*) */
+  --color-i-s50: var(--clk-color-i-s50);
+  --color-i-s100: var(--clk-color-i-s100);
+  --color-i-s200: var(--clk-color-i-s200);
+  --color-i-s300: var(--clk-color-i-s300);
+  --color-i-s400: var(--clk-color-i-s400);
+  --color-i-s500: var(--clk-color-i-s500);
+  --color-i-s600: var(--clk-color-i-s600);
+  --color-i-s700: var(--clk-color-i-s700);
+  --color-i-s800: var(--clk-color-i-s800);
+  --color-i-s900: var(--clk-color-i-s900);
+
+  /* Surfaces & Backgrounds */
+  --color-bg-main: var(--clk-bg-main);
+  --color-bg-card: var(--clk-bg-card);
+  --color-bg-soft: var(--clk-bg-soft);
+  --color-border-subtle: var(--clk-border-subtle);
+
+  /* Backward compatible tokens */
+  --color-clay-bg: var(--clay-bg);
+  --color-clay-bg-soft: var(--clay-bg-soft);
+  --color-clay-surface: var(--clay-surface);
+  --color-clay-surface-alt: var(--clay-surface-alt);
+  --color-clay-green: var(--clay-green);
+  --color-clay-green-deep: var(--clay-green-deep);
+  --color-clay-green-soft: var(--clay-green-soft);
+  --color-clay-coral: var(--clay-coral);
+  --color-clay-coral-soft: var(--clay-coral-soft);
+  --color-clay-mint: var(--clay-mint);
+  --color-clay-mint-soft: var(--clay-mint-soft);
+  --color-clay-sky: var(--clay-sky);
+  --color-clay-sky-soft: var(--clay-sky-soft);
+  --color-clay-yellow: var(--clay-yellow);
+  --color-clay-yellow-soft: var(--clay-yellow-soft);
+  --color-clay-lavender: var(--clay-lavender);
+  --color-clay-navy: var(--clay-navy);
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   DEFAULT THEME (ReGive Eco / Fresh Green & Cream)
+────────────────────────────────────────────────────────────────── */
+:root,
+.theme-default,
+.theme-green {
+  /* Primary Green Palette */
+  --clk-color-primary-300: #86efac;
+  --clk-color-primary-400: #4ade80;
+  --clk-color-primary: #22c55e;
+  --clk-color-primary-600: #16a34a;
+  --clk-color-primary-hover: #16a34a;
+  --clk-color-hover: #f0fdf4;
+
+  --clk-color-p-s50: #f0fdf4;
+  --clk-color-p-s100: #dcfce7;
+  --clk-color-p-s200: #bbf7d0;
+  --clk-color-p-s300: #86efac;
+  --clk-color-p-s400: #4ade80;
+  --clk-color-p-s500: #22c55e;
+  --clk-color-p-s600: #16a34a;
+  --clk-color-p-s700: #15803d;
+  --clk-color-p-s800: #166534;
+  --clk-color-p-s900: #14532d;
+  --clk-color-p-s950: #052e16;
+
+  /* Neutral Slate / Dark Navy Scale */
+  --clk-color-n-s50: #fff8f0;
+  --clk-color-n-s100: #f8fafc;
+  --clk-color-n-s200: #e2e8f0;
+  --clk-color-n-s300: #cbd5e1;
+  --clk-color-n-s400: #94a3b8;
+  --clk-color-n-s500: #64748b;
+  --clk-color-n-s600: #475569;
+  --clk-color-n-s700: #334155;
+  --clk-color-n-s800: #1e293b;
+  --clk-color-n-s900: #0f172a;
+  --clk-color-n-s950: #020617;
+
+  /* Secondary Coral Scale */
+  --clk-color-sec-s50: #fff7ed;
+  --clk-color-sec-s100: #ffedd5;
+  --clk-color-sec-s200: #fed7aa;
+  --clk-color-sec-s300: #fdba74;
+  --clk-color-sec-s400: #fb923c;
+  --clk-color-sec-s500: #f97316;
+  --clk-color-sec-s600: #ea580c;
+  --clk-color-sec-s700: #c2410c;
+  --clk-color-sec-s800: #9a3412;
+  --clk-color-sec-s900: #7c2d12;
+
+  /* Semantic - Success */
+  --clk-color-s-s50: #f0fdf4;
+  --clk-color-s-s100: #dcfce7;
+  --clk-color-s-s200: #bbf7d0;
+  --clk-color-s-s300: #86efac;
+  --clk-color-s-s400: #4ade80;
+  --clk-color-s-s500: #22c55e;
+  --clk-color-s-s600: #16a34a;
+  --clk-color-s-s700: #15803d;
+  --clk-color-s-s800: #166534;
+  --clk-color-s-s900: #14532d;
+
+  /* Semantic - Warning */
+  --clk-color-w-s50: #fffbeb;
+  --clk-color-w-s100: #fef3c7;
+  --clk-color-w-s200: #fde68a;
+  --clk-color-w-s300: #fcd34d;
+  --clk-color-w-s400: #fbbf24;
+  --clk-color-w-s500: #f59e0b;
+  --clk-color-w-s600: #d97706;
+  --clk-color-w-s700: #b45309;
+  --clk-color-w-s800: #92400e;
+  --clk-color-w-s900: #78350f;
+
+  /* Semantic - Error / Danger */
+  --clk-color-e-s50: #fef2f2;
+  --clk-color-e-s100: #fee2e2;
+  --clk-color-e-s200: #fecaca;
+  --clk-color-e-s300: #fca5a5;
+  --clk-color-e-s400: #f87171;
+  --clk-color-e-s500: #ef4444;
+  --clk-color-e-s600: #dc2626;
+  --clk-color-e-s700: #b91c1c;
+  --clk-color-e-s800: #991b1b;
+  --clk-color-e-s900: #7f1d1d;
+
+  /* Semantic - Info / Sky */
+  --clk-color-i-s50: #f0f9ff;
+  --clk-color-i-s100: #e0f2fe;
+  --clk-color-i-s200: #bae6fd;
+  --clk-color-i-s300: #7dd3fc;
+  --clk-color-i-s400: #38bdf8;
+  --clk-color-i-s500: #0ea5e9;
+  --clk-color-i-s600: #0284c7;
+  --clk-color-i-s700: #0369a1;
+  --clk-color-i-s800: #075985;
+  --clk-color-i-s900: #0c4a6e;
+
+  /* Layout and Surfaces */
+  --clk-bg-main: #fff8f0;
+  --clk-bg-card: #ffffff;
+  --clk-bg-soft: #fff3e6;
+  --clk-border-subtle: rgba(15, 23, 42, 0.08);
+
+  /* Clay Backward Compatibility */
+  --clay-bg: var(--clk-bg-main);
+  --clay-bg-soft: var(--clk-bg-soft);
+  --clay-surface: var(--clk-bg-card);
+  --clay-surface-alt: #f0fdf4;
+  --clay-green: var(--clk-color-p-s500);
+  --clay-green-deep: var(--clk-color-p-s600);
+  --clay-green-soft: var(--clk-color-p-s100);
+  --clay-coral: var(--clk-color-sec-s400);
+  --clay-coral-soft: var(--clk-color-sec-s50);
+  --clay-mint: #34d399;
+  --clay-mint-soft: #ecfdf5;
+  --clay-sky: #60a5fa;
+  --clay-sky-soft: #eff6ff;
+  --clay-yellow: #fbbf24;
+  --clay-yellow-soft: #fffbeb;
+  --clay-lavender: #a78bfa;
+  --clay-navy: var(--clk-color-n-s900);
+  --clay-navy-700: var(--clk-color-n-s800);
+  --clay-navy-500: var(--clk-color-n-s600);
+  --clay-navy-300: var(--clk-color-n-s400);
+  --clay-navy-100: var(--clk-color-n-s200);
+  --clay-border: var(--clk-border-subtle);
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   THEME: PURPLE
+────────────────────────────────────────────────────────────────── */
+.theme-purple {
+  --clk-color-primary-300: #9894ff;
+  --clk-color-primary-400: #847fff;
+  --clk-color-primary: #655fff;
+  --clk-color-primary-600: #5c56e8;
+  --clk-color-primary-hover: #5c56e8;
+  --clk-color-hover: #eeeeee;
+
+  --clk-color-p-s50: #f0efff;
+  --clk-color-p-s100: #cfcdff;
+  --clk-color-p-s200: #b8b5ff;
+  --clk-color-p-s300: #9894ff;
+  --clk-color-p-s400: #847fff;
+  --clk-color-p-s500: #655fff;
+  --clk-color-p-s600: #5c56e8;
+  --clk-color-p-s700: #4a44cc;
+  --clk-color-p-s800: #3c36a8;
+  --clk-color-p-s900: #2c2780;
+  --clk-color-p-s950: #1a1654;
+
+  --clay-green: var(--clk-color-p-s500);
+  --clay-green-deep: var(--clk-color-p-s600);
+  --clay-green-soft: var(--clk-color-p-s100);
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   THEME: RED
+────────────────────────────────────────────────────────────────── */
+.theme-red {
+  --clk-color-primary-300: #e03b78;
+  --clk-color-primary-400: #d62366;
+  --clk-color-primary: #b20845;
+  --clk-color-primary-600: #930638;
+  --clk-color-primary-hover: #930638;
+  --clk-color-hover: #eeeeee;
+
+  --clk-color-p-s50: #fff1f2;
+  --clk-color-p-s100: #ffe4e6;
+  --clk-color-p-s200: #fecdd3;
+  --clk-color-p-s300: #e03b78;
+  --clk-color-p-s400: #d62366;
+  --clk-color-p-s500: #b20845;
+  --clk-color-p-s600: #930638;
+  --clk-color-p-s700: #7a042e;
+  --clk-color-p-s800: #600324;
+  --clk-color-p-s900: #49021c;
+  --clk-color-p-s950: #2d0111;
+
+  --clay-green: var(--clk-color-p-s500);
+  --clay-green-deep: var(--clk-color-p-s600);
+  --clay-green-soft: var(--clk-color-p-s100);
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   THEME: DARK
+────────────────────────────────────────────────────────────────── */
+.theme-dark {
+  --clk-color-primary-300: #2b3168;
+  --clk-color-primary-400: #232856;
+  --clk-color-primary: #1d2144;
+  --clk-color-primary-600: #141733;
+  --clk-color-primary-hover: #141733;
+  --clk-color-hover: #f3f3f3;
+
+  --clk-color-p-s50: #1e293b;
+  --clk-color-p-s100: #334155;
+  --clk-color-p-s200: #475569;
+  --clk-color-p-s300: #2b3168;
+  --clk-color-p-s400: #232856;
+  --clk-color-p-s500: #1d2144;
+  --clk-color-p-s600: #141733;
+  --clk-color-p-s700: #0e1024;
+  --clk-color-p-s800: #090a17;
+  --clk-color-p-s900: #04050b;
+  --clk-color-p-s950: #020205;
+
+  --clk-color-n-s50: #090d16;
+  --clk-color-n-s100: #0f172a;
+  --clk-color-n-s200: #1e293b;
+  --clk-color-n-s300: #334155;
+  --clk-color-n-s400: #64748b;
+  --clk-color-n-s500: #94a3b8;
+  --clk-color-n-s600: #cbd5e1;
+  --clk-color-n-s700: #e2e8f0;
+  --clk-color-n-s800: #f1f5f9;
+  --clk-color-n-s900: #f8fafc;
+  --clk-color-n-s950: #ffffff;
+
+  --clk-bg-main: #0b1120;
+  --clk-bg-card: #131d31;
+  --clk-bg-soft: #1e293b;
+  --clk-border-subtle: rgba(255, 255, 255, 0.1);
+
+  --clay-bg: var(--clk-bg-main);
+  --clay-bg-soft: var(--clk-bg-soft);
+  --clay-surface: var(--clk-bg-card);
+  --clay-navy: var(--clk-color-n-s900);
+  --clay-navy-700: var(--clk-color-n-s800);
+  --clay-navy-500: var(--clk-color-n-s600);
+  --clay-navy-300: var(--clk-color-n-s400);
+  --clay-navy-100: var(--clk-color-n-s200);
+  --clay-border: var(--clk-border-subtle);
+}

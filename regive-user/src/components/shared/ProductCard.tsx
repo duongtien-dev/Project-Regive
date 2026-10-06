@@ -15,56 +15,25 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onBuyNow }) =
   const inStock = product.stockQuantity > 0;
 
   return (
-    <div
-      className="clay-card"
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-        overflow: 'hidden',
-      }}
-    >
+    <div className="clay-card flex flex-col h-full overflow-hidden">
       {/* ── Product Image ── */}
       <div
-        style={{
-          position: 'relative',
-          height: 190,
-          width: '100%',
-          background: hasImage ? 'transparent' : 'linear-gradient(135deg, var(--clay-green-soft) 0%, var(--clay-mint-soft) 100%)',
-          overflow: 'hidden',
-        }}
+        className={`relative h-48 w-full overflow-hidden ${
+          hasImage ? 'bg-transparent' : 'bg-gradient-to-br from-p-s100 to-p-s200'
+        }`}
       >
         {hasImage ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={product.images[0]}
             alt={product.name}
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              transition: 'transform 0.35s var(--ease-out)',
-            }}
-            className="group-hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             loading="lazy"
           />
         ) : (
-          <div
-            style={{
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 10,
-            }}
-          >
-            <Package
-              className="w-14 h-14"
-              style={{ color: 'var(--clay-green)', strokeWidth: 1.5 }}
-            />
-            <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--clay-navy-500)' }}>
+          <div className="w-full h-full flex flex-col items-center justify-center gap-2.5">
+            <Package className="w-14 h-14 text-p-s500 stroke-[1.5]" />
+            <span className="text-xs font-semibold text-n-s600">
               Sản phẩm quyên góp
             </span>
           </div>
@@ -72,88 +41,40 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onBuyNow }) =
 
         {/* Condition Badge */}
         {product.condition && (
-          <div style={{ position: 'absolute', top: 12, left: 12, zIndex: 10 }}>
+          <div className="absolute top-3 left-3 z-10">
             <StatusBadge type="product" status={product.condition} />
           </div>
         )}
 
         {/* Stock Badge */}
         <div
-          style={{
-            position: 'absolute',
-            top: 12,
-            right: 12,
-            zIndex: 10,
-            padding: '4px 10px',
-            borderRadius: 'var(--radius-pill)',
-            background: inStock ? 'rgba(15,23,42,.60)' : 'rgba(239,68,68,.80)',
-            backdropFilter: 'blur(10px)',
-            WebkitBackdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255,255,255,.20)',
-            color: '#fff',
-            fontSize: 11,
-            fontWeight: 700,
-            fontFamily: 'var(--font-body)',
-          }}
+          className={`absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full backdrop-blur-md border border-white/20 text-white text-[11px] font-bold ${
+            inStock ? 'bg-n-s900/60' : 'bg-red-500/80'
+          }`}
         >
           {inStock ? `Còn ${product.stockQuantity}` : 'Hết hàng'}
         </div>
       </div>
 
       {/* ── Content ── */}
-      <div style={{ padding: '18px 18px 16px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 12 }}>
+      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
         <div>
           {/* Category tag */}
-          <span className="clay-badge clay-badge-green" style={{ fontSize: 11, marginBottom: 8 }}>
+          <span className="clay-badge clay-badge-green text-[11px] mb-2 inline-flex">
             {product.category || 'Vật phẩm'}
           </span>
 
-          <Link href={`/marketplace/${product._id}`} style={{ textDecoration: 'none', display: 'block', marginTop: 6 }}>
-            <h3
-              style={{
-                fontFamily: 'var(--font-heading)',
-                fontSize: 16,
-                fontWeight: 700,
-                color: 'var(--clay-navy)',
-                lineHeight: 1.35,
-                margin: '0 0 8px',
-                display: '-webkit-box',
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: 'vertical',
-                overflow: 'hidden',
-                transition: 'color 0.2s',
-              }}
-              className="hover:text-green-700"
-            >
+          <Link href={`/marketplace/${product._id}`} className="no-underline block mt-1.5">
+            <h3 className="text-base font-bold text-n-s900 leading-snug mb-2 line-clamp-2 hover:text-p-s700 transition-colors">
               {product.name}
             </h3>
           </Link>
 
           {/* Linked Campaign */}
           {product.campaign && typeof product.campaign === 'object' && product.campaign.title && (
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6,
-                padding: '6px 10px',
-                borderRadius: 10,
-                background: 'var(--clay-yellow-soft)',
-                border: '1.5px solid rgba(251,191,36,.30)',
-                marginBottom: 6,
-              }}
-            >
-              <span style={{ fontSize: 11, fontWeight: 800, color: '#92400E' }}>Quỹ:</span>
-              <span
-                style={{
-                  fontSize: 11,
-                  fontWeight: 600,
-                  color: '#78350F',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                }}
-              >
+            <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-w-s50 border border-w-s300/30 mb-1.5">
+              <span className="text-[11px] font-extrabold text-w-s800">Quỹ:</span>
+              <span className="text-[11px] font-semibold text-w-s900 truncate">
                 {product.campaign.title}
               </span>
             </div>
@@ -161,39 +82,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onBuyNow }) =
 
           {/* AI Verified Badge */}
           {product.latestAiAssessment?.suggestion && (
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 5,
-                padding: '4px 10px',
-                borderRadius: 'var(--radius-pill)',
-                background: 'var(--clay-mint-soft)',
-                border: '1.5px solid rgba(52,211,153,.30)',
-                fontSize: 11,
-                fontWeight: 700,
-                color: '#065F46',
-                marginBottom: 6,
-              }}
-            >
-              <Sparkles className="w-3 h-3" />
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-300/40 text-[11px] font-bold text-emerald-800 mb-1.5">
+              <Sparkles className="w-3 h-3 text-emerald-600" />
               AI Verified · {product.condition || 'Tốt'}
             </div>
           )}
 
           {product.description && (
-            <p
-              style={{
-                fontSize: 12,
-                color: 'var(--clay-navy-500)',
-                lineHeight: 1.6,
-                margin: '4px 0 0',
-                display: '-webkit-box',
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: 'vertical',
-                overflow: 'hidden',
-              }}
-            >
+            <p className="text-xs text-n-s600 leading-relaxed mt-1 line-clamp-2 m-0">
               {product.description}
             </p>
           )}
@@ -201,37 +97,20 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onBuyNow }) =
 
         {/* ── Price + Actions ── */}
         <div>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginBottom: 12,
-              paddingTop: 12,
-              borderTop: '1.5px dashed rgba(34,197,94,.20)',
-            }}
-          >
-            <span style={{ fontSize: 12, color: 'var(--clay-navy-300)', fontWeight: 600 }}>Giá gây quỹ</span>
-            <span
-              style={{
-                fontFamily: 'var(--font-heading)',
-                fontSize: 18,
-                fontWeight: 700,
-                color: 'var(--clay-green-deep)',
-              }}
-            >
+          <div className="flex items-center justify-between mb-3 pt-3 border-t-2 border-dashed border-p-s500/20">
+            <span className="text-xs text-n-s400 font-semibold">Giá gây quỹ</span>
+            <span className="text-lg font-bold text-p-s600">
               {formatVND(product.price)}
             </span>
           </div>
 
-          <div style={{ display: 'flex', gap: 8 }}>
+          <div className="flex gap-2">
             <Link
               href={`/marketplace/${product._id}`}
-              style={{ flex: 1, textDecoration: 'none' }}
+              className="flex-1 no-underline"
             >
               <button
-                className="clay-btn-outline"
-                style={{ width: '100%', fontSize: 13, padding: '9px 12px' }}
+                className="clay-btn-outline w-full text-xs sm:text-sm py-2 px-3 justify-center"
               >
                 Chi tiết
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -243,14 +122,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onBuyNow }) =
                 onBuyNow ? onBuyNow(product) : (window.location.href = `/marketplace/${product._id}`)
               }
               disabled={!inStock}
-              className="clay-btn-primary"
-              style={{
-                flex: 1,
-                fontSize: 13,
-                padding: '9px 12px',
-                opacity: inStock ? 1 : 0.5,
-                cursor: inStock ? 'pointer' : 'not-allowed',
-              }}
+              className={`clay-btn-primary flex-1 text-xs sm:text-sm py-2 px-3 justify-center ${
+                !inStock ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
             >
               <ShoppingBag className="w-3.5 h-3.5" />
               Mua ngay

@@ -26,7 +26,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="vi" className={`${beVietnamPro.variable} h-full antialiased`}>
-      <body className="min-h-dvh flex flex-col" style={{ background: 'var(--clay-bg)', color: 'var(--clay-navy)' }}>
+      <body className="min-h-dvh flex flex-col bg-n-s50 text-n-s900">
         <AntdRegistry>
           <Providers>
             <AppHeader />

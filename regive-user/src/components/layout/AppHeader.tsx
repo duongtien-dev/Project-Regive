@@ -3,24 +3,16 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Badge, Drawer, type MenuProps } from 'antd';
+import { Badge, Drawer } from 'antd';
 import {
   Heart,
   Bell,
-  User as UserIcon,
   LogOut,
-  LayoutDashboard,
-  Gift,
-  HandHeart,
-  Package,
-  CreditCard,
-  LifeBuoy,
   Menu,
   X,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { notificationService } from '@/services/notificationService';
-import { Notification } from '@/types';
 
 export const AppHeader: React.FC = () => {
   const pathname = usePathname();
@@ -62,143 +54,25 @@ export const AppHeader: React.FC = () => {
     { label: 'Hỏi đáp', href: '/faq' },
   ];
 
-  const userMenuItems: MenuProps['items'] = [
-    {
-      key: 'user-info',
-      disabled: true,
-      label: (
-        <div className="py-1 px-1">
-          <p style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, color: 'var(--clay-navy)', fontSize: 15 }}>
-            {user?.fullName}
-          </p>
-          <p style={{ fontSize: 12, color: 'var(--clay-navy-500)' }}>{user?.email}</p>
-          <span
-            className="clay-badge clay-badge-green"
-            style={{ marginTop: 6, display: 'inline-flex' }}
-          >
-            {user?.role === 'BENEFICIARY' ? 'Người thụ hưởng' : 'Thành viên'}
-          </span>
-        </div>
-      ),
-    },
-    { type: 'divider' },
-    {
-      key: 'dashboard',
-      icon: <LayoutDashboard className="w-4 h-4" style={{ color: 'var(--clay-green-deep)' }} />,
-      label: <Link href="/me/dashboard">Tổng quan của tôi</Link>,
-    },
-    {
-      key: 'donations',
-      icon: <Gift className="w-4 h-4" style={{ color: 'var(--clay-coral)' }} />,
-      label: <Link href="/me/donations">Quyên góp của tôi</Link>,
-    },
-    {
-      key: 'volunteers',
-      icon: <HandHeart className="w-4 h-4" style={{ color: 'var(--clay-mint)' }} />,
-      label: <Link href="/me/volunteers">Đăng ký tình nguyện</Link>,
-    },
-    {
-      key: 'orders',
-      icon: <Package className="w-4 h-4" style={{ color: 'var(--clay-sky)' }} />,
-      label: <Link href="/me/orders">Đơn hàng Marketplace</Link>,
-    },
-    {
-      key: 'payments',
-      icon: <CreditCard className="w-4 h-4" style={{ color: 'var(--clay-navy-500)' }} />,
-      label: <Link href="/me/payments">Lịch sử thanh toán</Link>,
-    },
-    ...(user?.role === 'BENEFICIARY'
-      ? [
-          {
-            key: 'support-requests',
-            icon: <LifeBuoy className="w-4 h-4" style={{ color: 'var(--clay-coral)' }} />,
-            label: <Link href="/me/support-requests">Yêu cầu hỗ trợ</Link>,
-          },
-        ]
-      : []),
-    {
-      key: 'profile',
-      icon: <UserIcon className="w-4 h-4" style={{ color: 'var(--clay-navy-500)' }} />,
-      label: <Link href="/profile">Cài đặt tài khoản</Link>,
-    },
-    { type: 'divider' },
-    {
-      key: 'logout',
-      icon: <LogOut className="w-4 h-4" style={{ color: '#EF4444' }} />,
-      label: <span style={{ color: '#EF4444', fontWeight: 700 }}>Đăng xuất</span>,
-      onClick: handleLogout,
-    },
-  ];
-
   return (
     <header
-      style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 50,
-        background: scrolled ? 'rgba(255,248,240,.95)' : 'rgba(255,248,240,.85)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        borderBottom: scrolled
-          ? '2px solid rgba(34,197,94,.18)'
-          : '2px solid transparent',
-        boxShadow: scrolled ? 'var(--shadow-clay-sm)' : 'none',
-        transition: 'all 0.3s ease',
-      }}
+      className={`sticky top-0 z-50 transition-all duration-300 backdrop-blur-xl ${
+        scrolled
+          ? 'bg-n-s50/95 border-b-2 border-p-s500/20 shadow-sm'
+          : 'bg-n-s50/85 border-b-2 border-transparent'
+      }`}
     >
-      <div
-        style={{
-          maxWidth: 1280,
-          margin: '0 auto',
-          padding: '0 24px',
-          height: 68,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 16,
-        }}
-      >
+      <div className="max-w-7xl mx-auto px-6 h-[68px] flex items-center justify-between gap-4">
         {/* ── Brand Logo ── */}
-        <Link href="/" className="flex items-center gap-3 group" style={{ textDecoration: 'none', flexShrink: 0 }}>
-          <div
-            style={{
-              width: 44,
-              height: 44,
-              borderRadius: 16,
-              background: 'linear-gradient(135deg, var(--clay-green) 0%, var(--clay-mint) 100%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: 'var(--shadow-green)',
-              transition: 'transform 0.25s var(--ease-spring)',
-            }}
-            className="group-hover:scale-110"
-          >
+        <Link href="/" className="flex items-center gap-3 group no-underline shrink-0">
+          <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-p-s500 to-p-s400 flex items-center justify-center shadow-md shadow-p-s500/25 group-hover:scale-110 transition-transform duration-200">
             <Heart className="w-5 h-5 fill-white text-white" />
           </div>
           <div>
-            <span
-              style={{
-                fontFamily: 'var(--font-heading)',
-                fontSize: 22,
-                fontWeight: 700,
-                color: 'var(--clay-navy)',
-                lineHeight: 1.1,
-                letterSpacing: '-0.01em',
-              }}
-            >
-              Re<span style={{ color: 'var(--clay-green-deep)' }}>Give</span>
+            <span className="font-bold text-xl sm:text-2xl text-n-s900 leading-tight tracking-tight block">
+              Re<span className="text-p-s600">Give</span>
             </span>
-            <span
-              style={{
-                display: 'block',
-                fontSize: 10,
-                color: 'var(--clay-navy-300)',
-                fontWeight: 600,
-                letterSpacing: '0.04em',
-                marginTop: -1,
-              }}
-            >
+            <span className="block text-[10px] text-n-s400 font-semibold tracking-wider -mt-0.5">
               Trao tặng · Thiện nguyện
             </span>
           </div>
@@ -206,8 +80,7 @@ export const AppHeader: React.FC = () => {
 
         {/* ── Desktop Navigation ── */}
         <nav
-          className="hidden md:flex items-center"
-          style={{ gap: 4 }}
+          className="hidden md:flex items-center gap-1"
           aria-label="Điều hướng chính"
         >
           {navLinks.map((link) => {
@@ -216,25 +89,12 @@ export const AppHeader: React.FC = () => {
               <Link
                 key={link.href}
                 href={link.href}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 5,
-                  padding: '8px 14px',
-                  borderRadius: 'var(--radius-pill)',
-                  fontSize: 14,
-                  fontWeight: isActive ? 800 : 600,
-                  fontFamily: 'var(--font-body)',
-                  color: isActive ? 'var(--clay-green-deep)' : 'var(--clay-navy-700)',
-                  background: isActive ? 'var(--clay-green-soft)' : 'transparent',
-                  border: isActive ? '1.5px solid rgba(34,197,94,.25)' : '1.5px solid transparent',
-                  textDecoration: 'none',
-                  transition: 'all 0.2s ease',
-                  boxShadow: isActive ? 'var(--shadow-clay-sm)' : 'none',
-                }}
-                className="hover:bg-green-50 hover:text-green-700"
+                className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm no-underline transition-all duration-200 ${
+                  isActive
+                    ? 'font-extrabold text-p-s700 bg-p-s100 border border-p-s300/60 shadow-sm'
+                    : 'font-semibold text-n-s700 border border-transparent hover:bg-p-s50 hover:text-p-s700'
+                }`}
               >
-
                 {link.label}
               </Link>
             );
@@ -243,19 +103,7 @@ export const AppHeader: React.FC = () => {
           {user?.role === 'BENEFICIARY' && (
             <Link
               href="/support/new"
-              style={{
-                marginLeft: 4,
-                padding: '8px 16px',
-                borderRadius: 'var(--radius-pill)',
-                background: 'var(--clay-coral-soft)',
-                color: '#C2410C',
-                fontSize: 13,
-                fontWeight: 700,
-                border: '1.5px solid rgba(251,146,60,.30)',
-                textDecoration: 'none',
-                boxShadow: 'var(--shadow-clay-sm)',
-                transition: 'all 0.2s ease',
-              }}
+              className="ml-1 px-4 py-2 rounded-full bg-sec-s50 text-sec-s700 text-xs font-bold border border-sec-s300/40 no-underline shadow-sm hover:bg-sec-s100 transition-colors"
             >
               🆘 Gửi hỗ trợ
             </Link>
@@ -263,27 +111,13 @@ export const AppHeader: React.FC = () => {
         </nav>
 
         {/* ── Right controls ── */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
+        <div className="flex items-center gap-2.5 shrink-0">
           {user ? (
             <>
               {/* Notification Bell */}
               <Link
                 href="/notifications"
-                style={{
-                  position: 'relative',
-                  padding: 10,
-                  borderRadius: 16,
-                  background: 'var(--clay-surface)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: 'var(--shadow-clay-sm)',
-                  border: '1.5px solid var(--clay-border)',
-                  color: 'var(--clay-navy-500)',
-                  textDecoration: 'none',
-                  transition: 'all 0.2s ease',
-                }}
-                className="hover:border-green-400 hover:text-green-600"
+                className="relative p-2.5 rounded-2xl bg-white flex items-center justify-center shadow-sm border border-n-s200 text-n-s600 no-underline hover:border-p-s400 hover:text-p-s600 transition-colors"
                 aria-label={`Thông báo — ${unreadCount} chưa đọc`}
               >
                 <Badge count={unreadCount} size="small" offset={[3, -3]}>
@@ -294,75 +128,26 @@ export const AppHeader: React.FC = () => {
               {/* User Avatar Dropdown */}
               <div className="relative group/user">
                 <button
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    padding: '6px 10px 6px 6px',
-                    borderRadius: 20,
-                    border: '2px solid var(--clay-border)',
-                    background: 'var(--clay-surface)',
-                    boxShadow: 'var(--shadow-clay-sm)',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                    fontFamily: 'var(--font-body)',
-                  }}
-                  className="hover:border-green-400"
+                  className="flex items-center gap-2 py-1.5 pr-2.5 pl-1.5 rounded-full border-2 border-n-s200 bg-white shadow-sm cursor-pointer hover:border-p-s400 transition-colors"
                   aria-haspopup="true"
                   aria-label={`Tài khoản của ${user.fullName}`}
                 >
-                  <div
-                    style={{
-                      width: 34,
-                      height: 34,
-                      borderRadius: 12,
-                      background: 'linear-gradient(135deg, var(--clay-green-soft), var(--clay-mint-soft))',
-                      color: 'var(--clay-green-deep)',
-                      fontWeight: 900,
-                      fontSize: 16,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontFamily: 'var(--font-heading)',
-                      border: '2px solid rgba(34,197,94,.25)',
-                    }}
-                  >
+                  <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-p-s100 to-p-s200 text-p-s700 font-black text-sm flex items-center justify-center border border-p-s300/60">
                     {user.fullName.charAt(0).toUpperCase()}
                   </div>
-                  <span
-                    className="hidden sm:block"
-                    style={{
-                      fontSize: 13,
-                      fontWeight: 700,
-                      color: 'var(--clay-navy-700)',
-                      maxWidth: 100,
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
+                  <span className="hidden sm:block text-xs font-bold text-n-s800 max-w-[100px] truncate">
                     {user.fullName}
                   </span>
                 </button>
 
                 {/* Dropdown Menu */}
-                <div
-                  className="hidden group-hover/user:block absolute right-0 top-full mt-2 w-56 z-50"
-                  style={{
-                    background: 'var(--clay-surface)',
-                    borderRadius: 'var(--radius-clay-md)',
-                    boxShadow: 'var(--shadow-clay-lg)',
-                    border: '1.5px solid var(--clay-border)',
-                    padding: '8px 0',
-                    fontFamily: 'var(--font-body)',
-                  }}
-                >
-                  <div style={{ padding: '10px 16px 8px', borderBottom: '1px solid var(--clay-border)' }}>
-                    <p style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 15, color: 'var(--clay-navy)', margin: 0 }}>
+                <div className="hidden group-hover/user:block absolute right-0 top-full mt-2 w-56 z-50 bg-white rounded-2xl shadow-xl border border-n-s200 py-2">
+                  <div className="px-4 py-2.5 border-b border-n-s200">
+                    <p className="font-bold text-sm text-n-s900 m-0 truncate">
                       {user.fullName}
                     </p>
-                    <p style={{ fontSize: 11, color: 'var(--clay-navy-300)', margin: '2px 0 6px' }}>{user.email}</p>
-                    <span className="clay-badge clay-badge-green" style={{ fontSize: 11 }}>
+                    <p className="text-[11px] text-n-s400 my-0.5 truncate">{user.email}</p>
+                    <span className="clay-badge clay-badge-green text-[10px] mt-1 inline-flex">
                       {user.role === 'BENEFICIARY' ? 'Người thụ hưởng' : 'Thành viên'}
                     </span>
                   </div>
@@ -378,41 +163,15 @@ export const AppHeader: React.FC = () => {
                     <Link
                       key={item.href}
                       href={item.href}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 10,
-                        padding: '9px 16px',
-                        fontSize: 13,
-                        fontWeight: 600,
-                        color: 'var(--clay-navy-700)',
-                        textDecoration: 'none',
-                        transition: 'background 0.15s',
-                      }}
-                      className="hover:bg-green-50"
+                      className="flex items-center gap-2.5 px-4 py-2 text-xs sm:text-sm font-semibold text-n-s700 no-underline hover:bg-p-s50 hover:text-p-s700 transition-colors"
                     >
                       {item.label}
                     </Link>
                   ))}
-                  <div style={{ borderTop: '1px solid var(--clay-border)', marginTop: 4, paddingTop: 4 }}>
+                  <div className="border-t border-n-s200 mt-1 pt-1">
                     <button
                       onClick={handleLogout}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 10,
-                        padding: '9px 16px',
-                        fontSize: 13,
-                        fontWeight: 700,
-                        color: '#EF4444',
-                        background: 'none',
-                        border: 'none',
-                        width: '100%',
-                        cursor: 'pointer',
-                        textAlign: 'left',
-                        transition: 'background 0.15s',
-                      }}
-                      className="hover:bg-red-50"
+                      className="flex items-center gap-2.5 px-4 py-2 text-xs sm:text-sm font-bold text-red-500 bg-transparent border-0 w-full cursor-pointer text-left hover:bg-red-50 transition-colors"
                     >
                       <LogOut className="w-4 h-4" />
                       Đăng xuất
@@ -422,30 +181,16 @@ export const AppHeader: React.FC = () => {
               </div>
             </>
           ) : (
-            <div className="hidden sm:flex items-center" style={{ gap: 8 }}>
+            <div className="hidden sm:flex items-center gap-2">
               <Link
                 href="/login"
-                style={{
-                  padding: '9px 20px',
-                  borderRadius: 'var(--radius-pill)',
-                  fontSize: 14,
-                  fontWeight: 700,
-                  color: 'var(--clay-navy-700)',
-                  textDecoration: 'none',
-                  border: '2px solid var(--clay-border)',
-                  background: 'var(--clay-surface)',
-                  boxShadow: 'var(--shadow-clay-sm)',
-                  transition: 'all 0.2s ease',
-                  fontFamily: 'var(--font-body)',
-                }}
-                className="hover:border-green-400 hover:text-green-700"
+                className="px-5 py-2 rounded-full text-sm font-bold text-n-s800 no-underline border-2 border-n-s200 bg-white shadow-sm hover:border-p-s400 hover:text-p-s700 transition-colors"
               >
                 Đăng nhập
               </Link>
               <Link
                 href="/register"
-                className="clay-btn-primary"
-                style={{ padding: '9px 22px', fontSize: 14 }}
+                className="clay-btn-primary px-5 py-2 text-sm no-underline"
               >
                 Tham gia ngay
               </Link>
@@ -456,19 +201,7 @@ export const AppHeader: React.FC = () => {
           <button
             id="mobile-menu-toggle"
             onClick={() => setMobileOpen(true)}
-            className="md:hidden"
-            style={{
-              padding: 10,
-              borderRadius: 14,
-              background: 'var(--clay-surface)',
-              border: '2px solid var(--clay-border)',
-              boxShadow: 'var(--shadow-clay-sm)',
-              color: 'var(--clay-navy)',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
+            className="md:hidden p-2.5 rounded-xl bg-white border border-n-s200 shadow-sm text-n-s900 cursor-pointer flex items-center justify-center hover:bg-n-s50"
             aria-label="Mở menu điều hướng"
           >
             <Menu className="w-5 h-5" />
@@ -479,23 +212,12 @@ export const AppHeader: React.FC = () => {
       {/* ── Mobile Drawer ── */}
       <Drawer
         title={
-          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
-            <div
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: 12,
-                background: 'linear-gradient(135deg, var(--clay-green), var(--clay-mint))',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: 'var(--shadow-green)',
-              }}
-            >
+          <Link href="/" className="flex items-center gap-2.5 no-underline">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-p-s500 to-p-s400 flex items-center justify-center shadow-md">
               <Heart className="w-4 h-4 fill-white text-white" />
             </div>
-            <span style={{ fontFamily: 'var(--font-heading)', fontSize: 20, fontWeight: 700, color: 'var(--clay-navy)' }}>
-              Re<span style={{ color: 'var(--clay-green-deep)' }}>Give</span>
+            <span className="font-bold text-xl text-n-s900">
+              Re<span className="text-p-s600">Give</span>
             </span>
           </Link>
         }
@@ -505,7 +227,7 @@ export const AppHeader: React.FC = () => {
         closeIcon={<X className="w-5 h-5" />}
         size={300}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <div className="flex flex-col gap-1.5">
           {navLinks.map((link) => {
             const isActive = pathname === link.href || pathname.startsWith(`${link.href}/`);
             return (
@@ -513,23 +235,12 @@ export const AppHeader: React.FC = () => {
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 10,
-                  padding: '12px 16px',
-                  borderRadius: 'var(--radius-clay-md)',
-                  fontSize: 15,
-                  fontWeight: isActive ? 800 : 600,
-                  color: isActive ? 'var(--clay-green-deep)' : 'var(--clay-navy-700)',
-                  background: isActive ? 'var(--clay-green-soft)' : 'transparent',
-                  textDecoration: 'none',
-                  transition: 'all 0.2s ease',
-                  fontFamily: 'var(--font-body)',
-                  border: isActive ? '1.5px solid rgba(34,197,94,.2)' : '1.5px solid transparent',
-                }}
+                className={`flex items-center gap-2.5 px-4 py-3 rounded-2xl text-sm no-underline transition-colors ${
+                  isActive
+                    ? 'font-extrabold text-p-s700 bg-p-s100 border border-p-s300/40'
+                    : 'font-semibold text-n-s700 border border-transparent hover:bg-p-s50'
+                }`}
               >
-
                 {link.label}
               </Link>
             );
@@ -539,103 +250,46 @@ export const AppHeader: React.FC = () => {
             <Link
               href="/support/new"
               onClick={() => setMobileOpen(false)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 10,
-                padding: '12px 16px',
-                borderRadius: 'var(--radius-clay-md)',
-                fontSize: 15,
-                fontWeight: 700,
-                color: '#C2410C',
-                background: 'var(--clay-coral-soft)',
-                textDecoration: 'none',
-                border: '1.5px solid rgba(251,146,60,.25)',
-                fontFamily: 'var(--font-body)',
-              }}
+              className="flex items-center gap-2.5 px-4 py-3 rounded-2xl text-sm font-bold text-sec-s700 bg-sec-s50 no-underline border border-sec-s300/40"
             >
               Gửi yêu cầu hỗ trợ
             </Link>
           )}
 
-          <div style={{ marginTop: 16, paddingTop: 16, borderTop: '2px solid var(--clay-border)' }}>
+          <div className="mt-4 pt-4 border-t-2 border-n-s200">
             {user ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div className="flex flex-col gap-2">
                 <Link
                   href="/me/dashboard"
                   onClick={() => setMobileOpen(false)}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 10,
-                    padding: '12px 16px',
-                    borderRadius: 'var(--radius-clay-md)',
-                    fontSize: 14,
-                    fontWeight: 700,
-                    color: 'var(--clay-navy)',
-                    background: 'var(--clay-surface)',
-                    textDecoration: 'none',
-                    boxShadow: 'var(--shadow-clay-sm)',
-                    border: '1.5px solid var(--clay-border)',
-                    fontFamily: 'var(--font-body)',
-                  }}
+                  className="flex items-center gap-2.5 px-4 py-3 rounded-2xl text-sm font-bold text-n-s900 bg-white no-underline shadow-sm border border-n-s200"
                 >
-                  <div
-                    style={{
-                      width: 32,
-                      height: 32,
-                      borderRadius: 10,
-                      background: 'linear-gradient(135deg, var(--clay-green-soft), var(--clay-mint-soft))',
-                      color: 'var(--clay-green-deep)',
-                      fontWeight: 900,
-                      fontSize: 14,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontFamily: 'var(--font-heading)',
-                    }}
-                  >
+                  <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-p-s100 to-p-s200 text-p-s700 font-black text-xs flex items-center justify-center">
                     {user.fullName.charAt(0).toUpperCase()}
                   </div>
                   {user.fullName}
                 </Link>
                 <button
                   onClick={handleLogout}
-                  style={{
-                    padding: '12px 16px',
-                    borderRadius: 'var(--radius-clay-md)',
-                    background: '#FEF2F2',
-                    color: '#EF4444',
-                    fontWeight: 700,
-                    fontSize: 14,
-                    border: '1.5px solid rgba(239,68,68,.25)',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: 8,
-                    fontFamily: 'var(--font-body)',
-                  }}
+                  className="py-3 px-4 rounded-2xl bg-red-50 text-red-500 font-bold text-sm border border-red-200 cursor-pointer flex items-center justify-center gap-2"
                 >
                   <LogOut className="w-4 h-4" />
                   Đăng xuất
                 </button>
               </div>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div className="flex flex-col gap-2">
                 <Link
                   href="/login"
                   onClick={() => setMobileOpen(false)}
-                  className="clay-btn-outline"
-                  style={{ width: '100%', justifyContent: 'center', textDecoration: 'none' }}
+                  className="clay-btn-outline w-full justify-center no-underline"
                 >
                   Đăng nhập
                 </Link>
                 <Link
                   href="/register"
                   onClick={() => setMobileOpen(false)}
-                  className="clay-btn-primary"
-                  style={{ width: '100%', justifyContent: 'center', textDecoration: 'none' }}
+                  className="clay-btn-primary w-full justify-center no-underline"
                 >
                   Tham gia ngay
                 </Link>

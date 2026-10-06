@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Tooltip } from 'antd';
 import {
   MapPin,
   Calendar,
@@ -36,59 +35,22 @@ export const CampaignCard: React.FC<CampaignCardProps> = ({
   const isUrgent = diffDays > 0 && diffDays <= 7;
 
   return (
-    <div
-      className="clay-card"
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-        overflow: 'hidden',
-        cursor: 'default',
-      }}
-    >
+    <div className="clay-card flex flex-col h-full overflow-hidden cursor-default group">
       {/* ── Cover Image ── */}
       <div
+        className="relative h-52 w-full bg-cover bg-center overflow-hidden"
         style={{
-          position: 'relative',
-          height: 200,
-          width: '100%',
           backgroundImage: campaign.bannerImage
             ? `linear-gradient(to top, rgba(15,23,42,.80) 0%, rgba(15,23,42,.20) 55%, rgba(15,23,42,.05) 100%), url(${campaign.bannerImage})`
             : 'linear-gradient(135deg, #22C55E 0%, #34D399 50%, #60A5FA 100%)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          overflow: 'hidden',
         }}
       >
         {/* Top badges */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 14,
-            left: 14,
-            right: 14,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            zIndex: 10,
-          }}
-        >
+        <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between z-10">
           <span
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 5,
-              padding: '5px 11px',
-              borderRadius: 'var(--radius-pill)',
-              background: 'rgba(15,23,42,.55)',
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255,255,255,.20)',
-              color: isUrgent ? '#FCA5A5' : '#A7F3D0',
-              fontSize: 11,
-              fontWeight: 700,
-              fontFamily: 'var(--font-body)',
-            }}
+            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-n-s900/60 backdrop-blur-md border border-white/20 text-[11px] font-bold ${
+              isUrgent ? 'text-red-300' : 'text-p-s200'
+            }`}
           >
             <Clock className="w-3 h-3" />
             {daysLeftText}
@@ -98,40 +60,10 @@ export const CampaignCard: React.FC<CampaignCardProps> = ({
 
         {/* Quick View overlay */}
         {onQuickView && (
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'rgba(15,23,42,.40)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              opacity: 0,
-              transition: 'opacity 0.25s ease',
-              zIndex: 10,
-            }}
-            className="group-hover-overlay"
-            onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.opacity = '1'; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.opacity = '0'; }}
-          >
+          <div className="absolute inset-0 bg-n-s900/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
             <button
               onClick={() => onQuickView(campaign)}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 6,
-                padding: '10px 18px',
-                borderRadius: 'var(--radius-pill)',
-                background: 'rgba(255,255,255,.92)',
-                backdropFilter: 'blur(8px)',
-                border: 'none',
-                color: 'var(--clay-navy)',
-                fontSize: 13,
-                fontWeight: 700,
-                cursor: 'pointer',
-                boxShadow: 'var(--shadow-clay-md)',
-                fontFamily: 'var(--font-body)',
-              }}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/95 backdrop-blur-md border-0 text-n-s900 text-xs font-bold cursor-pointer shadow-md hover:scale-105 transition-transform"
             >
               <Eye className="w-4 h-4" />
               Xem nhanh
@@ -140,43 +72,20 @@ export const CampaignCard: React.FC<CampaignCardProps> = ({
         )}
 
         {/* Bottom: org + location */}
-        <div
-          style={{
-            position: 'absolute',
-            bottom: 14,
-            left: 14,
-            right: 14,
-            zIndex: 10,
-          }}
-        >
-          <span
-            style={{
-              display: 'inline-block',
-              padding: '3px 10px',
-              borderRadius: 8,
-              background: 'rgba(255,255,255,.18)',
-              backdropFilter: 'blur(8px)',
-              border: '1px solid rgba(255,255,255,.25)',
-              color: '#A7F3D0',
-              fontSize: 10,
-              fontWeight: 700,
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-              marginBottom: 5,
-            }}
-          >
+        <div className="absolute bottom-3.5 left-3.5 right-3.5 z-10">
+          <span className="inline-block px-2.5 py-0.5 rounded-lg bg-white/20 backdrop-blur-md border border-white/25 text-p-s200 text-[10px] font-bold tracking-wider uppercase mb-1.5">
             {campaign.organization || 'ReGive'}
           </span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#A7F3D0', fontSize: 11 }}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}>
-              <MapPin className="w-3 h-3 text-emerald-300" />
-              <span style={{ maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <div className="flex items-center gap-2 text-p-s100 text-xs font-medium">
+            <span className="inline-flex items-center gap-1">
+              <MapPin className="w-3 h-3 text-p-s300 shrink-0" />
+              <span className="max-w-[120px] truncate">
                 {campaign.location}
               </span>
             </span>
-            <span style={{ opacity: .5 }}>•</span>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}>
-              <Calendar className="w-3 h-3 text-emerald-300" />
+            <span className="opacity-50">•</span>
+            <span className="inline-flex items-center gap-1">
+              <Calendar className="w-3 h-3 text-p-s300 shrink-0" />
               {formatDate(campaign.endDate)}
             </span>
           </div>
@@ -184,64 +93,34 @@ export const CampaignCard: React.FC<CampaignCardProps> = ({
       </div>
 
       {/* ── Content ── */}
-      <div style={{ padding: '20px 20px 18px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 16 }}>
+      <div className="p-5 flex-1 flex flex-col justify-between gap-4">
         <div>
-          <Link href={`/campaigns/${campaign._id}`} style={{ textDecoration: 'none' }}>
-            <h3
-              style={{
-                fontFamily: 'var(--font-heading)',
-                fontSize: 17,
-                fontWeight: 700,
-                color: 'var(--clay-navy)',
-                lineHeight: 1.35,
-                margin: '0 0 8px',
-                display: '-webkit-box',
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: 'vertical',
-                overflow: 'hidden',
-                transition: 'color 0.2s',
-              }}
-              className="hover:text-green-700"
-            >
+          <Link href={`/campaigns/${campaign._id}`} className="no-underline block">
+            <h3 className="text-base sm:text-lg font-bold text-n-s900 leading-snug mb-2 line-clamp-2 hover:text-p-s700 transition-colors">
               {campaign.title}
             </h3>
           </Link>
 
-          <p
-            style={{
-              fontSize: 13,
-              color: 'var(--clay-navy-500)',
-              lineHeight: 1.65,
-              margin: 0,
-              display: '-webkit-box',
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-            }}
-          >
+          <p className="text-xs sm:text-sm text-n-s600 leading-relaxed m-0 line-clamp-2">
             {campaign.shortDescription || campaign.goal || campaign.description}
           </p>
         </div>
 
         {/* ── Progress ── */}
         <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
+          <div className="flex justify-between items-baseline mb-2">
             <div>
-              <span style={{ display: 'block', fontSize: 11, color: 'var(--clay-navy-300)', fontWeight: 600 }}>Đã gây quỹ</span>
-              <span style={{ fontSize: 15, fontWeight: 900, color: 'var(--clay-green-deep)', fontFamily: 'var(--font-heading)' }}>
+              <span className="block text-[11px] text-n-s400 font-semibold">Đã gây quỹ</span>
+              <span className="text-base font-black text-p-s600">
                 {formatVND(campaign.raisedAmount)}
               </span>
             </div>
             <span
-              style={{
-                padding: '3px 10px',
-                borderRadius: 'var(--radius-pill)',
-                background: progress >= 100 ? 'var(--clay-green-soft)' : 'var(--clay-bg-soft)',
-                color: progress >= 100 ? 'var(--clay-green-deep)' : 'var(--clay-navy-500)',
-                fontSize: 12,
-                fontWeight: 800,
-                border: '1.5px solid var(--clay-border)',
-              }}
+              className={`px-2.5 py-0.5 rounded-full text-xs font-extrabold border ${
+                progress >= 100
+                  ? 'bg-p-s100 text-p-s700 border-p-s300'
+                  : 'bg-n-s50 text-n-s600 border-n-s200'
+              }`}
             >
               {progress}%
             </span>
@@ -252,21 +131,12 @@ export const CampaignCard: React.FC<CampaignCardProps> = ({
             <div className="clay-progress-fill" style={{ width: `${Math.min(progress, 100)}%` }} />
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 6 }}>
-            <span style={{ fontSize: 11, color: 'var(--clay-navy-300)', fontWeight: 500 }}>
+          <div className="flex justify-between items-center mt-1.5">
+            <span className="text-[11px] text-n-s400 font-medium">
               Mục tiêu: {formatVND(campaign.targetAmount)}
             </span>
             {campaign.donationCount ? (
-              <span
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 4,
-                  fontSize: 11,
-                  color: 'var(--clay-green-deep)',
-                  fontWeight: 700,
-                }}
-              >
+              <span className="inline-flex items-center gap-1 text-[11px] text-p-s600 font-bold">
                 <Users className="w-3 h-3" />
                 {campaign.donationCount} lượt
               </span>
@@ -275,21 +145,19 @@ export const CampaignCard: React.FC<CampaignCardProps> = ({
         </div>
 
         {/* ── Action Buttons ── */}
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div className="flex gap-2">
           {onQuickDonate ? (
             <button
               onClick={() => onQuickDonate(campaign)}
-              className="clay-btn-primary"
-              style={{ flex: 1, fontSize: 13, padding: '10px 16px', gap: 6 }}
+              className="clay-btn-primary flex-1 text-xs sm:text-sm py-2 px-3 gap-1.5 justify-center"
             >
               <Heart className="w-3.5 h-3.5 fill-white" />
               Ủng hộ nhanh
             </button>
           ) : (
-            <Link href={`/campaigns/${campaign._id}/donate-money`} style={{ flex: 1, textDecoration: 'none' }}>
+            <Link href={`/campaigns/${campaign._id}/donate-money`} className="flex-1 no-underline">
               <button
-                className="clay-btn-primary"
-                style={{ width: '100%', fontSize: 13, padding: '10px 16px', gap: 6 }}
+                className="clay-btn-primary w-full text-xs sm:text-sm py-2 px-3 gap-1.5 justify-center"
               >
                 <Heart className="w-3.5 h-3.5 fill-white" />
                 Ủng hộ tiền
@@ -297,10 +165,9 @@ export const CampaignCard: React.FC<CampaignCardProps> = ({
             </Link>
           )}
 
-          <Link href={`/campaigns/${campaign._id}`} style={{ textDecoration: 'none', flexShrink: 0 }}>
+          <Link href={`/campaigns/${campaign._id}`} className="no-underline shrink-0">
             <button
-              className="clay-btn-outline"
-              style={{ padding: '10px 14px', fontSize: 13 }}
+              className="clay-btn-outline py-2 px-3 text-xs sm:text-sm justify-center"
             >
               Chi tiết
               <ArrowRight className="w-3.5 h-3.5" />
