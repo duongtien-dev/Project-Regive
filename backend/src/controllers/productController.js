@@ -119,7 +119,7 @@ const listManage = asyncHandler(async (req, res) => {
   if (req.query.reviewed !== undefined) filter.reviewed = req.query.reviewed === 'true';
 
   const products = await Product.find(filter)
-    .populate('donation', 'type status productInfo')
+    .populate('donation', 'type status productInfo donor')
     .populate('campaign', 'title')
     .populate('createdBy', 'fullName email')
     .populate('reviewedBy', 'fullName email')
@@ -130,8 +130,13 @@ const listManage = asyncHandler(async (req, res) => {
 
 const getById = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id)
-    .populate('donation', 'type status productInfo donor')
-    .populate('campaign', 'title status')
+    .populate({
+      path: 'donation',
+      select: 'type status productInfo donor isAnonymous note createdAt',
+      populate: { path: 'donor', select: 'fullName email' },
+    })
+    .populate('campaign', 'title status bannerImage targetAmount raisedAmount location description')
+    .populate('latestAiAssessment')
     .populate('createdBy', 'fullName email')
     .populate('reviewedBy', 'fullName email');
 
@@ -169,9 +174,14 @@ const getMarketplaceDetail = asyncHandler(async (req, res) => {
     listedOnMarketplace: true,
     status: PRODUCT_STATUS.LISTED,
   })
-    .populate('campaign', 'title bannerImage targetAmount raisedAmount location status description')
-    .populate('donation', 'donor anonymous productInfo')
-    .populate('latestAiAssessment', 'suggestion status')
+    .populate('campaign', 'title bannerImage targetAmount raisedAmount location status description category organization contactInfo')
+    .populate({
+      path: 'donation',
+      select: 'donor isAnonymous productInfo note createdAt type',
+      populate: { path: 'donor', select: 'fullName email' },
+    })
+    .populate('latestAiAssessment')
+    .populate('reviewedBy', 'fullName email')
     .select('-assessmentNote');
 
   if (!product) throw new ApiError(404, 'Không tìm thấy sản phẩm trên marketplace');
@@ -210,12 +220,28 @@ const updateProduct = asyncHandler(async (req, res) => {
   if (!product) throw new ApiError(404, 'Không tìm thấy sản phẩm');
 
   const fields = [
+    'sku',
     'name',
+    'brand',
+    'origin',
     'description',
     'category',
     'images',
+    'originalPrice',
     'price',
     'suggestedPrice',
+    'weight',
+    'dimensions',
+    'material',
+    'color',
+    'tags',
+    'highlights',
+    'specifications',
+    'inspectionReport',
+    'donationStory',
+    'charityImpact',
+    'warehouseAndShipping',
+    'guaranteePolicy',
     'storageLocation',
     'assessmentNote',
   ];

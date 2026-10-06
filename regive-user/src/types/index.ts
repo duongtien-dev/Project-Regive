@@ -219,13 +219,92 @@ export type ProductCondition = 'new' | 'like_new' | 'good' | 'fair' | 'poor' | '
 export type ProductQuality = 'high' | 'medium' | 'low';
 export type ProductStatus = 'draft' | 'assessed' | 'in_stock' | 'listed' | 'sold_out' | 'rejected' | 'archived';
 
+export type ProductSpecification = {
+  key: string;
+  value: string;
+};
+
+export type ProductInspectionReport = {
+  conditionDetails?: string;
+  functionalityStatus?: string;
+  sanitizationStatus?: string;
+  accessoriesIncluded?: string[];
+  inspectedAt?: string;
+  inspectorName?: string;
+  score?: number;
+};
+
+export type ProductDonationStory = {
+  donorName?: string;
+  donorType?: string;
+  isAnonymous?: boolean;
+  donorMessage?: string;
+  intakeLocation?: string;
+  receivedAt?: string;
+};
+
+export type ProductCharityImpact = {
+  directBenefit?: string;
+  co2SavedKg?: number;
+  wasteDivertedKg?: number;
+  fundAllocationPercent?: number;
+};
+
+export type ProductWarehouseAndShipping = {
+  storageLocation?: string;
+  packagingType?: string;
+  shippingOptions?: string[];
+  estimatedDeliveryDays?: string;
+};
+
+export type ProductGuaranteePolicy = {
+  warrantyDays?: number;
+  returnPolicy?: string;
+  supportHotline?: string;
+};
+
 export type Product = {
   _id: string;
+  sku?: string;
   name: string;
+  brand?: string;
+  origin?: string;
   description?: string;
   category: string;
   images: string[];
-  donation?: string | null;
+  originalPrice?: number;
+  suggestedPrice?: number;
+  price: number;
+  currency: string;
+  weight?: string;
+  dimensions?: {
+    length?: number;
+    width?: number;
+    height?: number;
+    unit?: string;
+  };
+  material?: string;
+  color?: string;
+  tags?: string[];
+  highlights?: string[];
+  specifications?: ProductSpecification[];
+  inspectionReport?: ProductInspectionReport;
+  donationStory?: ProductDonationStory;
+  charityImpact?: ProductCharityImpact;
+  warehouseAndShipping?: ProductWarehouseAndShipping;
+  guaranteePolicy?: ProductGuaranteePolicy;
+  donation?: {
+    _id?: string;
+    donor?: {
+      fullName?: string;
+      email?: string;
+    } | string;
+    isAnonymous?: boolean;
+    productInfo?: ProductDonationInfo;
+    note?: string;
+    createdAt?: string;
+    type?: string;
+  } | string | null;
   campaign?: {
     _id?: string;
     title?: string;
@@ -235,6 +314,9 @@ export type Product = {
     raisedAmount?: number;
     location?: string;
     description?: string;
+    category?: string;
+    organization?: string;
+    contactInfo?: CampaignContactInfo;
   } | string | null;
   latestAiAssessment?: {
     suggestion?: {
@@ -243,20 +325,35 @@ export type Product = {
       quality?: ProductQuality;
       suggestedPrice?: number;
       confidence?: number;
+      rationale?: string;
     };
+    finalDecision?: {
+      category?: string;
+      condition?: ProductCondition;
+      quality?: ProductQuality;
+      suggestedPrice?: number;
+      confidence?: number;
+      rationale?: string;
+    };
+    provider?: string;
     status?: string;
+    appliedToProduct?: boolean;
   } | null;
   condition?: ProductCondition;
   quality?: ProductQuality;
-  suggestedPrice?: number;
-  price: number;
-  currency: string;
   suitableForMarketplace: boolean;
   stockQuantity: number;
   storageLocation?: string;
   listedOnMarketplace: boolean;
   listedAt?: string;
   status: ProductStatus;
+  reviewed?: boolean;
+  reviewedBy?: {
+    _id?: string;
+    fullName?: string;
+    email?: string;
+  } | string;
+  reviewedAt?: string;
   createdAt: string;
   updatedAt: string;
 };

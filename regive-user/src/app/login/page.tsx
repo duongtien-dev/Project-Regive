@@ -10,7 +10,7 @@ import { useAuthStore } from '@/store/useAuthStore';
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirect = searchParams?.get('redirect') || '/me/dashboard';
+  const redirect = searchParams?.get('redirect') || '/';
 
   const { login } = useAuthStore();
   const [submitting, setSubmitting] = useState(false);

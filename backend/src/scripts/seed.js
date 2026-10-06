@@ -5,6 +5,7 @@ const User = require('../models/User');
 const Campaign = require('../models/Campaign');
 const Donation = require('../models/Donation');
 const Product = require('../models/Product');
+const AiAssessment = require('../models/AiAssessment');
 const Order = require('../models/Order');
 const Payment = require('../models/Payment');
 const VolunteerRegistration = require('../models/VolunteerRegistration');
@@ -25,6 +26,7 @@ const {
   VOLUNTEER_STATUS,
   SUPPORT_STATUS,
   INVENTORY_TX_TYPE,
+  AI_ASSESSMENT_STATUS,
 } = require('../constants/enums');
 const { applyStockChange } = require('../services/inventoryService');
 const { shortCode } = require('../utils/codes');
@@ -149,100 +151,25 @@ async function seed() {
         { name: 'Chăn ấm siêu nhẹ', targetQty: 500, receivedQty: 320, unit: 'chiếc' },
         { name: 'Ủng đi mưa lót lông', targetQty: 1000, receivedQty: 450, unit: 'đôi' },
       ],
-      tags: ['Vùng cao', 'Áo ấm mùa đông', 'Trẻ em', 'Khẩn cấp'],
+      tags: ['Áo ấm', 'Hà Giang', 'Trẻ em', 'Mùa đông', 'Vùng cao'],
       startDate: new Date('2026-09-01'),
       endDate: new Date('2026-12-31'),
       status: CAMPAIGN_STATUS.ACTIVE,
-      targetAmount: 120000000,
-      raisedAmount: 86500000,
-      activities: [
-        {
-          title: 'Khảo sát thực địa và trao đợt 1 tại xã Lũng Cú',
-          content: 'Đoàn tình nguyện viên ReGive phối hợp Hội Chữ Thập Đỏ đã trao 350 áo phao ấm và 150 chăn bông cho các em học sinh trường Phổ thông Dân tộc Bán trú Lũng Cú.',
-          date: new Date('2026-09-18'),
-          author: 'Ban Điều Hành ReGive',
-          image: 'https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&w=600&q=80',
-        },
-        {
-          title: 'Tiếp nhận 500 áo khoác lông vũ từ các nhà hảo tâm',
-          content: 'Kho ReGive Hà Nội đã hoàn tất phân loại, giặt sấy kháng khuẩn và đóng gói 500 chiếc áo ấm đạt chuẩn để chuẩn bị cho chuyến xe thứ 2.',
-          date: new Date('2026-09-24'),
-          author: 'Tổ Kiểm Định Vật Phẩm',
-          image: 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&w=600&q=80',
-        },
-      ],
-    },
-    {
-      title: 'Chiến Dịch Hỗ Trợ Học Đường Vùng Lũ Miền Trung',
-      shortDescription: 'Tái thiết 4 điểm trường tiểu học bị bão lũ tàn phá tại Nam Trà My, trang bị bàn ghế và đồ dùng học tập.',
-      category: 'disaster_relief',
-      bannerImage: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80',
-      description:
-        'Trận lũ lụt vừa qua đã cuốn trôi toàn bộ sách vở, bàn ghế của 4 điểm trường tiểu học tại huyện Nam Trà My. Chúng tôi kêu gọi kinh phí và hiện vật để sửa chữa phòng học và trang bị đồ dùng học tập.',
-      goal: 'Tái thiết 4 điểm trường và hỗ trợ dụng cụ học tập cho 450 học sinh.',
-      location: 'Nam Trà My, Quảng Nam',
-      organization: 'Mạng Lưới Tình Nguyện Miền Trung',
-      contactInfo: {
-        representative: 'Lê Thu Trang',
-        phone: '0977223344',
-        email: 'trang.le@regive.org.vn',
-      },
-      volunteerConditions: 'Ưu tiên TNV tại Quảng Nam/Đà Nẵng có khả năng hỗ trợ dọn dẹp bùn đất và sửa chữa mộc, xây dựng cơ bản.',
-      targetItems: [
-        { name: 'Bàn ghế học sinh chống nước', targetQty: 150, receivedQty: 90, unit: 'bộ' },
-        { name: 'Bộ sách giáo khoa lớp 1-5', targetQty: 450, receivedQty: 310, unit: 'bộ' },
-        { name: 'Vở ô ly 96 trang', targetQty: 2500, receivedQty: 1800, unit: 'cuốn' },
-      ],
-      tags: ['Cứu trợ bão lũ', 'Miền Trung', 'Học đường', 'Tái thiết'],
-      startDate: new Date('2026-08-15'),
-      endDate: new Date('2026-11-30'),
-      status: CAMPAIGN_STATUS.ACTIVE,
       targetAmount: 80000000,
-      raisedAmount: 52000000,
+      raisedAmount: 53500000,
       activities: [
         {
-          title: 'Khởi công sửa chữa mái tôn và sơn mới 3 phòng học',
-          content: 'Đội thợ địa phương cùng đội tình nguyện ReGive đã tiến hành lợp lại mái tôn chống bão và thay cửa kính kiên cố cho điểm trường Trà Leng.',
-          date: new Date('2026-09-05'),
-          author: 'Điều Phối Viên Miền Trung',
-          image: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=600&q=80',
+          title: 'Khảo sát thực tế điểm trường Lũng Táo',
+          date: new Date('2026-09-10'),
+          content: 'Đoàn tiền trạm đã đến 3 điểm trường lẻ, ghi nhận 420 em học sinh thiếu áo khoác mùa đông và ủng đi đường đất sình lầy.',
+          image: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=600&q=80',
+          author: 'Nguyễn Văn Minh',
         },
-      ],
-    },
-    {
-      title: 'Bữa Cơm Yêu Thương — Tiếp Sức Người Vô Gia Cư Sài Gòn',
-      shortDescription: 'Cung cấp 12.000 suất ăn nóng ấm và nhu yếu phẩm mỗi tuần cho người lao động nghèo và người vô gia cư tại TP.HCM.',
-      category: 'poverty_alleviation',
-      bannerImage: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=1200&q=80',
-      description:
-        'Mỗi đêm, hàng trăm người lao động nghèo, người già neo đơn và người vô gia cư tại TP.HCM mưu sinh vất vả. Chiến dịch duy trì 1.000 suất ăn nóng ấm mỗi tuần cùng các nhu yếu phẩm cơ bản.',
-      goal: 'Phát 12.000 suất ăn dinh dưỡng và nước uống sạch trong vòng 3 tháng.',
-      location: 'Quận 1 & Quận 4, TP. Hồ Chí Minh',
-      organization: 'Bếp Cơm Sài Gòn Ấm & ReGive Miền Nam',
-      contactInfo: {
-        representative: 'Trần Hoài An',
-        phone: '0903334455',
-        email: 'an.tran@regive.org.vn',
-      },
-      volunteerConditions: 'Nhiệt tình, có phương tiện di chuyển cá nhân vào buổi tối, có mặt đúng giờ tại điểm chuẩn bị lúc 18h00.',
-      targetItems: [
-        { name: 'Gạo sạch ST25', targetQty: 2000, receivedQty: 1400, unit: 'kg' },
-        { name: 'Dầu ăn & Gia vị đóng chai', targetQty: 300, receivedQty: 210, unit: 'chai' },
-        { name: 'Hộp bã mía thân thiện môi trường', targetQty: 5000, receivedQty: 3800, unit: 'hộp' },
-      ],
-      tags: ['Bữa cơm từ thiện', 'TP.HCM', 'Người vô gia cư', 'Tuần hoàn'],
-      startDate: new Date('2026-09-10'),
-      endDate: new Date('2026-12-10'),
-      status: CAMPAIGN_STATUS.ACTIVE,
-      targetAmount: 60000000,
-      raisedAmount: 45200000,
-      activities: [
         {
-          title: 'Đêm phát cơm thứ 4 - 350 suất ăn dinh dưỡng tại khu vực Chợ Lớn',
-          content: 'Hơn 20 tình nguyện viên đã tập trung chuẩn bị cơm thịt kho trứng và sữa tươi trao tận tay các cụ già và người lao động bán vé số dạo.',
-          date: new Date('2026-09-22'),
-          author: 'Nhóm TNV Sài Gòn Ấm',
-          image: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=600&q=80',
+          title: 'Tiếp nhận đợt hàng áo ấm đợt 1',
+          date: new Date('2026-09-25'),
+          content: 'Đã hoàn tất may 400 áo khoác phao 3 lớp tại xưởng may đối tác, sẵn sàng chuyển về kho tổng tập kết.',
+          author: 'Ban Hậu Cần',
         },
       ],
     },
@@ -359,111 +286,561 @@ async function seed() {
   const primaryCampaign = campaigns[0];
   const secondCampaign = campaigns[1];
 
-  // 3. VẬT PHẨM QUYÊN GÓP & MARKETPLACE (PRODUCTS)
+  // 3. VẬT PHẨM QUYÊN GÓP & MARKETPLACE (PRODUCTS) VỚI ĐẦY ĐỦ TRƯỜNG CHI TIẾT
   const productsData = [
     {
-      name: 'Balo chống gù học sinh cao cấp Tiger Family',
-      description: 'Balo học sinh màu xanh đậm, đệm lưng êm ái thoáng khí, các khóa kéo hoạt động hoàn hảo, đã giặt sạch sẽ.',
+      sku: 'REG-BALO-001',
+      name: 'Balo chống gù học sinh cao cấp Tiger Family Joyful',
+      brand: 'Tiger Family',
+      origin: 'Đức (Nhập khẩu chính hãng)',
+      description:
+        'Balo học sinh chuẩn công thái học châu Âu của thương hiệu Tiger Family (Germany). Thiết kế form hộp cứng cáp, đệm lưng Ergo Spine phân tán 40% trọng lượng lên hông và xương chậu, giúp bé không bị gù lưng khi mang sách vở nặng. Khóa kéo SBS siêu bền, vải chống thấm nước IPX4, dải phản quang ban đêm 360 độ giúp bảo vệ an toàn tối đa cho học sinh.',
       category: 'balo',
       images: [
-        'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1577733966973-d680bffd2e80?auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=800&q=80',
       ],
       condition: PRODUCT_CONDITION.LIKE_NEW,
       quality: PRODUCT_QUALITY.HIGH,
+      originalPrice: 890000,
       price: 150000,
+      weight: '750g',
+      dimensions: { length: 38, width: 28, height: 18, unit: 'cm' },
+      material: 'Vải Polyester 900D phủ PU chống thấm nước, đệm mút EVA tổ ong thoáng khí',
+      color: 'Xanh Navy & Dạ quang',
+      tags: ['Chống gù', 'Học sinh tiểu học', 'Chống thấm nước', 'Bảo vệ cột sống', 'Tiger Family'],
+      highlights: [
+        'Công nghệ đệm lưng Ergo Spine phân tán 40% lực tì đè lên cột sống',
+        'Chất liệu kháng khuẩn, chống trầy xước và chống nước đạt chuẩn IPX4',
+        'Dải phản quang 360 độ ban đêm đạt chuẩn an toàn giao thông châu Âu',
+        'Đáy cặp có 4 chân đế cao su chống bám bẩn và giữ dáng đứng vững',
+      ],
+      specifications: [
+        { key: 'Thương hiệu', value: 'Tiger Family (Germany)' },
+        { key: 'Dung tích chứa', value: '18 Lít (Đựng vừa tài liệu A4 và laptop 13 inch)' },
+        { key: 'Khối lượng siêu nhẹ', value: '750 gram' },
+        { key: 'Độ tuổi khuyên dùng', value: 'Lớp 1 đến Lớp 5 (6 - 11 tuổi)' },
+        { key: 'Cấu tạo ngăn', value: '1 ngăn lớn chia vách chống quăn sách, 2 ngăn phụ đựng dụng cụ, 2 ngăn co giãn bên hông' },
+        { key: 'Khóa kéo', value: 'Khóa SBS siêu bền êm ái chống kẹt' },
+      ],
+      inspectionReport: {
+        conditionDetails:
+          'Vải cặp còn nguyên form 98%, khóa kéo mượt mà 100%, đường may gia cố chắc chắn, đáy balo xước nhẹ 2% không ảnh hưởng thẩm mỹ.',
+        functionalityStatus: 'Hoạt động hoàn hảo 100% (Khóa ngực chống trượt, quai đệm vai co giãn tốt)',
+        sanitizationStatus: 'Đã giặt sấy nhiệt độ cao 70°C và khử khuẩn tia cực tím UV-C 15 phút tại trung tâm ReGive',
+        accessoriesIncluded: ['Bọc chống mưa chuyên dụng Tiger Family', 'Hộp bút mini đồng bộ', 'Thẻ tên phản quang'],
+        inspectedAt: new Date(),
+        inspectorName: 'Trần Minh Anh - Giám định viên ReGive',
+        score: 9.7,
+      },
+      donationStory: {
+        donorName: 'Gia đình chị Nguyễn Mai Phương',
+        donorType: 'individual',
+        isAnonymous: false,
+        donorMessage:
+          'Bé nhà mình lên cấp 2 đổi cặp lớn hơn nên gửi tặng lại chiếc balo Tiger Family này. Cặp còn rất bền đẹp, hy vọng sẽ giúp một bạn nhỏ vùng cao vững bước đến trường!',
+        intakeLocation: 'Điểm tiếp nhận ReGive Cầu Giấy, Hà Nội',
+        receivedAt: new Date('2026-09-20'),
+      },
+      charityImpact: {
+        directBenefit: '100% số tiền 150.000đ sẽ chuyển vào quỹ Áo Ấm Hà Giang, tài trợ 01 chiếc áo phao lót lông ấm cho học sinh nghèo.',
+        co2SavedKg: 3.8,
+        wasteDivertedKg: 0.75,
+        fundAllocationPercent: 100,
+      },
+      warehouseAndShipping: {
+        storageLocation: 'Kệ A1-04 - Kho ReGive Trung Tâm Hà Nội',
+        packagingType: 'Thùng carton tái chế đạt chuẩn FSC, bọc xốp khí tự hủy sinh học',
+        shippingOptions: [
+          'Giao hàng tiết kiệm toàn quốc (2-3 ngày)',
+          'Hỏa tốc nội thành Hà Nội (2-4 giờ)',
+          'Nhận trực tiếp tại Kho ReGive Cầu Giấy',
+        ],
+        estimatedDeliveryDays: '2 - 3 ngày làm việc',
+      },
+      guaranteePolicy: {
+        warrantyDays: 30,
+        returnPolicy: 'Đồng kiểm khi nhận hàng. Đổi trả hoặc hoàn tiền 100% gây quỹ trong 30 ngày nếu phát hiện lỗi hư hỏng ngoài mô tả.',
+        supportHotline: '1900 6868 (Hỗ trợ 24/7)',
+      },
       stockQuantity: 6,
-      storageLocation: 'Kệ A1 - Kho Hà Nội',
+      storageLocation: 'Kệ A1-04 - Kho ReGive Trung Tâm Hà Nội',
     },
     {
-      name: 'Bộ sách giáo khoa & tuyển tập truyện cổ tích Việt Nam',
-      description: 'Bộ sách gồm 12 cuốn truyện tranh màu và sách tham khảo toán - văn cấp 1, giấy còn mới nguyên vẹn không rách.',
+      sku: 'REG-BOOK-002',
+      name: 'Bộ sách giáo khoa & Tuyển tập truyện cổ tích Việt Nam (12 cuốn)',
+      brand: 'NXB Kim Đồng & Giáo Dục',
+      origin: 'Việt Nam',
+      description:
+        'Tuyển tập 12 cuốn sách chọn lọc gồm truyện cổ tích dân gian Việt Nam, truyện tranh lịch sử và sách tham khảo kỹ năng tư duy bồi dưỡng cho học sinh tiểu học. Giấy in màu cao cấp trên chất liệu chống lóa mắt, gáy sách được dán keo nhiệt gia cố vững chắc, hình ảnh minh họa sinh động truyền tải bài học đạo đức ý nghĩa.',
       category: 'sach',
       images: [
-        'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80',
       ],
       condition: PRODUCT_CONDITION.GOOD,
       quality: PRODUCT_QUALITY.HIGH,
+      originalPrice: 320000,
       price: 85000,
+      weight: '1.8kg',
+      dimensions: { length: 24, width: 17, height: 12, unit: 'cm' },
+      material: 'Giấy bãi bằng cao cấp in màu, bìa cán màng bóng chống ẩm mốc',
+      color: 'Bìa đa sắc rực rỡ',
+      tags: ['Sách truyện', 'Cổ tích Việt Nam', 'Giáo dục', 'Kỹ năng sống'],
+      highlights: [
+        'Trọn bộ 12 cuốn truyện tranh nhân văn và sách rèn luyện tư duy',
+        'Minh họa màu 100%, nét in rõ đẹp không nhòe mực',
+        'Đã bọc màng bảo vệ gáy sách và dán keo gia cố chắc chắn',
+      ],
+      specifications: [
+        { key: 'Nhà xuất bản', value: 'NXB Kim Đồng & NXB Giáo Dục Việt Nam' },
+        { key: 'Số lượng sách', value: '12 cuốn truyện & sách tham khảo' },
+        { key: 'Số trang trung bình', value: '64 - 120 trang/cuốn' },
+        { key: 'Độ tuổi phù hợp', value: 'Thiếu nhi 6 - 12 tuổi' },
+      ],
+      inspectionReport: {
+        conditionDetails: 'Sách sạch sẽ 95%, không quăn mép, không bị viết vẽ bậy lên trang nội dung, gáy sách chắc chắn.',
+        functionalityStatus: 'Trang giấy nguyên vẹn 100%, không rách, không thiếu trang',
+        sanitizationStatus: 'Khử khuẩn bằng máy tiệt trùng sách chiếu tia UV chuyên dụng',
+        accessoriesIncluded: ['Bộ đánh dấu trang gỗ khắc laser', 'Bọc bìa plastic chống bụi'],
+        inspectedAt: new Date(),
+        inspectorName: 'Lê Thùy Dương - Giám định viên ReGive',
+        score: 9.4,
+      },
+      donationStory: {
+        donorName: 'Thầy giáo Hoàng Văn Đức',
+        donorType: 'individual',
+        isAnonymous: false,
+        donorMessage: 'Tủ sách tuổi thơ của gia đình xin gửi tặng lại để tiếp thêm tri thức cho các bạn nhỏ.',
+        intakeLocation: 'Trạm tiếp nhận ReGive Đống Đa, Hà Nội',
+        receivedAt: new Date('2026-09-18'),
+      },
+      charityImpact: {
+        directBenefit: '100% doanh thu 85.000đ đóng góp vào Tủ Sách Tri Thức Biên Giới Lạng Sơn.',
+        co2SavedKg: 2.1,
+        wasteDivertedKg: 1.8,
+        fundAllocationPercent: 100,
+      },
+      warehouseAndShipping: {
+        storageLocation: 'Kệ B2-08 - Kho Hà Nội',
+        packagingType: 'Túi giấy kraft bọc màng chống ẩm 2 lớp',
+        shippingOptions: ['Giao tiêu chuẩn toàn quốc (2-3 ngày)', 'Nhận tại kho ReGive'],
+        estimatedDeliveryDays: '2 - 3 ngày làm việc',
+      },
+      guaranteePolicy: {
+        warrantyDays: 15,
+        returnPolicy: 'Đổi trả miễn phí trong 15 ngày nếu sách thiếu trang hoặc hư hại so với cam kết.',
+        supportHotline: '1900 6868',
+      },
       stockQuantity: 15,
-      storageLocation: 'Kệ B2 - Kho Hà Nội',
+      storageLocation: 'Kệ B2-08 - Kho Hà Nội',
     },
     {
-      name: 'Áo khoác gió thể thao chống nước 2 lớp',
-      description: 'Áo khoác gió form unisex size L, chất liệu chống gió cản mưa nhẹ, phù hợp thời tiết se lạnh hoặc đi phượt.',
+      sku: 'REG-CLOTH-003',
+      name: 'Áo khoác gió thể thao chống nước The North Face 2 lớp',
+      brand: 'The North Face',
+      origin: 'Việt Nam (Gia công xuất khẩu)',
+      description:
+        'Áo khoác gió thể thao 2 lớp công nghệ vải Gore-Tex cản gió và chống nước tối ưu. Lớp ngoài chống thấm cản mưa nhẹ, lớp lót trong dạng lưới tổ ong thoáng khí thoát mồ hôi nhanh. Thiết kế mũ trùm đầu tháo rời linh hoạt, khóa kéo YKK ép dán seam-tape chống nước qua khe chỉ.',
       category: 'quan_ao',
       images: [
-        'https://images.unsplash.com/photo-1544022613-e87ca75a784a?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1544022613-e87ca75a784a?auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=800&q=80',
       ],
       condition: PRODUCT_CONDITION.LIKE_NEW,
       quality: PRODUCT_QUALITY.HIGH,
+      originalPrice: 950000,
       price: 180000,
+      weight: '450g',
+      dimensions: { length: 70, width: 54, height: 2, unit: 'cm' },
+      material: 'Vải Gore-Tex 2 lớp cản gió 100%, lót lưới tản nhiệt Poly Micro-mesh',
+      color: 'Đỏ Đô phối Đen Sporty',
+      tags: ['Áo khoác gió', 'The North Face', 'Chống nước', 'Dã ngoại', 'Phượt'],
+      highlights: [
+        'Công nghệ màng thở Gore-Tex cản gió, chống mưa phùn hiệu quả',
+        'Khóa kéo chống nước YKK ép dán Seam-tape chống rò rỉ nước',
+        'Mũ trùm đầu tháo rời linh hoạt, có dây rút ôm sát cản gió rét',
+      ],
+      specifications: [
+        { key: 'Kích cỡ (Size)', value: 'Size L (Thích hợp người cao 1m65 - 1m75, nặng 58 - 70kg)' },
+        { key: 'Công nghệ vải', value: 'Chống thấm nước 10.000mm H2O, độ thở khí 10.000g/m2/24h' },
+        { key: 'Kiểu dáng', value: 'Form Regular Unisex nam nữ đều mặc đẹp' },
+      ],
+      inspectionReport: {
+        conditionDetails: 'Áo giữ màu tươi mới 99%, không sờn rách, logo thêu sắc nét, khóa kéo hoạt động trơn tru.',
+        functionalityStatus: 'Mọi khóa kéo, nút bấm, dây rút hoạt động trơn tru',
+        sanitizationStatus: 'Giặt hấp khử mùi sinh học và sấy tiệt trùng nhiệt độ kiểm soát',
+        accessoriesIncluded: ['Mũ trùm đầu tháo rời'],
+        inspectedAt: new Date(),
+        inspectorName: 'Nguyễn Văn Điều Phối',
+        score: 9.8,
+      },
+      donationStory: {
+        donorName: 'CLB Phượt Bụi Đà Nẵng',
+        donorType: 'organization',
+        isAnonymous: false,
+        donorMessage: 'Ủng hộ chương trình từ thiện ReGive để gây quỹ cho trẻ em vùng cao.',
+        intakeLocation: 'Trạm tiếp nhận ReGive Hải Châu, Đà Nẵng',
+        receivedAt: new Date('2026-09-12'),
+      },
+      charityImpact: {
+        directBenefit: '100% số tiền 180.000đ tài trợ suất ăn dinh dưỡng và áo ấm cho trẻ nhỏ Hà Giang.',
+        co2SavedKg: 4.5,
+        wasteDivertedKg: 0.45,
+        fundAllocationPercent: 100,
+      },
+      warehouseAndShipping: {
+        storageLocation: 'Kệ C1-02 - Kho Đà Nẵng',
+        packagingType: 'Túi bọc sinh học kháng khuẩn',
+        shippingOptions: ['Giao hàng toàn quốc (2-3 ngày)'],
+        estimatedDeliveryDays: '2 - 3 ngày làm việc',
+      },
+      guaranteePolicy: {
+        warrantyDays: 30,
+        returnPolicy: 'Bao đổi trả nếu phát sinh lỗi rách hoặc hỏng khóa.',
+        supportHotline: '1900 6868',
+      },
       stockQuantity: 5,
-      storageLocation: 'Kệ C1 - Kho Đà Nẵng',
+      storageLocation: 'Kệ C1-02 - Kho Đà Nẵng',
     },
     {
-      name: 'Bình giữ nhiệt inox cao cấp 500ml',
-      description: 'Bình giữ nhiệt chất liệu inox 304 giữ nóng 8h và giữ lạnh 12h, hàng mới chưa qua sử dụng, có hộp đi kèm.',
+      sku: 'REG-HOME-004',
+      name: 'Bình giữ nhiệt Lock&Lock Inox 304 Feather Light 500ml',
+      brand: 'Lock&Lock',
+      origin: 'Hàn Quốc (Sản xuất tại nhà máy Lock&Lock)',
+      description:
+        'Bình giữ nhiệt Lock&Lock Feather Light siêu nhẹ, vỏ phủ sơn tĩnh điện pastel mờ chống trầy. Ruột bình inox 304 không gỉ mạ đồng chân không 3 lớp, giữ nhiệt nóng 8 giờ và giữ lạnh đến 24 giờ. Nắp bật One-touch có khóa an toàn chống tràn tuyệt đối, lưới lọc trà tiện lợi.',
       category: 'gia_dung',
       images: [
-        'https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=800&q=80',
       ],
       condition: PRODUCT_CONDITION.NEW,
       quality: PRODUCT_QUALITY.HIGH,
+      originalPrice: 390000,
       price: 120000,
+      weight: '230g',
+      dimensions: { length: 22, width: 6.5, height: 6.5, unit: 'cm' },
+      material: 'Ruột Inox 304 cao cấp mạ đồng, vỏ thép không gỉ sơn tĩnh điện nhám',
+      color: 'Xanh Mint pastel',
+      tags: ['Bình giữ nhiệt', 'Lock&Lock', 'Inox 304', 'Tiết kiệm', 'Môi trường'],
+      highlights: [
+        'Giữ nóng liên tục 8 tiếng (trên 65°C) và giữ lạnh 24 tiếng (dưới 8°C)',
+        'Nắp mở One-Touch có khóa chốt an toàn chống tràn nước 100%',
+        'Trọng lượng siêu nhẹ chỉ 230g, lớp mạ chân không cách nhiệt mỏng 2mm',
+      ],
+      specifications: [
+        { key: 'Thương hiệu', value: 'Lock&Lock (Hàn Quốc)' },
+        { key: 'Dung tích', value: '500ml' },
+        { key: 'Chất liệu ruột', value: 'Inox STS304 an toàn thực phẩm' },
+        { key: 'Hiệu năng giữ nhiệt', value: 'Nóng > 65°C trong 8h / Lạnh < 8°C trong 24h' },
+      ],
+      inspectionReport: {
+        conditionDetails: 'Hàng mới 100% chưa qua sử dụng, nguyên hộp tem mác niêm phong.',
+        functionalityStatus: 'Gioăng cao su kín khít 100%, nắp bật nhạy bén',
+        sanitizationStatus: 'Khử khuẩn bằng khí Ozone và tia cực tím',
+        accessoriesIncluded: ['Hộp đựng chính hãng', 'Lưới lọc trà inox'],
+        inspectedAt: new Date(),
+        inspectorName: 'Phạm Đức Toàn - Giám định viên ReGive',
+        score: 10.0,
+      },
+      donationStory: {
+        donorName: 'Công ty CP Công Nghệ Xanh',
+        donorType: 'corporate',
+        isAnonymous: false,
+        donorMessage: 'Ủng hộ 10 bình giữ nhiệt gây quỹ nước sạch cho bà con Bến Tre.',
+        intakeLocation: 'Trạm tiếp nhận ReGive Quận 1, TP.HCM',
+        receivedAt: new Date('2026-09-05'),
+      },
+      charityImpact: {
+        directBenefit: '100% số tiền 120.000đ đóng góp vào Dự án Nước Sạch Bến Tre.',
+        co2SavedKg: 1.9,
+        wasteDivertedKg: 0.3,
+        fundAllocationPercent: 100,
+      },
+      warehouseAndShipping: {
+        storageLocation: 'Kệ A3-11 - Kho TP.HCM',
+        packagingType: 'Hộp carton có đệm lót bảo vệ',
+        shippingOptions: ['Giao hàng toàn quốc', 'Giao hỏa tốc nội thành'],
+        estimatedDeliveryDays: '2 - 3 ngày làm việc',
+      },
+      guaranteePolicy: {
+        warrantyDays: 60,
+        returnPolicy: 'Bảo hành giữ nhiệt 60 ngày nếu bình bị tỏa nhiệt ra vỏ ngoài.',
+        supportHotline: '1900 6868',
+      },
       stockQuantity: 10,
-      storageLocation: 'Kệ A3 - Kho TP.HCM',
+      storageLocation: 'Kệ A3-11 - Kho TP.HCM',
     },
     {
-      name: 'Đèn bàn học LED chống cận thị Rạng Đông',
-      description: 'Đèn học có 3 chế độ ánh sáng vàng/trắng/trung tính, ánh sáng dịu mắt, bóng LED tiết kiệm điện năng.',
+      sku: 'REG-ELEC-005',
+      name: 'Đèn bàn học LED chống cận thị Rạng Đông RD-RL-20.LED',
+      brand: 'Rạng Đông',
+      origin: 'Việt Nam',
+      description:
+        'Đèn bàn LED bảo vệ thị lực học đường từ thương hiệu quốc dân Rạng Đông. Ánh sáng chuẩn CRI > 90 tái hiện màu sắc trung thực không gây lóa mỏi mắt, điều khiển cảm ứng 3 mức nhiệt độ màu phù hợp học tập, đọc sách và thư giãn ban đêm.',
       category: 'dien_tu',
       images: [
-        'https://images.unsplash.com/photo-1534353436294-0dbd4bdac845?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1534353436294-0dbd4bdac845?auto=format&fit=crop&w=800&q=80',
       ],
       condition: PRODUCT_CONDITION.GOOD,
       quality: PRODUCT_QUALITY.MEDIUM,
+      originalPrice: 285000,
       price: 95000,
+      weight: '850g',
+      dimensions: { length: 35, width: 15, height: 42, unit: 'cm' },
+      material: 'Nhựa ABS chống cháy, cần đèn kim loại bọc silicon uốn cong 360 độ',
+      color: 'Trắng tinh khiết',
+      tags: ['Đèn học LED', 'Rạng Đông', 'Chống cận', 'Học tập'],
+      highlights: [
+        'Chip LED SunLike cho chỉ số hoàn màu CRI > 90, ánh sáng trung thực',
+        '3 chế độ màu (Trắng 6500K - Vàng 3000K - Trung tính 4500K) cảm ứng',
+        'Cần đèn bọc silicon dẻo dai điều chỉnh mọi góc chiếu thuận tiện',
+      ],
+      specifications: [
+        { key: 'Công suất', value: '6W (Tương đương bóng sợi đốt 40W)' },
+        { key: 'Chỉ số hoàn màu', value: 'Ra >= 90' },
+        { key: 'Độ rọi trung tâm', value: '>= 700 Lux' },
+        { key: 'Nguồn điện', value: 'Adapter 12V DC an toàn chống giật' },
+      ],
+      inspectionReport: {
+        conditionDetails: 'Vỏ ngoài sạch sẽ không nứt vỡ, bóng LED sáng đều không nhấp nháy, nút cảm ứng nhạy.',
+        functionalityStatus: 'Kiểm tra mạch điện & adapter an toàn 100%',
+        sanitizationStatus: 'Lau cồn y tế khử khuẩn toàn bộ bề mặt',
+        accessoriesIncluded: ['Adapter nguồn 12V chính hãng'],
+        inspectedAt: new Date(),
+        inspectorName: 'Trần Minh Anh - Giám định viên ReGive',
+        score: 9.3,
+      },
+      donationStory: {
+        donorName: 'Anh Vũ Đình Trọng',
+        donorType: 'individual',
+        isAnonymous: false,
+        donorMessage: 'Đèn dùng rất tốt cho góc học tập, xin tặng lại các bạn nhỏ.',
+        intakeLocation: 'Trạm tiếp nhận ReGive Thanh Xuân, Hà Nội',
+        receivedAt: new Date('2026-09-15'),
+      },
+      charityImpact: {
+        directBenefit: '100% số tiền 95.000đ đóng góp vào Quỹ Tủ Sách Biên Giới.',
+        co2SavedKg: 2.7,
+        wasteDivertedKg: 0.85,
+        fundAllocationPercent: 100,
+      },
+      warehouseAndShipping: {
+        storageLocation: 'Kệ D2-03 - Kho Hà Nội',
+        packagingType: 'Hộp carton có màng xốp bóng khí',
+        shippingOptions: ['Giao toàn quốc (2-3 ngày)'],
+        estimatedDeliveryDays: '2 - 3 ngày làm việc',
+      },
+      guaranteePolicy: {
+        warrantyDays: 30,
+        returnPolicy: 'Đổi mới hoặc hoàn tiền 100% nếu phát sinh lỗi đèn trong 30 ngày.',
+        supportHotline: '1900 6868',
+      },
       stockQuantity: 8,
-      storageLocation: 'Kệ D2 - Kho Hà Nội',
+      storageLocation: 'Kệ D2-03 - Kho Hà Nội',
     },
     {
-      name: 'Giày thể thao nam nữ êm chân size 39',
-      description: 'Đôi giày thể thao thể dục màu trắng xám, đế cao su chống trượt, lót trong êm ái, thích hợp đi bộ và chạy bộ.',
+      sku: 'REG-SHOE-006',
+      name: "Giày thể thao Biti's Hunter Street Nam Nữ Size 39",
+      brand: "Biti's",
+      origin: 'Việt Nam',
+      description:
+        "Giày thể thao Biti's Hunter Street phiên bản Canvas thời trang. Đế LiteFlex cao su đúc nguyên khối siêu nhẹ giảm sốc, lót giày Ortholite kháng khuẩn êm ái thoáng khí. Thiết kế đường phố trẻ trung, form giày ôm chân vận động linh hoạt.",
       category: 'giay_dep',
       images: [
-        'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80',
       ],
       condition: PRODUCT_CONDITION.LIKE_NEW,
       quality: PRODUCT_QUALITY.HIGH,
+      originalPrice: 690000,
       price: 220000,
+      weight: '550g / đôi',
+      dimensions: { length: 27, width: 10, height: 11, unit: 'cm' },
+      material: 'Vải Canvas dệt thoáng khí, đế cao su đúc LiteFlex đàn hồi cao',
+      color: 'Trắng Kem & Xám Khói',
+      tags: ["Biti's Hunter", 'Giày thể thao', 'Streetwear', 'Thời trang'],
+      highlights: [
+        'Đế LiteFlex siêu nhẹ giảm chấn động tối đa khi di chuyển vận động',
+        'Lót giày kháng khuẩn Ortholite khử mùi hôi chân hiệu quả',
+        'Form ôm chân vừa vặn, phong cách Streetwear trẻ trung năng động',
+      ],
+      specifications: [
+        { key: 'Size giày', value: 'Size 39 (Chiều dài bàn chân 24.5cm - 25.0cm)' },
+        { key: 'Chất liệu thân', value: 'Vải Canvas 10oz bền bỉ thoáng khí' },
+        { key: 'Chất liệu đế', value: 'Cao su nhiệt dẻo TPR chống trơn trượt' },
+      ],
+      inspectionReport: {
+        conditionDetails: 'Đế giày độ mòn dưới 2%, vải thân giày sạch tinh tươm, dây giày mới.',
+        functionalityStatus: 'Đế bám dính tốt, lót trong êm ái đàn hồi 100%',
+        sanitizationStatus: 'Giặt hấp tiệt trùng UV và xịt khử khuẩn thảo mộc chuyên sâu',
+        accessoriesIncluded: ['Dây giày sơ cua màu trắng'],
+        inspectedAt: new Date(),
+        inspectorName: 'Nguyễn Văn Điều Phối',
+        score: 9.6,
+      },
+      donationStory: {
+        donorName: 'Bạn Lê Minh Trí (Sinh viên ĐH KHTN)',
+        donorType: 'individual',
+        isAnonymous: false,
+        donorMessage: 'Mua nhầm size đi 1 lần nên gửi tặng lại để giúp gây quỹ từ thiện.',
+        intakeLocation: 'Trạm tiếp nhận ReGive Quận 5, TP.HCM',
+        receivedAt: new Date('2026-09-22'),
+      },
+      charityImpact: {
+        directBenefit: '100% số tiền 220.000đ đóng góp vào Quỹ Phẫu Thuật Nụ Cười Trẻ Thơ.',
+        co2SavedKg: 5.2,
+        wasteDivertedKg: 0.6,
+        fundAllocationPercent: 100,
+      },
+      warehouseAndShipping: {
+        storageLocation: 'Kệ E1-05 - Kho TP.HCM',
+        packagingType: 'Hộp giày giấy tái chế ReGive',
+        shippingOptions: ['Giao tiêu chuẩn toàn quốc (2-3 ngày)'],
+        estimatedDeliveryDays: '2 - 3 ngày làm việc',
+      },
+      guaranteePolicy: {
+        warrantyDays: 30,
+        returnPolicy: 'Hỗ trợ thử chân đồng kiểm khi nhận hàng.',
+        supportHotline: '1900 6868',
+      },
       stockQuantity: 3,
-      storageLocation: 'Kệ E1 - Kho TP.HCM',
+      storageLocation: 'Kệ E1-05 - Kho TP.HCM',
     },
     {
-      name: 'Bộ xếp hình Lego trí tuệ phát triển tư duy',
-      description: 'Hơn 400 chi tiết xếp hình phong phú kích thích sáng tạo cho trẻ nhỏ từ 5 đến 12 tuổi, đầy đủ khay đựng.',
+      sku: 'REG-TOY-007',
+      name: 'Bộ đồ chơi xếp hình trí tuệ Lego City 450 chi tiết',
+      brand: 'Lego (Đan Mạch)',
+      origin: 'Đan Mạch / Hungary',
+      description:
+        'Bộ xếp hình Lego chủ đề thành phố tương lai gồm 450 chi tiết mảnh ghép chuẩn xác. Chất liệu nhựa ABS nguyên sinh tuyệt đối an toàn cho trẻ nhỏ. Hỗ trợ kích thích tư duy logic, khả năng giải quyết vấn đề và óc tưởng tượng không gian.',
       category: 'do_choi',
       images: [
-        'https://images.unsplash.com/photo-1585366119957-e9730b6d0f60?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1585366119957-e9730b6d0f60?auto=format&fit=crop&w=800&q=80',
       ],
       condition: PRODUCT_CONDITION.GOOD,
       quality: PRODUCT_QUALITY.HIGH,
+      originalPrice: 750000,
       price: 160000,
+      weight: '900g',
+      dimensions: { length: 30, width: 22, height: 14, unit: 'cm' },
+      material: 'Nhựa ABS nguyên sinh cao cấp an toàn không độc hại (BPA Free)',
+      color: 'Đa màu sắc',
+      tags: ['Lego City', 'Đồ chơi trí tuệ', 'Phát triển tư duy', 'Bền đẹp'],
+      highlights: [
+        '450 chi tiết mảnh ghép chuẩn xác, phát triển tư duy không gian và sáng tạo',
+        'Đầy đủ khay nhựa phân loại ngăn nắp và sách hướng dẫn lắp ghép',
+        'Tương thích 100% với mọi bộ xếp hình Lego tiêu chuẩn quốc tế',
+      ],
+      specifications: [
+        { key: 'Thương hiệu', value: 'Lego Group (Đan Mạch)' },
+        { key: 'Số lượng mảnh ghép', value: '450 chi tiết + 3 nhân vật minifigures' },
+        { key: 'Độ tuổi', value: '5 - 12 tuổi' },
+      ],
+      inspectionReport: {
+        conditionDetails: 'Mảnh ghép đầy đủ 100%, không bị gãy vỡ hay biến dạng, khớp nối chắc chắn.',
+        functionalityStatus: 'Khớp nối vừa khít, không lỏng lẻo',
+        sanitizationStatus: 'Rửa tiệt trùng bằng dung dịch chuyên dụng cho đồ chơi trẻ em & sấy khô tia cực tím',
+        accessoriesIncluded: ['Khay nhựa phân loại có nắp', 'Sách hướng dẫn lắp ghép'],
+        inspectedAt: new Date(),
+        inspectorName: 'Lê Thùy Dương - Giám định viên ReGive',
+        score: 9.5,
+      },
+      donationStory: {
+        donorName: 'Gia đình anh Trần Quốc Tuấn',
+        donorType: 'individual',
+        isAnonymous: false,
+        donorMessage: 'Gửi tặng các bạn nhỏ đam mê lắp ghép sáng tạo.',
+        intakeLocation: 'Trạm tiếp nhận ReGive Sơn Trà, Đà Nẵng',
+        receivedAt: new Date('2026-09-10'),
+      },
+      charityImpact: {
+        directBenefit: '100% số tiền 160.000đ đóng góp vào Quỹ Tủ Sách Biên Giới.',
+        co2SavedKg: 3.1,
+        wasteDivertedKg: 0.9,
+        fundAllocationPercent: 100,
+      },
+      warehouseAndShipping: {
+        storageLocation: 'Kệ B1-03 - Kho Đà Nẵng',
+        packagingType: 'Hộp carton bảo vệ khay nhựa',
+        shippingOptions: ['Giao hàng toàn quốc (2-3 ngày)'],
+        estimatedDeliveryDays: '2 - 3 ngày làm việc',
+      },
+      guaranteePolicy: {
+        warrantyDays: 15,
+        returnPolicy: 'Hoàn tiền 100% nếu thiếu chi tiết chính.',
+        supportHotline: '1900 6868',
+      },
       stockQuantity: 5,
-      storageLocation: 'Kệ B1 - Kho Đà Nẵng',
+      storageLocation: 'Kệ B1-03 - Kho Đà Nẵng',
     },
     {
-      name: 'Tai nghe chụp tai có micro học trực tuyến',
-      description: 'Tai nghe over-ear êm tai, có mic đàm thoại rõ ràng, jack 3.5mm tương thích mọi laptop và điện thoại.',
+      sku: 'REG-ELEC-008',
+      name: 'Tai nghe chụp tai có micro học trực tuyến Sony MDR-ZX110AP',
+      brand: 'Sony',
+      origin: 'Thái Lan',
+      description:
+        'Tai nghe over-ear chính hãng Sony MDR-ZX110AP tích hợp microphone đàm thoại rõ ràng lọc tiếng ồn. Màng loa Dynamic 30mm cho âm thanh chi tiết, đệm tai êm ái không gây đau tai khi học online kéo dài. Thiết kế gập xoay Swivel gấp phẳng bỏ balo siêu gọn gàng.',
       category: 'dien_tu',
       images: [
-        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80',
       ],
       condition: PRODUCT_CONDITION.FAIR,
       quality: PRODUCT_QUALITY.MEDIUM,
+      originalPrice: 490000,
       price: 110000,
+      weight: '120g',
+      dimensions: { length: 20, width: 15, height: 5, unit: 'cm' },
+      material: 'Vỏ nhựa polymer siêu nhẹ, đệm tai mút xốp bọc da êm ái',
+      color: 'Đen sang trọng',
+      tags: ['Tai nghe Sony', 'Học trực tuyến', 'Micro đàm thoại', 'Gọn nhẹ'],
+      highlights: [
+        'Driver dynamic 30mm cho âm thanh rõ ràng, cách âm thụ động tốt',
+        'Microphone tích hợp đàm thoại học tiếng Anh & Zoom rõ tiếng, lọc tạp âm',
+        'Thiết kế gập xoay Swivel gập gọn bỏ balo tiện lợi mang theo',
+      ],
+      specifications: [
+        { key: 'Thương hiệu', value: 'Sony (Nhật Bản)' },
+        { key: 'Kích thước màng loa', value: '30 mm Dynamic Dome' },
+        { key: 'Dải tần số', value: '12 Hz – 22.000 Hz' },
+        { key: 'Cổng cắm', value: 'Jack 3.5mm mạ vàng chữ L' },
+      ],
+      inspectionReport: {
+        conditionDetails: 'Đệm da có vết xước nhỏ 5% theo thời gian, chất âm 2 bên loa cân bằng 100%, mic thu âm trong.',
+        functionalityStatus: 'Âm thanh 2 kênh rõ nét, micro hoạt động hoàn hảo',
+        sanitizationStatus: 'Lau cồn y tế và tiệt trùng mút tai bằng tia cực tím',
+        accessoriesIncluded: ['Jack chuyển đổi 3.5mm'],
+        inspectedAt: new Date(),
+        inspectorName: 'Trần Minh Anh - Giám định viên ReGive',
+        score: 8.9,
+      },
+      donationStory: {
+        donorName: 'Bạn Ngô Thu Trang',
+        donorType: 'individual',
+        isAnonymous: false,
+        donorMessage: 'Tặng lại chiếc tai nghe đã đồng hành cùng mình suốt 4 năm đại học.',
+        intakeLocation: 'Trạm tiếp nhận ReGive Hai Bà Trưng, Hà Nội',
+        receivedAt: new Date('2026-09-08'),
+      },
+      charityImpact: {
+        directBenefit: '100% số tiền 110.000đ đóng góp vào Quỹ Áo Ấm Cho Em Hà Giang.',
+        co2SavedKg: 1.5,
+        wasteDivertedKg: 0.15,
+        fundAllocationPercent: 100,
+      },
+      warehouseAndShipping: {
+        storageLocation: 'Kệ D1-07 - Kho Hà Nội',
+        packagingType: 'Túi chống sốc tái chế ReGive',
+        shippingOptions: ['Giao toàn quốc (2-3 ngày)'],
+        estimatedDeliveryDays: '2 - 3 ngày làm việc',
+      },
+      guaranteePolicy: {
+        warrantyDays: 30,
+        returnPolicy: 'Bảo hành nghe thử 30 ngày đổi trả nếu phát sinh rè loa.',
+        supportHotline: '1900 6868',
+      },
       stockQuantity: 4,
-      storageLocation: 'Kệ D1 - Kho Hà Nội',
+      storageLocation: 'Kệ D1-07 - Kho Hà Nội',
     },
   ];
 
@@ -472,15 +849,8 @@ async function seed() {
     let prod = await Product.findOne({ name: pData.name });
     if (!prod) {
       prod = await Product.create({
-        name: pData.name,
-        description: pData.description,
-        category: pData.category,
-        images: pData.images,
+        ...pData,
         campaign: primaryCampaign._id,
-        condition: pData.condition,
-        quality: pData.quality,
-        suggestedPrice: pData.price,
-        price: pData.price,
         currency: 'VND',
         suitableForMarketplace: true,
         reviewed: true,
@@ -489,14 +859,68 @@ async function seed() {
         listedOnMarketplace: true,
         listedAt: new Date(),
         status: PRODUCT_STATUS.LISTED,
-        stockQuantity: pData.stockQuantity,
-        storageLocation: pData.storageLocation,
         createdBy: employeeUser._id,
       });
-      console.log(`+ Tạo sản phẩm Marketplace: ${prod.name}`);
+      console.log(`+ Tạo sản phẩm Marketplace: ${prod.name} (SKU: ${prod.sku})`);
     } else {
-      console.log(`= Đã tồn tại sản phẩm: ${prod.name}`);
+      // Update with deep fields
+      Object.assign(prod, pData);
+      prod.campaign = primaryCampaign._id;
+      prod.suitableForMarketplace = true;
+      prod.reviewed = true;
+      prod.reviewedBy = employeeUser._id;
+      prod.reviewedAt = new Date();
+      prod.listedOnMarketplace = true;
+      prod.status = PRODUCT_STATUS.LISTED;
+      await prod.save();
+      console.log(`= Cập nhật sản phẩm Marketplace chi tiết: ${prod.name}`);
     }
+
+    // Seed or update AiAssessment
+    let assessment = await AiAssessment.findOne({ product: prod._id });
+    if (!assessment) {
+      assessment = await AiAssessment.create({
+        product: prod._id,
+        requestedBy: employeeUser._id,
+        status: AI_ASSESSMENT_STATUS.CONFIRMED,
+        provider: 'gemini-1.5-flash',
+        input: {
+          name: prod.name,
+          description: prod.description,
+          category: prod.category,
+          images: prod.images,
+          extraNote: 'Kiểm định chất lượng phân loại vật phẩm trao tặng cộng đồng ReGive',
+        },
+        suggestion: {
+          category: prod.category,
+          condition: prod.condition,
+          quality: prod.quality,
+          suggestedPrice: prod.price,
+          suitableForMarketplace: true,
+          confidence: 0.96,
+          rationale: `Sản phẩm ${prod.name} thuộc thương hiệu ${prod.brand || 'chính hãng'}, đạt phẩm chất ${prod.quality}, tình trạng ${prod.condition}. Phù hợp 100% để niêm yết gây quỹ.`,
+        },
+        finalDecision: {
+          category: prod.category,
+          condition: prod.condition,
+          quality: prod.quality,
+          suggestedPrice: prod.price,
+          suitableForMarketplace: true,
+          confidence: 0.98,
+          rationale: 'Chuyên viên kiểm định ReGive đã đối chiếu thực tế và phê duyệt niêm yết.',
+        },
+        reviewedBy: employeeUser._id,
+        reviewedAt: new Date(),
+        appliedToProduct: true,
+      });
+      prod.latestAiAssessment = assessment._id;
+      await prod.save();
+      console.log(`  + Đã liên kết AiAssessment xác thực cho ${prod.name}`);
+    } else {
+      prod.latestAiAssessment = assessment._id;
+      await prod.save();
+    }
+
     createdProducts.push(prod);
   }
 
