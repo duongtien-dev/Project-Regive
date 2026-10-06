@@ -128,30 +128,136 @@ async function seed() {
   const demoUser = users['user1@example.com'] || users['user@regive.local'];
   const demoBeneficiary = users['beneficiary1@example.com'] || users['beneficiary@regive.local'];
 
-  // 2. CHIẾN DỊCH THIỆN NGUYỆN (CAMPAIGNS)
+  // 2. CHIẾN DỊCH THIỆN NGUYỆN (CAMPAIGNS) VỚI ĐẦY ĐỦ TRƯỜNG CHI TIẾT
   const campaignsData = [
     {
       title: 'Áo Ấm Cho Em — Mùa Đông Vùng Cao Hà Giang 2026',
-      shortDescription: 'Gây quỹ trao tặng 1.200 áo phao ấm và 500 chăn bông cho học sinh tiểu học xã Lũng Cú & Đồng Văn vượt qua mùa đông buốt giá.',
+      shortDescription:
+        'Gây quỹ may 1.200 áo phao ấm 3 lớp, 500 chăn bông và 1.000 đôi ủng đi mưa cho học sinh tiểu học xã Lũng Cú, Đồng Văn & Lũng Táo.',
       category: 'children',
+      urgency: 'urgent',
       bannerImage: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1200&q=80',
+      galleryImages: [
+        'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1200&q=80',
+      ],
       description:
-        'Hàng ngàn em nhỏ tại các điểm trường xã Lũng Cú và Đồng Văn đang đối mặt với cái lạnh buốt giá dưới 5°C. Chiến dịch quyên góp kinh phí may áo khoác ấm, ủng đi mưa và chăn ấm cho các em.',
-      goal: 'Trao tặng 1.200 bộ áo ấm và 500 chăn bông cho học sinh tiểu học Hà Giang.',
-      location: 'Đồng Văn, Hà Giang',
+        'Hàng ngàn em nhỏ tại các điểm trường xã Lũng Cú, Lũng Táo và Đồng Văn đang đối mặt với cái lạnh buốt giá dưới 5°C của mùa đông vùng cao Đông Bắc. Nhiều em phải đi chân trần trên nền đá tai mèo trơn trượt và chỉ mặc một manh áo mỏng manh.\n\nChiến dịch “Áo Ấm Cho Em 2026” do CLB Kết Nối Yêu Thương phối hợp cùng Nền tảng ReGive phát động nhằm mang hơi ấm đến 1.200 em học sinh mầm non và tiểu học. Toàn bộ kinh phí sẽ được dùng để may áo khoác phao 3 lớp chống thấm, mua chăn ấm và ủng đi mưa, đồng thời tổ chức bữa ăn dinh dưỡng ngày trao quà.',
+      goal: 'Trao tặng 1.200 áo khoác phao giữ nhiệt, 500 chăn bông và 1.000 đôi ủng đi mưa cho trẻ em vùng cao Hà Giang.',
+      location: 'Đồng Văn & Mèo Vạc, Hà Giang',
+      beneficiaryCount: 1200,
+      beneficiaryUnit: 'học sinh tiểu học và mầm non',
+      impactSummary: 'Trang bị 1.200 áo phao ấm 3 lớp, 500 chăn bông và 1.000 đôi ủng chống rét cho học sinh 3 xã biên giới Hà Giang.',
       organization: 'CLB Kết Nối Yêu Thương & ReGive Hà Giang',
       contactInfo: {
-        representative: 'Nguyễn Văn Minh (Trưởng ban)',
+        representative: 'Nguyễn Văn Minh (Trưởng ban Điều Phối)',
         phone: '0988112233',
         email: 'minh.nguyen@regive.org.vn',
       },
-      volunteerConditions: 'Độ tuổi từ 18-35, sức khỏe tốt chịu được địa hình núi cao, ưu tiên có kinh nghiệm đi phượt hoặc sơ cứu cơ bản.',
+      bankAccount: {
+        bankName: 'Ngân hàng Quân Đội (MB Bank)',
+        accountNumber: '9999AOAMHAGIANG',
+        accountHolder: 'QUY THIEN NGUYEN REGIVE VIET NAM',
+        branch: 'Chi nhánh Ba Đình, Hà Nội',
+        qrCodeUrl: '',
+      },
+      volunteerConditions:
+        'Độ tuổi 18-35, sức khỏe dẻo dai thích nghi tốt thời tiết lạnh dưới 5°C, tuân thủ kỷ luật đoàn đi phượt/tình nguyện vùng cao, ưu tiên TNV có kỹ năng sơ cứu hoặc chụp ảnh tư liệu.',
       targetItems: [
-        { name: 'Áo khoác lông vũ chống rét', targetQty: 1200, receivedQty: 780, unit: 'chiếc' },
-        { name: 'Chăn ấm siêu nhẹ', targetQty: 500, receivedQty: 320, unit: 'chiếc' },
-        { name: 'Ủng đi mưa lót lông', targetQty: 1000, receivedQty: 450, unit: 'đôi' },
+        { name: 'Áo khoác lông vũ 3 lớp chống rét', targetQty: 1200, receivedQty: 780, unit: 'chiếc' },
+        { name: 'Chăn bông siêu nhẹ giữ nhiệt', targetQty: 500, receivedQty: 320, unit: 'chiếc' },
+        { name: 'Ủng đi mưa lót nỉ chống trượt', targetQty: 1000, receivedQty: 450, unit: 'đôi' },
+        { name: 'Khăn len & Găng tay ấm', targetQty: 1200, receivedQty: 900, unit: 'bộ' },
       ],
-      tags: ['Áo ấm', 'Hà Giang', 'Trẻ em', 'Mùa đông', 'Vùng cao'],
+      budgetBreakdown: [
+        {
+          title: 'May 1.200 áo khoác phao 3 lớp chuyên dụng',
+          percentage: 70,
+          amount: 56000000,
+          description: 'Đặt may trực tiếp tại xưởng với chất liệu vải dù gió chống nước và lót bông ép giữ nhiệt dày dặn.',
+        },
+        {
+          title: 'Mua 500 chăn bông ấm & 1.000 đôi ủng',
+          percentage: 18,
+          amount: 14400000,
+          description: 'Cung cấp chăn đắp tại các điểm trường bán trú và ủng cao su cho các em đi bộ qua đèo núi.',
+        },
+        {
+          title: 'Vận chuyển hàng hóa vượt đèo & Hậu cần đoàn',
+          percentage: 12,
+          amount: 9600000,
+          description: 'Thuê xe tải 3.5 tấn vận chuyển từ Hà Nội lên Hà Giang và trung chuyển bằng xe máy vào các điểm trường bản sâu.',
+        },
+        {
+          title: 'Phí vận hành nền tảng ReGive',
+          percentage: 0,
+          amount: 0,
+          description: 'ReGive tài trợ 100% chi phí công nghệ & quản trị — 0% phí nền tảng.',
+        },
+      ],
+      timeline: [
+        {
+          phase: 'Giai đoạn 1',
+          date: '01/09/2026 - 15/09/2026',
+          title: 'Khảo sát tiền trạm & Lập danh sách điểm trường',
+          description: 'Đoàn tiền trạm khảo sát 8 điểm trường lẻ tại Lũng Táo và Đồng Văn, chốt danh sách 1.200 em khó khăn nhất.',
+          status: 'completed',
+        },
+        {
+          phase: 'Giai đoạn 2',
+          date: '16/09/2026 - 31/10/2026',
+          title: 'Gây quỹ cộng đồng & Đặt may áo ấm',
+          description: 'Phát động chiến dịch gây quỹ và đặt xưởng may áo khoác theo kích cỡ chiều cao của từng lớp.',
+          status: 'in_progress',
+        },
+        {
+          phase: 'Giai đoạn 3',
+          date: '01/11/2026 - 30/11/2026',
+          title: 'Tập kết kho bãi & Đóng gói suất quà',
+          description: 'Kiểm tra chất lượng áo ấm, đóng gói theo từng điểm trường và tập kết tại kho Hà Nội sẵn sàng xuất phát.',
+          status: 'upcoming',
+        },
+        {
+          phase: 'Giai đoạn 4',
+          date: '05/12/2026 - 15/12/2026',
+          title: 'Hành trình trao quà thực địa tại Hà Giang',
+          description: 'Đoàn 25 tình nguyện viên di chuyển lên Hà Giang, trao tận tay các em học sinh và nấu bữa ăn ấm áp.',
+          status: 'upcoming',
+        },
+      ],
+      faqs: [
+        {
+          question: 'Tôi có thể ủng hộ áo ấm cũ đã qua sử dụng không?',
+          answer:
+            'Có. ReGive hoan nghênh hiện vật cũ còn dùng tốt (>80%), sạch sẽ, không rách nát. Sau khi tiếp nhận, đội ngũ ReGive sẽ phân loại, giặt sấy nhiệt độ cao và tiệt trùng UV-C trước khi chuyển lên vùng cao.',
+        },
+        {
+          question: 'Làm thế nào để tôi kiểm tra dòng tiền ủng hộ của mình?',
+          answer:
+            'Mọi khoản đóng góp qua tài khoản hoặc cổng thanh toán đều được hệ thống ReGive ghi nhận tức thì vào mục "Sao kê minh bạch" và cập nhật vào số dư công khai của chiến dịch theo thời gian thực.',
+        },
+        {
+          question: 'Tôi muốn đăng ký tham gia đoàn trao quà trực tiếp tại Hà Giang thì làm sao?',
+          answer:
+            'Bạn hãy nhấn nút "Đăng ký tình nguyện viên" ngay trên trang chiến dịch, điền kỹ năng và ghi chú thời gian tham gia. Ban điều phối sẽ liên hệ phỏng vấn và xếp lịch tập huấn.',
+        },
+      ],
+      verificationStatus: {
+        isVerified: true,
+        verifiedAt: new Date('2026-08-25'),
+        verifiedBy: 'UBND Huyện Đồng Văn & Hội Đồng Giám Định ReGive',
+        licenseNumber: 'GP-TGQ-2026/UBND-HG',
+      },
+      donationGuidelines: {
+        moneyNote:
+          '100% số tiền ủng hộ được nạp vào quỹ chiến dịch, sao kê tự động theo thời gian thực và giải ngân minh bạch có hóa đơn chứng từ.',
+        productNote:
+          'Quần áo ấm, chăn màn hoặc sách vở cần sạch sẽ, lành lặn. Xin không gửi đồ hè hoặc đồ hư hỏng.',
+        receivingAddress: 'Kho Tổng ReGive Hà Nội: Số 15 Cầu Giấy, Hà Nội — ĐT tiếp nhận: 0988112233.',
+      },
+      tags: ['Áo ấm', 'Hà Giang', 'Trẻ em', 'Mùa đông', 'Vùng cao', 'Đồng Văn'],
       startDate: new Date('2026-09-01'),
       endDate: new Date('2026-12-31'),
       status: CAMPAIGN_STATUS.ACTIVE,
@@ -169,31 +275,105 @@ async function seed() {
           title: 'Tiếp nhận đợt hàng áo ấm đợt 1',
           date: new Date('2026-09-25'),
           content: 'Đã hoàn tất may 400 áo khoác phao 3 lớp tại xưởng may đối tác, sẵn sàng chuyển về kho tổng tập kết.',
+          image: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=600&q=80',
           author: 'Ban Hậu Cần',
         },
       ],
     },
     {
       title: 'Tủ Sách Tri Thức Cho Trẻ Em Vùng Biên Giới',
-      shortDescription: 'Xây dựng 5 thư viện mini thân thiện với 3.000 đầu sách truyện tranh và kỹ năng sống tại Lạng Sơn.',
+      shortDescription:
+        'Xây dựng 5 thư viện mini thân thiện với 3.000 đầu sách truyện tranh, khoa học và kỹ năng sống tại các trường bán trú Lạng Sơn.',
       category: 'education',
+      urgency: 'normal',
       bannerImage: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=1200&q=80',
+      galleryImages: [
+        'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80',
+      ],
       description:
-        'Xây dựng 5 tủ sách cộng đồng với hơn 3.000 đầu sách truyện tranh, sách khoa học và kỹ năng sống cho thiếu nhi tại các xã biên giới Lạng Sơn.',
-      goal: 'Xây dựng 5 thư viện mini thân thiện tại các trường bán trú.',
-      location: 'Cao Lộc, Lạng Sơn',
+        'Thiếu thốn nguồn sách đọc giải trí và tài liệu bổ trợ khiến việc phát triển kỹ năng đọc hiểu của các em học sinh vùng biên giới gặp nhiều hạn chế. Dự án hướng tới việc xây dựng 5 không gian đọc mở thân thiện, trang bị đầy đủ kệ sách gỗ, thảm ngồi và 3.000 cuốn sách mới.',
+      goal: 'Xây dựng 5 thư viện mini thân thiện tại các trường bán trú tiểu học Cao Lộc, Lạng Sơn.',
+      location: 'Cao Lộc & Tràng Định, Lạng Sơn',
+      beneficiaryCount: 3000,
+      beneficiaryUnit: 'học sinh bán trú',
+      impactSummary: 'Xây dựng 5 thư viện mini thân thiện với 3.000 đầu sách truyện tranh và kỹ năng sống tại Lạng Sơn.',
       organization: 'Hội Sách Cộng Đồng Việt Nam',
       contactInfo: {
         representative: 'Phạm Hồng Ánh',
         phone: '0912445566',
         email: 'anh.pham@regive.org.vn',
       },
+      bankAccount: {
+        bankName: 'Ngân hàng Quân Đội (MB Bank)',
+        accountNumber: '9999TUSACHBIENGIOI',
+        accountHolder: 'QUY THIEN NGUYEN REGIVE VIET NAM',
+        branch: 'Chi nhánh Hà Nội',
+        qrCodeUrl: '',
+      },
       volunteerConditions: 'Yêu thích đọc sách, có kỹ năng phân loại và bọc dán sách bảo quản, hỗ trợ tổ chức ngày hội đọc.',
       targetItems: [
         { name: 'Sách truyện thiếu nhi & kỹ năng', targetQty: 3000, receivedQty: 1950, unit: 'cuốn' },
         { name: 'Kệ sách gỗ 5 tầng', targetQty: 10, receivedQty: 7, unit: 'cái' },
+        { name: 'Bàn đọc và thảm nỉ ngồi đọc', targetQty: 15, receivedQty: 10, unit: 'bộ' },
       ],
-      tags: ['Tủ sách', 'Giáo dục', 'Trẻ em biên giới', 'Tri thức'],
+      budgetBreakdown: [
+        {
+          title: 'Mua 3.000 đầu sách thiếu nhi và kỹ năng mới',
+          percentage: 65,
+          amount: 26000000,
+          description: 'Sách truyện cổ tích, bách khoa toàn thư, truyện tranh lịch sử NXB Kim Đồng.',
+        },
+        {
+          title: 'Đóng mới 10 kệ sách gỗ và bàn đọc thân thiện',
+          percentage: 25,
+          amount: 10000000,
+          description: 'Kệ sách gỗ chống ẩm 5 tầng thiết kế bo tròn an toàn cho thiếu nhi.',
+        },
+        {
+          title: 'Tổ chức ngày hội đọc sách & Quà tặng học tập',
+          percentage: 10,
+          amount: 4000000,
+          description: 'Trao tặng bộ dụng cụ học tập và tổ chức thi đố vui đọc sách cho các em.',
+        },
+      ],
+      timeline: [
+        {
+          phase: 'Giai đoạn 1',
+          date: '15/09/2026 - 30/09/2026',
+          title: 'Thu gom sách & Phân loại tuyển chọn',
+          description: 'Tiếp nhận sách quyên góp từ các trường học và chọn lọc đầu sách phù hợp lứa tuổi.',
+          status: 'completed',
+        },
+        {
+          phase: 'Giai đoạn 2',
+          date: '01/10/2026 - 25/10/2026',
+          title: 'Sản xuất kệ sách & Mua sách bổ sung',
+          description: 'Đặt làm kệ sách gỗ và mua mới 1.500 đầu sách thiếu nhi.',
+          status: 'in_progress',
+        },
+        {
+          phase: 'Giai đoạn 3',
+          date: '01/11/2026 - 15/11/2026',
+          title: 'Lắp đặt và Khai trương 5 thư viện mini',
+          description: 'Vận chuyển lên Lạng Sơn, hoàn thiện trang trí và tổ chức ngày hội đọc sách.',
+          status: 'upcoming',
+        },
+      ],
+      faqs: [
+        {
+          question: 'Tôi có thể quyên góp sách cũ không?',
+          answer: 'Có. Sách truyện tranh, sách khoa học, văn học thiếu nhi còn nguyên vẹn không rách bìa đều được tiếp nhận.',
+        },
+      ],
+      verificationStatus: {
+        isVerified: true,
+        verifiedAt: new Date('2026-09-01'),
+        verifiedBy: 'Phòng GD&ĐT Huyện Cao Lộc & ReGive',
+        licenseNumber: 'GP-GD-2026/LS',
+      },
+      tags: ['Tủ sách', 'Giáo dục', 'Trẻ em biên giới', 'Tri thức', 'Lạng Sơn'],
       startDate: new Date('2026-09-15'),
       endDate: new Date('2026-11-15'),
       status: CAMPAIGN_STATUS.ACTIVE,
@@ -203,25 +383,96 @@ async function seed() {
     },
     {
       title: 'Nước Sạch Cho Đồng Bào Hạn Mặn Bến Tre',
-      shortDescription: 'Lắp đặt 10 bồn chứa nước dung tích lớn và máy lọc nước RO cung cấp nước ngọt miễn phí cho 1.500 hộ dân.',
+      shortDescription:
+        'Lắp đặt 10 bồn chứa nước inox dung tích lớn và 3 máy lọc nước RO công nghiệp cung cấp nước ngọt miễn phí cho 1.500 hộ dân.',
       category: 'environment',
+      urgency: 'emergency',
       bannerImage: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1200&q=80',
+      galleryImages: [
+        'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1584824486509-112e4181ff6b?auto=format&fit=crop&w=1200&q=80',
+      ],
       description:
-        'Hạn mặn kéo dài khiến hàng ngàn hộ dân thiếu nước sinh hoạt. Chiến dịch lắp đặt 10 bồn chứa nước dung tích lớn và máy lọc nước RO công suất cao.',
-      goal: 'Cung cấp nước ngọt sinh hoạt miễn phí cho 1.500 hộ gia đình.',
-      location: 'Ba Tri, Bến Tre',
+        'Hạn mặn kéo dài khốc liệt tại khu vực hạ lưu sông Tiền khiến hàng ngàn hộ dân xã Ba Tri không có nước ngọt để ăn uống và sinh hoạt. Chiến dịch khẩn cấp lắp đặt 10 bồn chứa nước 2000L và 3 trạm lọc nước RO công suất lớn phục vụ bà con.',
+      goal: 'Cung cấp nước ngọt sinh hoạt miễn phí cho 1.500 hộ gia đình tại Ba Tri, Bến Tre.',
+      location: 'Ba Tri & Bình Đại, Bến Tre',
+      beneficiaryCount: 1500,
+      beneficiaryUnit: 'hộ gia đình',
+      impactSummary: 'Lắp đặt 10 bồn chứa nước 2000L và 3 hệ thống máy lọc nước RO công nghiệp cho 1.500 hộ dân.',
       organization: 'Quỹ Môi Trường Xanh ĐBSCL',
       contactInfo: {
         representative: 'Võ Minh Đạt',
         phone: '0939556677',
         email: 'dat.vo@regive.org.vn',
       },
+      bankAccount: {
+        bankName: 'Ngân hàng Quân Đội (MB Bank)',
+        accountNumber: '9999NUOCSACHBENTRE',
+        accountHolder: 'QUY THIEN NGUYEN REGIVE VIET NAM',
+        branch: 'Chi nhánh Bến Tre',
+        qrCodeUrl: '',
+      },
       volunteerConditions: 'Hiểu biết kỹ thuật lọc nước cơ bản hoặc hỗ trợ vận chuyển lắp đặt bồn chứa tại xã Ba Tri.',
       targetItems: [
         { name: 'Bồn chứa nước Inox 2000L', targetQty: 10, receivedQty: 8, unit: 'bồn' },
         { name: 'Hệ thống máy lọc nước RO công nghiệp', targetQty: 3, receivedQty: 2, unit: 'hệ thống' },
       ],
-      tags: ['Nước sạch', 'Bến Tre', 'Hạn mặn', 'Môi trường'],
+      budgetBreakdown: [
+        {
+          title: '3 Hệ thống máy lọc nước RO công nghiệp (1.000L/h)',
+          percentage: 60,
+          amount: 90000000,
+          description: 'Hệ thống xử lý nước mặn thành nước tinh khiết uống trực tiếp đạt chuẩn BYT.',
+        },
+        {
+          title: '10 Bồn chứa nước Inox 304 dung tích 2000L',
+          percentage: 28,
+          amount: 42000000,
+          description: 'Bồn chứa nước ngọt dự trữ đặt tại các điểm văn hóa ấp.',
+        },
+        {
+          title: 'Thi công đường ống & Bảo trì màng lọc 1 năm',
+          percentage: 12,
+          amount: 18000000,
+          description: 'Lắp đặt van xả tự động và bảo dưỡng định kỳ.',
+        },
+      ],
+      timeline: [
+        {
+          phase: 'Giai đoạn 1',
+          date: '01/07/2026 - 31/07/2026',
+          title: 'Đo độ mặn nguồn nước & Khảo sát vị trí đặt trạm',
+          description: 'Lấy mẫu nước tại 10 điểm và xác định vị trí cấp nước công cộng.',
+          status: 'completed',
+        },
+        {
+          phase: 'Giai đoạn 2',
+          date: '01/08/2026 - 30/09/2026',
+          title: 'Lắp đặt 2 trạm lọc đầu tiên và 8 bồn chứa',
+          description: 'Bàn giao 2 trạm lọc RO đầu tiên cho UBND xã Ba Tri vận hành.',
+          status: 'completed',
+        },
+        {
+          phase: 'Giai đoạn 3',
+          date: '01/10/2026 - 31/10/2026',
+          title: 'Hoàn thiện trạm lọc thứ 3 & Tổng kết dự án',
+          description: 'Vận hành toàn bộ hệ thống phục vụ bà con suốt mùa hạn mặn.',
+          status: 'in_progress',
+        },
+      ],
+      faqs: [
+        {
+          question: 'Chất lượng nước lọc có đảm bảo uống trực tiếp không?',
+          answer: 'Nước sau lọc qua màng RO được Viện Pasteur kiểm nghiệm đạt tiêu chuẩn nước uống đóng chai QCVN 6-1:2010/BYT.',
+        },
+      ],
+      verificationStatus: {
+        isVerified: true,
+        verifiedAt: new Date('2026-06-28'),
+        verifiedBy: 'Sở Nông Nghiệp & PTNT Tỉnh Bến Tre',
+        licenseNumber: 'GP-NN-2026/BT',
+      },
+      tags: ['Nước sạch', 'Bến Tre', 'Hạn mặn', 'Môi trường', 'Đồng bằng sông Cửu Long'],
       startDate: new Date('2026-07-01'),
       endDate: new Date('2026-10-31'),
       status: CAMPAIGN_STATUS.ACTIVE,
@@ -231,24 +482,96 @@ async function seed() {
     },
     {
       title: 'Hành Trình Chữa Lành — Phẫu Thuật Nụ Cười Trẻ Thơ',
-      shortDescription: 'Tài trợ 100% chi phí phẫu thuật nụ cười và phục hồi chức năng phát âm cho 30 em nhỏ hở môi vòm miệng.',
+      shortDescription:
+        'Tài trợ 100% chi phí phẫu thuật nụ cười và phục hồi chức năng phát âm cho 30 em nhỏ hở môi vòm miệng.',
       category: 'healthcare',
+      urgency: 'urgent',
       bannerImage: 'https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?auto=format&fit=crop&w=1200&q=80',
+      galleryImages: [
+        'https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=1200&q=80',
+      ],
       description:
-        'Phối hợp cùng các y bác sĩ tình nguyện mang lại nụ cười trọn vẹn cho các em nhỏ bị dị tật hở môi, vòm miệng có hoàn cảnh khó khăn.',
-      goal: 'Tài trợ 100% chi phí phẫu thuật cho 30 em nhỏ.',
+        'Phối hợp cùng các y bác sĩ tình nguyện mang lại nụ cười trọn vẹn cho các em nhỏ bị dị tật hở môi, vòm miệng có hoàn cảnh khó khăn. Giúp các em tự tin hòa nhập cuộc sống, ăn uống và phát âm bình thường.',
+      goal: 'Tài trợ 100% chi phí phẫu thuật và chăm sóc hậu phẫu cho 30 em nhỏ.',
       location: 'Bệnh viện Nhi Trung Ương, Hà Nội',
+      beneficiaryCount: 30,
+      beneficiaryUnit: 'bệnh nhi hở môi vòm miệng',
+      impactSummary: 'Tài trợ trọn gói phẫu thuật tạo hình nụ cười và trị liệu phát âm cho 30 em nhỏ có hoàn cảnh khó khăn.',
       organization: 'Nhóm Bác Sĩ Tình Nguyện Nụ Cười Mới',
       contactInfo: {
         representative: 'Bác sĩ Đặng Quốc Cường',
         phone: '0913889900',
         email: 'cuong.dang@regive.org.vn',
       },
+      bankAccount: {
+        bankName: 'Ngân hàng Quân Đội (MB Bank)',
+        accountNumber: '9999NUCOITRETHO',
+        accountHolder: 'QUY THIEN NGUYEN REGIVE VIET NAM',
+        branch: 'Chi nhánh Hà Nội',
+        qrCodeUrl: '',
+      },
       volunteerConditions: 'Ưu tiên sinh viên y khoa, điều dưỡng hoặc TNV có kinh nghiệm chăm sóc và chơi đùa cùng bệnh nhi.',
       targetItems: [
         { name: 'Gói hỗ trợ dinh dưỡng hậu phẫu', targetQty: 30, receivedQty: 22, unit: 'suất' },
+        { name: 'Bộ đồ chơi phát triển cơ hàm & phát âm', targetQty: 30, receivedQty: 18, unit: 'bộ' },
       ],
-      tags: ['Y tế', 'Phẫu thuật nụ cười', 'Trẻ em', 'Bệnh viện'],
+      budgetBreakdown: [
+        {
+          title: 'Chi phí phẫu thuật & Vật tư y tế tạo hình (5.000.000 ₫/ca)',
+          percentage: 75,
+          amount: 150000000,
+          description: 'Phẫu thuật thẩm mỹ đóng khe môi, tạo hình vòm họng bằng kỹ thuật vi phẫu hiện đại.',
+        },
+        {
+          title: 'Dinh dưỡng chuyên biệt & Trị liệu ngôn ngữ hậu phẫu',
+          percentage: 15,
+          amount: 30000000,
+          description: 'Cung cấp sữa dinh dưỡng y khoa và 6 buổi trị liệu tập phát âm cùng chuyên gia.',
+        },
+        {
+          title: 'Hỗ trợ chi phí đi lại và lưu trú cho gia đình bệnh nhi',
+          percentage: 10,
+          amount: 20000000,
+          description: 'Hỗ trợ tiền vé xe và phòng trọ sạch sẽ gần bệnh viện cho phụ huynh ở tỉnh xa.',
+        },
+      ],
+      timeline: [
+        {
+          phase: 'Giai đoạn 1',
+          date: '01/08/2026 - 31/08/2026',
+          title: 'Khám sàng lọc và xét nghiệm tiền phẫu',
+          description: 'Khám sức khỏe tổng quát cho 45 hồ sơ và chọn 30 em đủ điều kiện phẫu thuật an toàn.',
+          status: 'completed',
+        },
+        {
+          phase: 'Giai đoạn 2',
+          date: '01/09/2026 - 15/11/2026',
+          title: 'Tiến hành các đợt phẫu thuật theo nhóm',
+          description: 'Đã hoàn thành 18 ca phẫu thuật thành công, các em đang phục hồi tốt.',
+          status: 'in_progress',
+        },
+        {
+          phase: 'Giai đoạn 3',
+          date: '16/11/2026 - 25/12/2026',
+          title: 'Hoàn thành 12 ca còn lại & Trị liệu phát âm',
+          description: 'Tiếp tục phẫu thuật đợt cuối và theo dõi sự phát triển ngôn ngữ của các em.',
+          status: 'upcoming',
+        },
+      ],
+      faqs: [
+        {
+          question: 'Phẫu thuật được thực hiện ở đâu?',
+          answer: 'Toàn bộ các ca phẫu thuật đều được thực hiện tại phòng mổ vô trùng tiêu chuẩn của Bệnh viện Nhi Trung Ương bởi đội ngũ bác sĩ chuyên khoa đầu ngành.',
+        },
+      ],
+      verificationStatus: {
+        isVerified: true,
+        verifiedAt: new Date('2026-07-20'),
+        verifiedBy: 'Hội Phẫu Thuật Tạo Hình Hà Nội & ReGive',
+        licenseNumber: 'GP-YT-2026/HN',
+      },
+      tags: ['Y tế', 'Phẫu thuật nụ cười', 'Trẻ em', 'Bệnh viện', 'Nụ cười mới'],
       startDate: new Date('2026-08-01'),
       endDate: new Date('2026-12-25'),
       status: CAMPAIGN_STATUS.ACTIVE,
@@ -268,17 +591,9 @@ async function seed() {
       });
       console.log(`+ Tạo chiến dịch: ${c.title}`);
     } else {
-      c.category = camp.category;
-      c.bannerImage = camp.bannerImage;
-      c.shortDescription = camp.shortDescription;
-      c.organization = camp.organization;
-      c.contactInfo = camp.contactInfo;
-      c.volunteerConditions = camp.volunteerConditions;
-      c.targetItems = camp.targetItems;
-      c.tags = camp.tags;
-      c.activities = camp.activities;
+      Object.assign(c, camp);
       await c.save();
-      console.log(`= Cập nhật chiến dịch: ${c.title}`);
+      console.log(`= Cập nhật chiến dịch chi tiết: ${c.title}`);
     }
     campaigns.push(c);
   }

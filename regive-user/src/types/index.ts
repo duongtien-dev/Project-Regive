@@ -19,6 +19,7 @@ export type User = {
 };
 
 export type CampaignStatus = 'draft' | 'active' | 'closed' | 'cancelled';
+export type CampaignUrgency = 'normal' | 'urgent' | 'emergency';
 
 export type CampaignActivity = {
   _id?: string;
@@ -37,6 +38,47 @@ export type CampaignTargetItem = {
   unit: string;
 };
 
+export type CampaignBudgetBreakdown = {
+  title: string;
+  percentage: number;
+  amount: number;
+  description?: string;
+};
+
+export type CampaignTimeline = {
+  phase?: string;
+  date?: string;
+  title: string;
+  description?: string;
+  status?: 'completed' | 'in_progress' | 'upcoming';
+};
+
+export type CampaignBankAccount = {
+  bankName?: string;
+  accountNumber?: string;
+  accountHolder?: string;
+  branch?: string;
+  qrCodeUrl?: string;
+};
+
+export type CampaignVerificationStatus = {
+  isVerified?: boolean;
+  verifiedAt?: string;
+  verifiedBy?: string;
+  licenseNumber?: string;
+};
+
+export type CampaignDonationGuidelines = {
+  moneyNote?: string;
+  productNote?: string;
+  receivingAddress?: string;
+};
+
+export type CampaignFaq = {
+  question: string;
+  answer: string;
+};
+
 export type CampaignContactInfo = {
   representative?: string;
   phone?: string;
@@ -53,14 +95,25 @@ export type Campaign = {
   startDate: string;
   endDate: string;
   status: CampaignStatus;
+  urgency?: CampaignUrgency;
   targetAmount: number;
   raisedAmount: number;
+  beneficiaryCount?: number;
+  beneficiaryUnit?: string;
+  impactSummary?: string;
   category?: string;
   bannerImage?: string;
+  galleryImages?: string[];
   organization?: string;
   contactInfo?: CampaignContactInfo;
+  bankAccount?: CampaignBankAccount;
   volunteerConditions?: string;
   targetItems?: CampaignTargetItem[];
+  budgetBreakdown?: CampaignBudgetBreakdown[];
+  timeline?: CampaignTimeline[];
+  faqs?: CampaignFaq[];
+  verificationStatus?: CampaignVerificationStatus;
+  donationGuidelines?: CampaignDonationGuidelines;
   tags?: string[];
   activities?: CampaignActivity[];
   donationCount?: number;

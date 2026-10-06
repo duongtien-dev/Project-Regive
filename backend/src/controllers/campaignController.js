@@ -14,13 +14,24 @@ const campaignBodyValidators = [
   body('startDate').isISO8601(),
   body('endDate').isISO8601(),
   body('status').optional().isIn(Object.values(CAMPAIGN_STATUS)),
+  body('urgency').optional().isIn(['normal', 'urgent', 'emergency']),
   body('targetAmount').optional().isFloat({ min: 0 }),
+  body('beneficiaryCount').optional().isInt({ min: 0 }),
+  body('beneficiaryUnit').optional().isString(),
+  body('impactSummary').optional().isString(),
   body('category').optional().isString(),
   body('bannerImage').optional().isString(),
+  body('galleryImages').optional().isArray(),
   body('organization').optional().isString(),
   body('contactInfo').optional().isObject(),
+  body('bankAccount').optional().isObject(),
   body('volunteerConditions').optional().isString(),
   body('targetItems').optional().isArray(),
+  body('budgetBreakdown').optional().isArray(),
+  body('timeline').optional().isArray(),
+  body('faqs').optional().isArray(),
+  body('verificationStatus').optional().isObject(),
+  body('donationGuidelines').optional().isObject(),
   body('tags').optional().isArray(),
 ];
 
@@ -33,13 +44,24 @@ const campaignUpdateValidators = [
   body('startDate').optional().isISO8601(),
   body('endDate').optional().isISO8601(),
   body('status').optional().isIn(Object.values(CAMPAIGN_STATUS)),
+  body('urgency').optional().isIn(['normal', 'urgent', 'emergency']),
   body('targetAmount').optional().isFloat({ min: 0 }),
+  body('beneficiaryCount').optional().isInt({ min: 0 }),
+  body('beneficiaryUnit').optional().isString(),
+  body('impactSummary').optional().isString(),
   body('category').optional().isString(),
   body('bannerImage').optional().isString(),
+  body('galleryImages').optional().isArray(),
   body('organization').optional().isString(),
   body('contactInfo').optional().isObject(),
+  body('bankAccount').optional().isObject(),
   body('volunteerConditions').optional().isString(),
   body('targetItems').optional().isArray(),
+  body('budgetBreakdown').optional().isArray(),
+  body('timeline').optional().isArray(),
+  body('faqs').optional().isArray(),
+  body('verificationStatus').optional().isObject(),
+  body('donationGuidelines').optional().isObject(),
   body('tags').optional().isArray(),
 ];
 
@@ -57,15 +79,24 @@ const listPublic = asyncHandler(async (req, res) => {
     .populate('createdBy', 'fullName email')
     .sort({ startDate: -1 });
 
-  // Tính số lượng quyên góp và tình nguyện viên hiện tại cho từng chiến dịch
   const campaignIds = campaigns.map((c) => c._id);
   const [donationCounts, volunteerCounts] = await Promise.all([
     Donation.aggregate([
-      { $match: { campaign: { $in: campaignIds }, status: { $in: ['completed', 'approved', 'received', 'confirmed'] } } },
+      {
+        $match: {
+          campaign: { $in: campaignIds },
+          status: { $in: ['completed', 'approved', 'received', 'confirmed', 'processing'] },
+        },
+      },
       { $group: { _id: '$campaign', count: { $sum: 1 } } },
     ]),
     VolunteerRegistration.aggregate([
-      { $match: { campaign: { $in: campaignIds }, status: { $in: ['approved', 'completed', 'pending'] } } },
+      {
+        $match: {
+          campaign: { $in: campaignIds },
+          status: { $in: ['approved', 'completed', 'pending'] },
+        },
+      },
       { $group: { _id: '$campaign', count: { $sum: 1 } } },
     ]),
   ]);
@@ -107,7 +138,22 @@ const getById = asyncHandler(async (req, res) => {
     throw new ApiError(404, 'Không tìm thấy chiến dịch');
   }
 
-  return success(res, { campaign });
+  const [donationCount, volunteerCount] = await Promise.all([
+    Donation.countDocuments({
+      campaign: campaign._id,
+      status: { $in: ['completed', 'confirmed', 'processing'] },
+    }),
+    VolunteerRegistration.countDocuments({
+      campaign: campaign._id,
+      status: { $in: ['approved', 'completed', 'pending'] },
+    }),
+  ]);
+
+  const obj = campaign.toObject();
+  obj.donationCount = donationCount;
+  obj.volunteerCount = volunteerCount;
+
+  return success(res, { campaign: obj });
 });
 
 const listPublicDonations = asyncHandler(async (req, res) => {
@@ -217,13 +263,24 @@ const create = asyncHandler(async (req, res) => {
     startDate,
     endDate,
     status,
+    urgency,
     targetAmount,
+    beneficiaryCount,
+    beneficiaryUnit,
+    impactSummary,
     category,
     bannerImage,
+    galleryImages,
     organization,
     contactInfo,
+    bankAccount,
     volunteerConditions,
     targetItems,
+    budgetBreakdown,
+    timeline,
+    faqs,
+    verificationStatus,
+    donationGuidelines,
     tags,
   } = req.body;
 
@@ -232,7 +289,7 @@ const create = asyncHandler(async (req, res) => {
   }
 
   const isStaff = ['ADMIN', 'EMPLOYEE'].includes(req.user.role);
-  const initialStatus = isStaff ? (status || CAMPAIGN_STATUS.ACTIVE) : CAMPAIGN_STATUS.DRAFT;
+  const initialStatus = isStaff ? status || CAMPAIGN_STATUS.ACTIVE : CAMPAIGN_STATUS.DRAFT;
 
   const campaign = await Campaign.create({
     title,
@@ -243,13 +300,24 @@ const create = asyncHandler(async (req, res) => {
     startDate,
     endDate,
     status: initialStatus,
+    urgency: urgency || 'normal',
     targetAmount: targetAmount || 0,
+    beneficiaryCount: beneficiaryCount || 0,
+    beneficiaryUnit: beneficiaryUnit || 'người thụ hưởng',
+    impactSummary: impactSummary || '',
     category: category || 'chung',
     bannerImage: bannerImage || '',
+    galleryImages: galleryImages || [],
     organization: organization || 'Ban Điều Hành ReGive',
     contactInfo: contactInfo || {},
+    bankAccount: bankAccount || {},
     volunteerConditions: volunteerConditions || '',
     targetItems: targetItems || [],
+    budgetBreakdown: budgetBreakdown || [],
+    timeline: timeline || [],
+    faqs: faqs || [],
+    verificationStatus: verificationStatus || {},
+    donationGuidelines: donationGuidelines || {},
     tags: tags || [],
     createdBy: req.user._id,
   });
@@ -278,13 +346,24 @@ const update = asyncHandler(async (req, res) => {
     'startDate',
     'endDate',
     'status',
+    'urgency',
     'targetAmount',
+    'beneficiaryCount',
+    'beneficiaryUnit',
+    'impactSummary',
     'category',
     'bannerImage',
+    'galleryImages',
     'organization',
     'contactInfo',
+    'bankAccount',
     'volunteerConditions',
     'targetItems',
+    'budgetBreakdown',
+    'timeline',
+    'faqs',
+    'verificationStatus',
+    'donationGuidelines',
     'tags',
   ];
   fields.forEach((field) => {
