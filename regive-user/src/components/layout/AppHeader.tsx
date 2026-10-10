@@ -57,21 +57,21 @@ export const AppHeader: React.FC = () => {
   return (
     <header
       className={`sticky top-0 z-50 transition-all duration-300 backdrop-blur-xl ${scrolled
-          ? 'bg-p-s900/95 border-b-2 border-p-s400/30 shadow-lg'
-          : 'bg-p-s900/95 border-b-2 border-transparent'
+          ? 'bg-white/95 border-b-2 border-p-s100 shadow-sm'
+          : 'bg-white/90 border-b-2 border-transparent'
         }`}
     >
       <div className="max-w-7xl mx-auto px-6 h-[68px] flex items-center justify-between gap-4">
         {/* ── Brand Logo ── */}
         <Link href="/" className="flex items-center gap-3 group no-underline shrink-0">
-          <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-sec-s500 to-sec-s400 flex items-center justify-center shadow-md shadow-sec-s500/30 group-hover:scale-110 transition-transform duration-200">
+          <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-p-s500 to-p-s400 flex items-center justify-center shadow-md shadow-p-s500/25 group-hover:scale-110 transition-transform duration-200">
             <Heart className="w-5 h-5 fill-white text-white" />
           </div>
           <div>
-            <span className="font-bold text-xl sm:text-2xl text-white leading-tight tracking-tight block">
-              Re<span className="text-sec-s400">Give</span>
+            <span className="font-bold text-xl sm:text-2xl text-n-s900 leading-tight tracking-tight block">
+              Re<span className="text-p-s600">Give</span>
             </span>
-            <span className="block text-[10px] text-n-s300 font-semibold tracking-wider -mt-0.5">
+            <span className="block text-[10px] text-n-s400 font-semibold tracking-wider -mt-0.5">
               Trao tặng · Thiện nguyện
             </span>
           </div>
@@ -89,8 +89,8 @@ export const AppHeader: React.FC = () => {
                 key={link.href}
                 href={link.href}
                 className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm no-underline transition-all duration-200 ${isActive
-                    ? 'font-extrabold text-white bg-p-s600 border border-p-s400/50 shadow-sm'
-                    : 'font-semibold text-n-s200 border border-transparent hover:bg-white/10 hover:text-white'
+                    ? 'font-extrabold text-p-s700 bg-p-s100 border border-p-s300/60 shadow-sm'
+                    : 'font-semibold text-n-s700 border border-transparent hover:bg-p-s50 hover:text-p-s700'
                   }`}
               >
                 {link.label}
@@ -119,7 +119,7 @@ export const AppHeader: React.FC = () => {
                 aria-label={`Thông báo — ${unreadCount} chưa đọc`}
               >
                 <Badge count={unreadCount} size="small" offset={[3, -3]}>
-                  <Bell className="w-5 h-5 text-white" />
+                  <Bell className="w-5 h-5" />
                 </Badge>
               </Link>
 
@@ -188,7 +188,7 @@ export const AppHeader: React.FC = () => {
               </Link>
               <Link
                 href="/register"
-                className="inline-flex items-center justify-center px-5 py-2 rounded-full text-sm font-bold text-white bg-sec-s500 hover:bg-sec-s600 no-underline shadow-md shadow-sec-s500/30 transition-colors"
+                className="inline-flex items-center justify-center px-5 py-2 rounded-full text-sm font-bold text-white bg-p-s500 hover:bg-p-s600 no-underline shadow-md shadow-p-s500/30 transition-colors"
               >
                 Tham gia ngay
               </Link>

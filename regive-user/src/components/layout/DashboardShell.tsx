@@ -77,11 +77,11 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({
 
   const brand = (
     <div className="flex items-center gap-2.5">
-      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-sec-s500 to-sec-s400 flex items-center justify-center shadow-md shadow-sec-s500/30">
+      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-p-s500 to-p-s400 flex items-center justify-center shadow-md shadow-p-s500/25">
         <Heart className="w-5 h-5 fill-white text-white" />
       </div>
-      <span className="font-bold text-lg tracking-tight">
-        Re<span className="text-sec-s400">Give</span>
+      <span className="font-bold text-lg tracking-tight text-n-s900">
+        Re<span className="text-p-s600">Give</span>
       </span>
     </div>
   );
@@ -96,11 +96,11 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({
             href={item.href}
             onClick={() => setMobileOpen(false)}
             className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm no-underline transition-colors ${active
-              ? 'bg-white/10 text-white font-semibold border border-white/10'
-              : 'text-n-s300 hover:bg-white/5 hover:text-white'
+              ? 'bg-p-s100 text-p-s700 font-semibold border border-p-s200'
+              : 'text-n-s600 hover:bg-p-s50 hover:text-p-s700'
               }`}
           >
-            <span className={active ? 'text-sec-s400' : 'text-n-s400'}>{item.icon}</span>
+            <span className={active ? 'text-p-s600' : 'text-n-s500'}>{item.icon}</span>
             <span>{item.label}</span>
           </Link>
         );
@@ -119,22 +119,22 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({
     <AuthGuard>
       <div className="flex min-h-dvh w-full">
         {/* ── Desktop Sidebar ── */}
-        <aside className="hidden lg:flex flex-col w-64 shrink-0 bg-p-s900 text-white sticky top-0 h-dvh">
-          <div className="h-16 px-5 flex items-center border-b border-white/10">{brand}</div>
+        <aside className="hidden lg:flex flex-col w-64 shrink-0 bg-white border-r border-n-s100 text-n-s900 sticky top-0 h-dvh">
+          <div className="h-16 px-5 flex items-center border-b border-n-s100">{brand}</div>
           {sidebarNav}
-          <div className="p-3 border-t border-white/10">
+          <div className="p-3 border-t border-n-s100">
             <div className="flex items-center gap-3 px-2 py-2">
               <div className="w-9 h-9 rounded-full bg-gradient-to-br from-p-s500 to-p-s400 text-white flex items-center justify-center text-sm font-black shrink-0">
                 {user?.fullName?.charAt(0).toUpperCase()}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-bold text-white truncate">{user?.fullName}</p>
+                <p className="text-sm font-bold text-n-s900 truncate">{user?.fullName}</p>
                 <p className="text-[11px] text-n-s400 truncate">{user?.email}</p>
               </div>
             </div>
             <button
               onClick={handleLogout}
-              className="mt-2 w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-n-s200 text-sm font-semibold border border-white/10 transition-colors cursor-pointer"
+              className="mt-2 w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-n-s50 hover:bg-n-s100 text-n-s600 text-sm font-semibold border border-n-s200 transition-colors cursor-pointer"
             >
               <LogOut className="w-4 h-4" /> Đăng xuất
             </button>
@@ -147,16 +147,16 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({
           onClose={() => setMobileOpen(false)}
           open={mobileOpen}
           width={280}
-          closeIcon={<X className="w-5 h-5 text-white" />}
-          styles={{ body: { padding: 0, background: '#011a2b' } }}
+          closeIcon={<X className="w-5 h-5 text-n-s900" />}
+          styles={{ body: { padding: 0, background: '#ffffff' } }}
         >
-          <div className="flex flex-col h-full text-white">
-            <div className="h-16 px-5 flex items-center border-b border-white/10">{brand}</div>
+          <div className="flex flex-col h-full text-n-s900">
+            <div className="h-16 px-5 flex items-center border-b border-n-s100">{brand}</div>
             {sidebarNav}
-            <div className="p-3 border-t border-white/10">
+            <div className="p-3 border-t border-n-s100">
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-n-s200 text-sm font-semibold border border-white/10 transition-colors cursor-pointer"
+                className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-n-s50 hover:bg-n-s100 text-n-s600 text-sm font-semibold border border-n-s200 transition-colors cursor-pointer"
               >
                 <LogOut className="w-4 h-4" /> Đăng xuất
               </button>
