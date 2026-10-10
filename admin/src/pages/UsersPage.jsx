@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Lock, Unlock } from 'lucide-react';
 import { authApi } from '../api/client';
-import { Badge, Button, Card, DataState, FilterSelect, PageHeader, Select, Table, TableSkeleton } from '../components/ui';
+import { Badge, Card, DataState, FilterSelect, PageHeader, Select, Table, TableSkeleton } from '../components/ui';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { LABELS, ROLES } from '../lib/constants';
@@ -113,10 +113,16 @@ export default function UsersPage() {
                 className: 'text-right',
                 render: (row) =>
                   isSelf(row) ? null : (
-                    <Button variant={row.isActive ? 'danger' : 'ghost'} onClick={() => handleToggleStatus(row)}>
+                    <button
+                      type="button"
+                      onClick={() => handleToggleStatus(row)}
+                      className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-sm font-medium cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss ${
+                        row.isActive ? 'text-rose hover:bg-rose/10' : 'text-moss hover:bg-ink/5'
+                      }`}
+                    >
                       {row.isActive ? <Lock size={16} /> : <Unlock size={16} />}
                       {row.isActive ? 'Khoá' : 'Mở khoá'}
-                    </Button>
+                    </button>
                   ),
               },
             ]}

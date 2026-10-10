@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { productApi } from '../api/client';
 import {
   Badge,
-  Button,
   Card,
   DataState,
   FilterSelect,
@@ -104,10 +103,17 @@ export default function ProductsPage() {
                 header: '',
                 render: (row) => (
                   <div className="flex justify-end gap-2">
-                    <Button variant="ghost" onClick={() => togglePublish(row)} disabled={busy === oid(row)}>
+                    <button
+                      type="button"
+                      onClick={() => togglePublish(row)}
+                      disabled={busy === oid(row)}
+                      className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-sm font-medium cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss ${
+                        row.listedOnMarketplace ? 'text-rose hover:bg-rose/10' : 'text-moss hover:bg-ink/5'
+                      }`}
+                    >
                       {row.listedOnMarketplace ? <Ban size={16} /> : <Rocket size={16} />}
                       {row.listedOnMarketplace ? 'Gỡ bán' : 'Đăng bán'}
-                    </Button>
+                    </button>
                   </div>
                 ),
               },

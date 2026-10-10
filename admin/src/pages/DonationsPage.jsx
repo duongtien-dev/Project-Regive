@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { donationApi, productApi } from '../api/client';
 import {
   Badge,
-  Button,
   Card,
   DataState,
   FilterSelect,
@@ -144,10 +143,15 @@ export default function DonationsPage() {
                       ))}
                     </Select>
                     {row.type === 'product' && row.status !== 'rejected' ? (
-                      <Button variant="lime" onClick={() => intake(row)} disabled={busy === oid(row)}>
+                      <button
+                        type="button"
+                        onClick={() => intake(row)}
+                        disabled={busy === oid(row)}
+                        className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-sm font-medium text-forest hover:bg-ink/5 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
+                      >
                         <PackagePlus size={16} />
                         Intake sản phẩm
-                      </Button>
+                      </button>
                     ) : null}
                   </div>
                 ),

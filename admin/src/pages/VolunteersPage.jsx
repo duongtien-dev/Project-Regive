@@ -120,10 +120,14 @@ export default function VolunteersPage() {
                 key: 'actions',
                 header: '',
                 render: (row) => (
-                  <Button variant="ghost" onClick={() => openReview(row)}>
+                  <button
+                    type="button"
+                    onClick={() => openReview(row)}
+                    className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-sm font-medium text-moss hover:bg-ink/5 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
+                  >
                     <CheckCircle2 size={16} />
                     Duyệt
-                  </Button>
+                  </button>
                 ),
               },
             ]}
