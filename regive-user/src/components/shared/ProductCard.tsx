@@ -109,9 +109,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onBuyNow }) =
               href={`/marketplace/${product._id}`}
               className="flex-1 no-underline"
             >
-              <button
-                className="clay-btn-outline w-full text-xs sm:text-sm py-2 px-3 justify-center"
-              >
+              <button className="w-full inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold py-2 px-3 rounded-full border border-n-s200 text-n-s700 hover:border-p-s400 hover:text-p-s600 transition-colors cursor-pointer">
                 Chi tiết
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
@@ -122,7 +120,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onBuyNow }) =
                 onBuyNow ? onBuyNow(product) : (window.location.href = `/marketplace/${product._id}`)
               }
               disabled={!inStock}
-              className={`clay-btn-primary flex-1 text-xs sm:text-sm py-2 px-3 justify-center ${
+              className={`flex-1 inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-bold py-2 px-3 rounded-full bg-p-s500 text-white hover:bg-p-s600 transition-colors cursor-pointer ${
                 !inStock ? 'opacity-50 cursor-not-allowed' : ''
               }`}
             >

@@ -45,7 +45,7 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({
       notificationService
         .listMine({ unread: true })
         .then((items) => setUnread(items.length))
-        .catch(() => {});
+        .catch(() => { });
     }
   }, [user, pathname]);
 
@@ -62,12 +62,12 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({
     { label: 'Lịch sử thanh toán', href: '/me/payments', icon: <CreditCard className="w-4 h-4" /> },
     ...(user?.role === 'BENEFICIARY'
       ? [
-          {
-            label: 'Yêu cầu hỗ trợ của tôi',
-            href: '/me/support-requests',
-            icon: <LifeBuoy className="w-4 h-4" />,
-          },
-        ]
+        {
+          label: 'Yêu cầu hỗ trợ của tôi',
+          href: '/me/support-requests',
+          icon: <LifeBuoy className="w-4 h-4" />,
+        },
+      ]
       : []),
     { label: 'Thông báo', href: '/notifications', icon: <Bell className="w-4 h-4" /> },
     { label: 'Cài đặt tài khoản', href: '/profile', icon: <UserIcon className="w-4 h-4" /> },
@@ -87,7 +87,7 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({
   );
 
   const sidebarNav = (
-    <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
+    <nav className="flex-1 px-3 space-y-2 overflow-y-auto">
       {navItems.map((item) => {
         const active = isActive(item.href);
         return (
@@ -95,11 +95,10 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({
             key={item.href}
             href={item.href}
             onClick={() => setMobileOpen(false)}
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm no-underline transition-colors ${
-              active
-                ? 'bg-white/10 text-white font-semibold border border-white/10'
-                : 'text-n-s300 hover:bg-white/5 hover:text-white'
-            }`}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm no-underline transition-colors ${active
+              ? 'bg-white/10 text-white font-semibold border border-white/10'
+              : 'text-n-s300 hover:bg-white/5 hover:text-white'
+              }`}
           >
             <span className={active ? 'text-sec-s400' : 'text-n-s400'}>{item.icon}</span>
             <span>{item.label}</span>

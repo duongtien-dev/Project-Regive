@@ -31,7 +31,7 @@ export const AppHeader: React.FC = () => {
       notificationService
         .listMine({ unread: true })
         .then((items) => setUnreadCount(items.length))
-        .catch(() => {});
+        .catch(() => { });
     }
   }, [user, pathname]);
 
@@ -56,11 +56,10 @@ export const AppHeader: React.FC = () => {
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-300 backdrop-blur-xl ${
-        scrolled
+      className={`sticky top-0 z-50 transition-all duration-300 backdrop-blur-xl ${scrolled
           ? 'bg-p-s900/95 border-b-2 border-p-s400/30 shadow-lg'
           : 'bg-p-s900/95 border-b-2 border-transparent'
-      }`}
+        }`}
     >
       <div className="max-w-7xl mx-auto px-6 h-[68px] flex items-center justify-between gap-4">
         {/* ── Brand Logo ── */}
@@ -89,11 +88,10 @@ export const AppHeader: React.FC = () => {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm no-underline transition-all duration-200 ${
-                  isActive
+                className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm no-underline transition-all duration-200 ${isActive
                     ? 'font-extrabold text-white bg-p-s600 border border-p-s400/50 shadow-sm'
                     : 'font-semibold text-n-s200 border border-transparent hover:bg-white/10 hover:text-white'
-                }`}
+                  }`}
               >
                 {link.label}
               </Link>
@@ -117,11 +115,11 @@ export const AppHeader: React.FC = () => {
               {/* Notification Bell */}
               <Link
                 href="/notifications"
-                className="relative p-2.5 rounded-2xl bg-white flex items-center justify-center shadow-sm border border-n-s200 text-n-s600 no-underline hover:border-p-s400 hover:text-p-s600 transition-colors"
+                className="relative p-2.5 rounded-2xl bg-white flex items-center justify-center shadow-sm border border-n-s200 text-sec-s600 no-underline hover:border-sec-s400 hover:text-sec-s500 transition-colors"
                 aria-label={`Thông báo — ${unreadCount} chưa đọc`}
               >
                 <Badge count={unreadCount} size="small" offset={[3, -3]}>
-                  <Bell className="w-5 h-5" />
+                  <Bell className="w-5 h-5 text-white" />
                 </Badge>
               </Link>
 
@@ -235,11 +233,10 @@ export const AppHeader: React.FC = () => {
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className={`flex items-center gap-2.5 px-4 py-3 rounded-2xl text-sm no-underline transition-colors ${
-                  isActive
+                className={`flex items-center gap-2.5 px-4 py-3 rounded-2xl text-sm no-underline transition-colors ${isActive
                     ? 'font-extrabold text-p-s700 bg-p-s100 border border-p-s300/40'
                     : 'font-semibold text-n-s700 border border-transparent hover:bg-p-s50'
-                }`}
+                  }`}
               >
                 {link.label}
               </Link>
