@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { CheckCircle2 } from 'lucide-react';
 import { volunteerApi } from '../api/client';
 import {
   Badge,
@@ -120,6 +121,7 @@ export default function VolunteersPage() {
                 header: '',
                 render: (row) => (
                   <Button variant="ghost" onClick={() => openReview(row)}>
+                    <CheckCircle2 size={16} />
                     Duyệt
                   </Button>
                 ),

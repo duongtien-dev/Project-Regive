@@ -27,6 +27,14 @@ const updateProfileValidators = [
   body('beneficiaryInfo.note').optional().isString(),
 ];
 
+const updateUserRoleValidators = [
+  body('role').isIn(Object.values(ROLES)).withMessage('Vai trò không hợp lệ'),
+];
+
+const updateUserStatusValidators = [
+  body('isActive').isBoolean().withMessage('Trạng thái không hợp lệ'),
+];
+
 const register = asyncHandler(async (req, res) => {
   const { email, password, fullName, phone, address, role } = req.body;
   const exists = await User.findOne({ email: email.toLowerCase() });
@@ -96,13 +104,47 @@ const listUsers = asyncHandler(async (req, res) => {
   return success(res, { users: users.map((u) => u.toSafeObject()) });
 });
 
+const updateUserRole = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    throw new ApiError(404, 'Không tìm thấy người dùng');
+  }
+  if (user._id.toString() === req.user._id.toString()) {
+    throw new ApiError(400, 'Không thể thay đổi vai trò của chính mình');
+  }
+  user.role = req.body.role;
+  await user.save();
+  return success(res, { user: user.toSafeObject() }, 'Đã cập nhật vai trò người dùng');
+});
+
+const updateUserStatus = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    throw new ApiError(404, 'Không tìm thấy người dùng');
+  }
+  if (user._id.toString() === req.user._id.toString()) {
+    throw new ApiError(400, 'Không thể thay đổi trạng thái của chính mình');
+  }
+  user.isActive = req.body.isActive;
+  await user.save();
+  return success(
+    res,
+    { user: user.toSafeObject() },
+    req.body.isActive ? 'Tài khoản đã được kích hoạt' : 'Tài khoản đã bị vô hiệu hóa'
+  );
+});
+
 module.exports = {
   registerValidators,
   loginValidators,
   updateProfileValidators,
+  updateUserRoleValidators,
+  updateUserStatusValidators,
   register,
   login,
   me,
   updateProfile,
   listUsers,
+  updateUserRole,
+  updateUserStatus,
 };

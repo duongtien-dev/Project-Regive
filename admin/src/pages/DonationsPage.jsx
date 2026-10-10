@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { PackagePlus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { donationApi, productApi } from '../api/client';
 import {
@@ -144,6 +145,7 @@ export default function DonationsPage() {
                     </Select>
                     {row.type === 'product' && row.status !== 'rejected' ? (
                       <Button variant="lime" onClick={() => intake(row)} disabled={busy === oid(row)}>
+                        <PackagePlus size={16} />
                         Intake sản phẩm
                       </Button>
                     ) : null}

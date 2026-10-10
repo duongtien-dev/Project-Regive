@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { Eye, Pencil, Trash2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { campaignApi } from '../api/client';
 import {
   Badge,
@@ -162,17 +164,40 @@ export default function CampaignsPage() {
                 key: 'actions',
                 header: '',
                 className: 'text-right',
-                render: (row) =>
-                  isAdmin ? (
-                    <div className="flex justify-end gap-2">
-                      <Button variant="ghost" onClick={() => openEdit(row)}>
-                        Sửa
-                      </Button>
-                      <Button variant="danger" onClick={() => setDeleting(row)}>
-                        Xoá
-                      </Button>
-                    </div>
-                  ) : null,
+                render: (row) => (
+                  <div className="flex justify-end gap-1">
+                    <Link
+                      to={`/campaigns/${oid(row)}`}
+                      className="p-2 rounded-lg text-moss hover:bg-ink/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
+                      title="Xem chi tiết"
+                      aria-label="Xem chi tiết"
+                    >
+                      <Eye size={24} />
+                    </Link>
+                    {isAdmin ? (
+                      <>
+                        <button
+                          type="button"
+                          onClick={() => openEdit(row)}
+                          className="p-2 rounded-lg text-forest hover:bg-ink/5 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
+                          title="Sửa"
+                          aria-label="Sửa"
+                        >
+                          <Pencil size={24} />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setDeleting(row)}
+                          className="p-2 rounded-lg text-rose hover:bg-rose/10 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose"
+                          title="Xoá"
+                          aria-label="Xoá"
+                        >
+                          <Trash2 size={24} />
+                        </button>
+                      </>
+                    ) : null}
+                  </div>
+                ),
               },
             ]}
           />

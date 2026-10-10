@@ -5,6 +5,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
 import AiReviewPage from './pages/AiReviewPage';
 import CampaignsPage from './pages/CampaignsPage';
+import CampaignDetailPage from './pages/CampaignDetailPage';
 import DashboardPage from './pages/DashboardPage';
 import DonationsPage from './pages/DonationsPage';
 import InventoryPage from './pages/InventoryPage';
@@ -51,6 +52,7 @@ export default function App() {
             <Route element={<Layout />}>
               <Route index element={<DashboardPage />} />
               <Route path="campaigns" element={<CampaignsPage />} />
+              <Route path="campaigns/:id" element={<CampaignDetailPage />} />
               <Route path="donations" element={<DonationsPage />} />
               <Route path="volunteers" element={<VolunteersPage />} />
               <Route path="support" element={<SupportPage />} />

@@ -1,21 +1,49 @@
 import { useState } from 'react';
+import { Lock, Unlock } from 'lucide-react';
 import { authApi } from '../api/client';
-import { Badge, Card, DataState, FilterSelect, PageHeader, Table, TableSkeleton } from '../components/ui';
+import { Badge, Button, Card, DataState, FilterSelect, PageHeader, Select, Table, TableSkeleton } from '../components/ui';
+import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 import { LABELS, ROLES } from '../lib/constants';
 import { formatDate, oid } from '../lib/format';
 import { useAsync } from '../lib/hooks';
 
 export default function UsersPage() {
+  const { user: currentUser } = useAuth();
+  const toast = useToast();
   const [role, setRole] = useState('');
   const { data, loading, error, reload } = useAsync(() => authApi.users({ role }), [role]);
   const users = data?.data?.users || [];
+
+  const isSelf = (row) => oid(row) === currentUser?.id;
+
+  async function handleRoleChange(row, newRole) {
+    if (newRole === row.role) return;
+    try {
+      await authApi.updateRole(oid(row), newRole);
+      toast.success('Đã cập nhật vai trò');
+      reload();
+    } catch (err) {
+      toast.error(err.message);
+    }
+  }
+
+  async function handleToggleStatus(row) {
+    try {
+      await authApi.updateStatus(oid(row), !row.isActive);
+      toast.success(row.isActive ? 'Đã khoá tài khoản' : 'Đã mở khoá tài khoản');
+      reload();
+    } catch (err) {
+      toast.error(err.message);
+    }
+  }
 
   return (
     <div>
       <PageHeader
         eyebrow="Admin"
         title="Người dùng"
-        description="Danh sách tài khoản theo role. Tạo ADMIN/EMPLOYEE chỉ qua seed — public register chỉ USER/BENEFICIARY."
+        description="Quản lý tài khoản: đổi vai trò, khoá/mở khoá. Không thể thao tác trên chính tài khoản đang đăng nhập."
       />
       <div className="mb-4 max-w-xs">
         <FilterSelect
@@ -50,7 +78,22 @@ export default function UsersPage() {
                   </div>
                 ),
               },
-              { key: 'role', header: 'Vai trò', render: (row) => <Badge value={row.role} map={LABELS.role} /> },
+              {
+                key: 'role',
+                header: 'Vai trò',
+                render: (row) =>
+                  isSelf(row) ? (
+                    <Badge value={row.role} map={LABELS.role} />
+                  ) : (
+                    <Select value={row.role} onChange={(e) => handleRoleChange(row, e.target.value)}>
+                      {Object.values(ROLES).map((r) => (
+                        <option key={r} value={r}>
+                          {LABELS.role[r]}
+                        </option>
+                      ))}
+                    </Select>
+                  ),
+              },
               { key: 'phone', header: 'Điện thoại', render: (row) => row.phone || '—' },
               {
                 key: 'active',
@@ -64,6 +107,18 @@ export default function UsersPage() {
                   row.role === 'BENEFICIARY' ? row.beneficiaryInfo?.householdSize || '—' : '—',
               },
               { key: 'at', header: 'Tạo lúc', render: (row) => formatDate(row.createdAt) },
+              {
+                key: 'actions',
+                header: '',
+                className: 'text-right',
+                render: (row) =>
+                  isSelf(row) ? null : (
+                    <Button variant={row.isActive ? 'danger' : 'ghost'} onClick={() => handleToggleStatus(row)}>
+                      {row.isActive ? <Lock size={16} /> : <Unlock size={16} />}
+                      {row.isActive ? 'Khoá' : 'Mở khoá'}
+                    </Button>
+                  ),
+              },
             ]}
           />
         </Card>

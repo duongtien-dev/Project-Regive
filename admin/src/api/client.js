@@ -65,6 +65,8 @@ export const authApi = {
   me: () => api('/api/auth/me'),
   updateMe: (body) => api('/api/auth/me', { method: 'PATCH', body }),
   users: (query) => api('/api/auth/users', { query }),
+  updateRole: (id, role) => api(`/api/auth/users/${id}/role`, { method: 'PATCH', body: { role } }),
+  updateStatus: (id, isActive) => api(`/api/auth/users/${id}/status`, { method: 'PATCH', body: { isActive } }),
 };
 
 export const campaignApi = {
@@ -73,6 +75,9 @@ export const campaignApi = {
   create: (body) => api('/api/campaigns', { method: 'POST', body }),
   update: (id, body) => api(`/api/campaigns/${id}`, { method: 'PATCH', body }),
   remove: (id) => api(`/api/campaigns/${id}`, { method: 'DELETE' }),
+  donations: (id) => api(`/api/campaigns/${id}/donations`),
+  volunteers: (id) => api(`/api/campaigns/${id}/volunteers`),
+  addActivity: (id, body) => api(`/api/campaigns/${id}/activities`, { method: 'POST', body }),
 };
 
 export const donationApi = {

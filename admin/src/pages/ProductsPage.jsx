@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Ban, Rocket } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { productApi } from '../api/client';
 import {
@@ -104,6 +105,7 @@ export default function ProductsPage() {
                 render: (row) => (
                   <div className="flex justify-end gap-2">
                     <Button variant="ghost" onClick={() => togglePublish(row)} disabled={busy === oid(row)}>
+                      {row.listedOnMarketplace ? <Ban size={16} /> : <Rocket size={16} />}
                       {row.listedOnMarketplace ? 'Gỡ bán' : 'Đăng bán'}
                     </Button>
                   </div>

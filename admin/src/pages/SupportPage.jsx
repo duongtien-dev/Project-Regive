@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { SquarePen } from 'lucide-react';
 import { supportApi } from '../api/client';
 import {
   Badge,
@@ -117,6 +118,7 @@ export default function SupportPage() {
                 header: '',
                 render: (row) => (
                   <Button variant="ghost" onClick={() => openReview(row)}>
+                    <SquarePen size={16} />
                     Xử lý
                   </Button>
                 ),
