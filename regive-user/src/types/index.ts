@@ -542,6 +542,26 @@ export type Notification = {
   updatedAt: string;
 };
 
+export type CommentTargetType = 'campaign' | 'product';
+
+export type CommentAuthor = {
+  _id?: string;
+  id?: string;
+  fullName: string;
+};
+
+export type Comment = {
+  _id: string;
+  targetType: CommentTargetType;
+  targetId: string;
+  author: CommentAuthor | string;
+  content: string;
+  likeCount: number;
+  likedByMe: boolean;
+  createdAt: string;
+  updatedAt?: string;
+};
+
 export type ApiResponse<T> = {
   success: boolean;
   message?: string;

@@ -41,6 +41,7 @@ import { formatVND, formatDate } from '@/lib/format';
 import { StatusBadge } from '@/components/shared/StatusBadge';
 import { ProductCard } from '@/components/shared/ProductCard';
 import { DetailSkeleton } from '@/components/shared/LoadingSkeleton';
+import { CommentSection } from '@/components/shared/CommentSection';
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -816,6 +817,9 @@ export default function ProductDetailPage() {
       <section className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm">
         <Tabs defaultActiveKey="specs" items={tabItems} size="large" className="custom-product-tabs" />
       </section>
+
+      {/* Community Comments */}
+      <CommentSection targetType="product" targetId={product._id} />
 
       {/* Related Products Section */}
       {relatedProducts.length > 0 && (

@@ -19,6 +19,7 @@ const orderRoutes = require('./routes/orderRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const reportRoutes = require('./routes/reportRoutes');
 const aiRoutes = require('./routes/aiRoutes');
+const commentRoutes = require('./routes/commentRoutes');
 
 const app = express();
 
@@ -50,6 +51,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/comments', commentRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

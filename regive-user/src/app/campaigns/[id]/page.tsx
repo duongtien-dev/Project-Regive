@@ -42,6 +42,7 @@ import { Campaign } from '@/types';
 import { formatVND, formatDate, calculateProgress } from '@/lib/format';
 import { StatusBadge } from '@/components/shared/StatusBadge';
 import { DetailSkeleton } from '@/components/shared/LoadingSkeleton';
+import { CommentSection } from '@/components/shared/CommentSection';
 import { QuickDonateModal } from '@/components/campaigns/QuickDonateModal';
 import { QuickVolunteerModal } from '@/components/campaigns/QuickVolunteerModal';
 import { AddActivityModal } from '@/components/campaigns/AddActivityModal';
@@ -930,6 +931,9 @@ export default function CampaignDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* Community Comments */}
+      <CommentSection targetType="campaign" targetId={campaign._id} />
 
       {/* Share Modal */}
       <Modal
