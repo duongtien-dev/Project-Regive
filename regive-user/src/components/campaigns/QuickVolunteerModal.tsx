@@ -105,7 +105,7 @@ export const QuickVolunteerModal: React.FC<QuickVolunteerModalProps> = ({
                 key="close"
                 type="primary"
                 onClick={handleModalClose}
-                className="bg-emerald-600 rounded-xl h-10 px-6 font-bold"
+                className="bg-p-s600 rounded-xl h-10 px-6 font-bold"
               >
                 Hoàn tất
               </Button>,

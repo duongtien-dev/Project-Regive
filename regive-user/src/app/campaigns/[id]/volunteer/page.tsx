@@ -54,7 +54,7 @@ export default function VolunteerRegisterPage() {
         <div>
           <Link
             href={`/campaigns/${campaignId}`}
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-gray-500 hover:text-emerald-600 transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-gray-500 hover:text-p-s600 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Quay lại chi tiết chiến dịch</span>
@@ -146,7 +146,7 @@ export default function VolunteerRegisterPage() {
               </Form>
 
               <div className="pt-2 flex items-center justify-center gap-2 text-xs text-gray-400 text-center">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <ShieldCheck className="w-4 h-4 text-p-s600" />
                 <span>Mọi hoạt động tình nguyện đều được hỗ trợ bảo hộ và hướng dẫn chu đáo.</span>
               </div>
             </div>

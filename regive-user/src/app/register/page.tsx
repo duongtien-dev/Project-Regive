@@ -44,11 +44,11 @@ export default function RegisterPage() {
         {/* Header */}
         <div className="text-center">
           <Link href="/" className="inline-flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-md">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-p-s600 to-sec-s500 flex items-center justify-center text-white shadow-md">
               <Heart className="w-5 h-5 fill-white" />
             </div>
             <span className="text-2xl font-black text-gray-900">
-              Re<span className="text-emerald-600">Give</span>
+              Re<span className="text-p-s600">Give</span>
             </span>
           </Link>
           <h2 className="mt-4 text-2xl font-black text-gray-900">Tạo Tài Khoản Mới</h2>
@@ -163,7 +163,7 @@ export default function RegisterPage() {
               htmlType="submit"
               loading={submitting}
               size="large"
-              className="w-full h-12 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-600/20"
+              className="w-full h-12 rounded-xl bg-p-s600 hover:bg-p-s700 text-white font-bold text-sm shadow-md shadow-p-s600/20"
             >
               Đăng ký tài khoản
             </Button>
@@ -172,7 +172,7 @@ export default function RegisterPage() {
 
         <div className="text-center text-xs text-gray-500 pt-2 border-t border-gray-100">
           Đã có tài khoản?{' '}
-          <Link href="/login" className="font-bold text-emerald-600 hover:text-emerald-700">
+          <Link href="/login" className="font-bold text-p-s600 hover:text-p-s700">
             Đăng nhập ngay
           </Link>
         </div>

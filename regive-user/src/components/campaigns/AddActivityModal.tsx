@@ -56,7 +56,7 @@ export const AddActivityModal: React.FC<AddActivityModalProps> = ({
     <Modal
       title={
         <div className="flex items-center gap-2 pb-2 border-b border-gray-100">
-          <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
+          <div className="w-8 h-8 rounded-full bg-p-s100 flex items-center justify-center text-p-s600">
             <Camera className="w-4 h-4" />
           </div>
           <div>
@@ -131,7 +131,7 @@ export const AddActivityModal: React.FC<AddActivityModalProps> = ({
             htmlType="submit"
             loading={submitting}
             size="large"
-            className="w-full h-12 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-600/20"
+            className="w-full h-12 rounded-xl bg-p-s600 hover:bg-p-s700 text-white font-bold text-sm shadow-md shadow-p-s600/20"
           >
             Đăng cập nhật thực địa
           </Button>

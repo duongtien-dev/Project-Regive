@@ -66,7 +66,7 @@ export default function MarketplacePage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       {/* Page Header */}
       <div className="border-b border-gray-200 pb-6">
-        <div className="flex items-center gap-2 text-emerald-600 font-bold text-xs uppercase tracking-wider mb-1">
+        <div className="flex items-center gap-2 text-p-s600 font-bold text-xs uppercase tracking-wider mb-1">
           <ShoppingBag className="w-4 h-4" />
           <span>Cửa hàng thiện nguyện tuần hoàn</span>
         </div>

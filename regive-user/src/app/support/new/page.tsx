@@ -56,7 +56,7 @@ export default function NewSupportRequestPage() {
           <div>
             <Link
               href="/me/dashboard"
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-gray-500 hover:text-emerald-600 transition-colors"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-gray-500 hover:text-p-s600 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Quay lại Dashboard</span>
@@ -65,8 +65,8 @@ export default function NewSupportRequestPage() {
 
           <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-xl space-y-6">
             <div className="border-b border-gray-100 pb-5">
-              <div className="flex items-center gap-2 text-emerald-600 font-bold text-xs uppercase tracking-wider mb-1">
-                <LifeBuoy className="w-4 h-4 text-emerald-600" />
+              <div className="flex items-center gap-2 text-p-s600 font-bold text-xs uppercase tracking-wider mb-1">
+                <LifeBuoy className="w-4 h-4 text-p-s600" />
                 <span>Trợ giúp & Đồng hành</span>
               </div>
               <h1 className="text-2xl font-black text-gray-900">Gửi Yêu Cầu Hỗ Trợ</h1>
@@ -145,7 +145,7 @@ export default function NewSupportRequestPage() {
                   htmlType="submit"
                   loading={submitting}
                   size="large"
-                  className="w-full h-12 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-base shadow-md shadow-emerald-600/20"
+                  className="w-full h-12 rounded-xl bg-p-s600 hover:bg-p-s700 text-white font-bold text-base shadow-md shadow-p-s600/20"
                 >
                   Gửi hồ sơ yêu cầu hỗ trợ
                 </Button>
@@ -153,7 +153,7 @@ export default function NewSupportRequestPage() {
             </Form>
 
             <div className="pt-2 flex items-center justify-center gap-2 text-xs text-gray-400 text-center">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              <ShieldCheck className="w-4 h-4 text-p-s600" />
               <span>Hồ sơ của bạn sẽ được bảo mật và nhân viên ReGive sẽ liên hệ xác minh.</span>
             </div>
           </div>

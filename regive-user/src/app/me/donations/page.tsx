@@ -108,7 +108,7 @@ export default function MyDonationsPage() {
                 >
                   <div className="space-y-1.5 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <Tag color={d.type === 'money' ? 'emerald' : 'cyan'} className="font-semibold">
+                      <Tag color={d.type === 'money' ? 'blue' : 'cyan'} className="font-semibold">
                         {d.type === 'money' ? 'Tiền mặt' : 'Hiện vật'}
                       </Tag>
                       <StatusBadge type="donation" status={d.status} />
@@ -121,14 +121,14 @@ export default function MyDonationsPage() {
                       {d.type === 'money' ? (
                         <p>
                           Số tiền quyên góp:{' '}
-                          <strong className="text-emerald-700 font-bold text-sm">
+                          <strong className="text-p-s700 font-bold text-sm">
                             {formatVND(d.amount)}
                           </strong>
                         </p>
                       ) : (
                         <p>
                           Vật phẩm:{' '}
-                          <strong className="text-teal-700">
+                          <strong className="text-sec-s700">
                             {d.productInfo?.name} (Số lượng: {d.productInfo?.quantity})
                           </strong>
                         </p>
@@ -149,7 +149,7 @@ export default function MyDonationsPage() {
                         loading={payingId === d._id}
                         icon={<CreditCard className="w-3.5 h-3.5" />}
                         onClick={() => handlePayPendingDonation(d._id)}
-                        className="bg-emerald-600 rounded-lg text-xs"
+                        className="bg-p-s600 rounded-lg text-xs"
                       >
                         Thanh toán ngay
                       </Button>
@@ -194,7 +194,7 @@ export default function MyDonationsPage() {
               {selectedDonation.type === 'money' ? (
                 <div className="flex justify-between items-center">
                   <span>Số tiền:</span>
-                  <span className="text-base font-bold text-emerald-700">
+                  <span className="text-base font-bold text-p-s700">
                     {formatVND(selectedDonation.amount)}
                   </span>
                 </div>

@@ -201,7 +201,7 @@ export default function ProductDetailPage() {
           {product.specifications && product.specifications.length > 0 ? (
             <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100">
               <h4 className="font-bold text-gray-900 text-sm mb-4 flex items-center gap-2">
-                <FileText className="w-4 h-4 text-emerald-600" />
+                <FileText className="w-4 h-4 text-p-s600" />
                 Bảng thông số chi tiết của vật phẩm
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-sm">
@@ -288,29 +288,29 @@ export default function ProductDetailPage() {
       key: 'inspection',
       label: (
         <span className="flex items-center gap-1.5 font-bold text-sm">
-          <ShieldCheck className="w-4 h-4 text-emerald-600" />
+          <ShieldCheck className="w-4 h-4 text-p-s600" />
           Biên bản kiểm định & AI
         </span>
       ),
       children: (
         <div className="space-y-6 pt-3">
           {/* Quality Rating Overview Header */}
-          <div className="bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 rounded-2xl p-5 border border-emerald-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="bg-gradient-to-r from-p-s50 via-sec-s50 to-p-s50 rounded-2xl p-5 border border-p-s200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <Award className="w-5 h-5 text-emerald-700" />
-                <span className="font-black text-emerald-950 text-base">Chứng chỉ giám định ReGive Quality Shield</span>
+                <Award className="w-5 h-5 text-p-s700" />
+                <span className="font-black text-p-s950 text-base">Chứng chỉ giám định ReGive Quality Shield</span>
               </div>
-              <p className="text-xs text-emerald-800">
+              <p className="text-xs text-p-s800">
                 Được kiểm định độc lập & đối chiếu chéo bởi chuyên viên ReGive kết hợp AI Assessment.
               </p>
             </div>
-            <div className="flex items-center gap-3 bg-white/90 px-4 py-2.5 rounded-2xl border border-emerald-200 shadow-sm shrink-0">
+            <div className="flex items-center gap-3 bg-white/90 px-4 py-2.5 rounded-2xl border border-p-s200 shadow-sm shrink-0">
               <div className="text-right">
                 <span className="text-[10px] uppercase font-bold text-gray-400 block">Điểm thẩm định</span>
-                <span className="text-xs font-semibold text-emerald-800">Đạt chuẩn A+</span>
+                <span className="text-xs font-semibold text-p-s800">Đạt chuẩn A+</span>
               </div>
-              <span className="text-2xl font-black text-emerald-700">{inspectionScore}/10</span>
+              <span className="text-2xl font-black text-p-s700">{inspectionScore}/10</span>
             </div>
           </div>
 
@@ -318,7 +318,7 @@ export default function ProductDetailPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm space-y-2">
               <span className="text-xs font-bold text-gray-500 uppercase tracking-wide flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <CheckCircle2 className="w-4 h-4 text-p-s600" />
                 Độ hao mòn & Hình thức thực tế
               </span>
               <p className="text-gray-700 text-xs leading-relaxed">
@@ -329,7 +329,7 @@ export default function ProductDetailPage() {
 
             <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm space-y-2">
               <span className="text-xs font-bold text-gray-500 uppercase tracking-wide flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <CheckCircle2 className="w-4 h-4 text-p-s600" />
                 Kiểm tra công năng & Khả năng sử dụng
               </span>
               <p className="text-gray-700 text-xs leading-relaxed">
@@ -340,7 +340,7 @@ export default function ProductDetailPage() {
 
             <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm space-y-2">
               <span className="text-xs font-bold text-gray-500 uppercase tracking-wide flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-teal-600" />
+                <Sparkles className="w-4 h-4 text-sec-s600" />
                 Quy trình vệ sinh & Khử trùng
               </span>
               <p className="text-gray-700 text-xs leading-relaxed">
@@ -370,18 +370,18 @@ export default function ProductDetailPage() {
 
           {/* AI Assessment Deep Verification */}
           {product.latestAiAssessment && (
-            <div className="p-5 rounded-2xl bg-teal-50/70 border border-teal-200 space-y-3">
+            <div className="p-5 rounded-2xl bg-sec-s50/70 border border-sec-s200 space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <div className="flex items-center gap-2 font-bold text-teal-950 text-sm">
-                  <Sparkles className="w-4 h-4 text-teal-600" />
+                <div className="flex items-center gap-2 font-bold text-sec-s950 text-sm">
+                  <Sparkles className="w-4 h-4 text-sec-s600" />
                   <span>Mô hình AI Đánh giá & Định lượng minh bạch</span>
                 </div>
-                <Tag color="teal" className="text-xs font-bold px-3 py-1 rounded-full m-0 border-0">
+                <Tag color="cyan" className="text-xs font-bold px-3 py-1 rounded-full m-0 border-0">
                   Độ tin cậy AI: {Math.round((product.latestAiAssessment.suggestion?.confidence || 0.95) * 100)}%
                 </Tag>
               </div>
 
-              <p className="text-xs text-teal-900/90 leading-relaxed">
+              <p className="text-xs text-sec-s900/90 leading-relaxed">
                 {product.latestAiAssessment.suggestion?.rationale ||
                   product.latestAiAssessment.finalDecision?.rationale ||
                   `AI đã phân tích dữ liệu hình ảnh, thương hiệu và thông số của sản phẩm để đưa ra mức giá ủng hộ tối ưu ${formatVND(
@@ -389,7 +389,7 @@ export default function ProductDetailPage() {
                   )}, đảm bảo vừa dễ dàng tiếp cận người mua vừa tối đa hóa nguồn quỹ từ thiện.`}
               </p>
 
-              <div className="pt-2 flex items-center justify-between text-[11px] text-teal-800 border-t border-teal-200/60">
+              <div className="pt-2 flex items-center justify-between text-[11px] text-sec-s800 border-t border-sec-s200/60">
                 <span>Nhà cung cấp thuật toán: {product.latestAiAssessment.provider || 'Gemini 1.5 Pro Vision'}</span>
                 <span>Trạng thái: Đã phê duyệt và niêm yết</span>
               </div>
@@ -399,7 +399,7 @@ export default function ProductDetailPage() {
           {/* Inspector Sign-off info */}
           <div className="flex flex-wrap items-center justify-between text-xs text-gray-500 bg-slate-50 p-4 rounded-xl border border-slate-100">
             <span className="flex items-center gap-1.5">
-              <UserCheck className="w-4 h-4 text-emerald-600" />
+              <UserCheck className="w-4 h-4 text-p-s600" />
               Chuyên viên giám định: <strong className="text-gray-800">{inspectorName}</strong>
             </span>
             <span className="flex items-center gap-1.5">
@@ -455,19 +455,19 @@ export default function ProductDetailPage() {
       key: 'impact',
       label: (
         <span className="flex items-center gap-1.5 font-bold text-sm">
-          <Leaf className="w-4 h-4 text-emerald-600" />
+          <Leaf className="w-4 h-4 text-p-s600" />
           Tác động xã hội & Xanh
         </span>
       ),
       children: (
         <div className="space-y-6 pt-3">
           {/* Direct Charity Benefit Card */}
-          <div className="bg-emerald-50 rounded-2xl p-5 border border-emerald-200/80 space-y-3">
-            <div className="flex items-center gap-2 text-emerald-950 font-bold text-sm">
-              <HeartHandshake className="w-5 h-5 text-emerald-600" />
+          <div className="bg-p-s50 rounded-2xl p-5 border border-p-s200/80 space-y-3">
+            <div className="flex items-center gap-2 text-p-s950 font-bold text-sm">
+              <HeartHandshake className="w-5 h-5 text-p-s600" />
               <span>Ý nghĩa hỗ trợ cộng đồng trực tiếp</span>
             </div>
-            <p className="text-sm text-emerald-900 leading-relaxed font-medium">
+            <p className="text-sm text-p-s900 leading-relaxed font-medium">
               {product.charityImpact?.directBenefit ||
                 `100% doanh thu ${formatVND(
                   product.price
@@ -478,12 +478,12 @@ export default function ProductDetailPage() {
           {/* Environmental Savings Grid */}
           <div>
             <h4 className="font-bold text-gray-900 text-sm mb-3 flex items-center gap-2">
-              <Leaf className="w-4 h-4 text-emerald-600" />
+              <Leaf className="w-4 h-4 text-p-s600" />
               Tác động tích cực đến môi trường (Kinh tế tuần hoàn)
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
               <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm space-y-1">
-                <span className="text-2xl font-black text-emerald-600">
+                <span className="text-2xl font-black text-p-s600">
                   {product.charityImpact?.co2SavedKg || (product.price > 100000 ? 3.5 : 1.8)} kg
                 </span>
                 <span className="text-xs text-gray-500 block font-medium">Giảm phát thải CO2</span>
@@ -491,7 +491,7 @@ export default function ProductDetailPage() {
               </div>
 
               <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm space-y-1">
-                <span className="text-2xl font-black text-teal-600">
+                <span className="text-2xl font-black text-sec-s600">
                   {product.charityImpact?.wasteDivertedKg || (product.weight ? product.weight : '0.8 kg')}
                 </span>
                 <span className="text-xs text-gray-500 block font-medium">Rác thải giảm khỏi bãi chôn</span>
@@ -499,7 +499,7 @@ export default function ProductDetailPage() {
               </div>
 
               <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm space-y-1">
-                <span className="text-2xl font-black text-emerald-700">100%</span>
+                <span className="text-2xl font-black text-p-s700">100%</span>
                 <span className="text-xs text-gray-500 block font-medium">Minh bạch dòng tiền</span>
                 <span className="text-[10px] text-gray-400 block">Truy xuất sao kê thời gian thực</span>
               </div>
@@ -551,13 +551,13 @@ export default function ProductDetailPage() {
             {/* Guarantee Policy */}
             <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100 space-y-4">
               <h4 className="font-bold text-gray-900 flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <ShieldCheck className="w-4 h-4 text-p-s600" />
                 Chính sách đồng kiểm & Bảo hành
               </h4>
               <div className="space-y-2 text-xs text-gray-600">
                 <div>
                   <span className="text-gray-400 block">Thời hạn bảo hành đổi trả:</span>
-                  <span className="font-semibold text-emerald-700">
+                  <span className="font-semibold text-p-s700">
                     {product.guaranteePolicy?.warrantyDays || 30} ngày kể từ khi nhận hàng
                   </span>
                 </div>
@@ -587,11 +587,11 @@ export default function ProductDetailPage() {
       {/* Breadcrumbs & Back link */}
       <div className="flex items-center justify-between flex-wrap gap-2 text-xs text-gray-500">
         <div className="flex items-center gap-1.5 flex-wrap">
-          <Link href="/" className="hover:text-emerald-600 transition-colors">
+          <Link href="/" className="hover:text-p-s600 transition-colors">
             Trang chủ
           </Link>
           <span>/</span>
-          <Link href="/marketplace" className="hover:text-emerald-600 transition-colors">
+          <Link href="/marketplace" className="hover:text-p-s600 transition-colors">
             Chợ gây quỹ ReGive
           </Link>
           <span>/</span>
@@ -601,7 +601,7 @@ export default function ProductDetailPage() {
         </div>
         <Link
           href="/marketplace"
-          className="inline-flex items-center gap-1 font-semibold text-gray-500 hover:text-emerald-600 transition-colors"
+          className="inline-flex items-center gap-1 font-semibold text-gray-500 hover:text-p-s600 transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Về danh sách</span>
@@ -623,7 +623,7 @@ export default function ProductDetailPage() {
                 />
               ) : (
                 <div className="flex flex-col items-center text-gray-400">
-                  <Package className="w-20 h-20 stroke-[1.2] text-emerald-500 mb-2" />
+                  <Package className="w-20 h-20 stroke-[1.2] text-p-s500 mb-2" />
                   <span className="text-sm font-medium">Vật phẩm trao tặng ReGive</span>
                 </div>
               )}
@@ -648,7 +648,7 @@ export default function ProductDetailPage() {
                     type="button"
                     onClick={() => setSelectedImage(img)}
                     className={`w-16 h-16 rounded-xl border-2 overflow-hidden shrink-0 transition-all ${
-                      activeImage === img ? 'border-emerald-600 shadow-md ring-2 ring-emerald-100' : 'border-gray-200 opacity-60 hover:opacity-100'
+                      activeImage === img ? 'border-p-s600 shadow-md ring-2 ring-p-s100' : 'border-gray-200 opacity-60 hover:opacity-100'
                     }`}
                   >
                     <img src={img} alt={`thumb-${i}`} className="w-full h-full object-cover" />
@@ -659,17 +659,17 @@ export default function ProductDetailPage() {
           </div>
 
           {/* ReGive Quality Shield Box */}
-          <div className="bg-emerald-50/80 border border-emerald-200/80 rounded-2xl p-4 space-y-2 text-xs text-emerald-950">
+          <div className="bg-p-s50/80 border border-p-s200/80 rounded-2xl p-4 space-y-2 text-xs text-p-s950">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 font-bold text-emerald-900">
-                <ShieldCheck className="w-4 h-4 text-emerald-700" />
+              <div className="flex items-center gap-2 font-bold text-p-s900">
+                <ShieldCheck className="w-4 h-4 text-p-s700" />
                 <span>ReGive Quality Shield Guarantee</span>
               </div>
-              <span className="text-[11px] font-extrabold text-emerald-700 bg-white px-2 py-0.5 rounded-full border border-emerald-200">
+              <span className="text-[11px] font-extrabold text-p-s700 bg-white px-2 py-0.5 rounded-full border border-p-s200">
                 {inspectionScore}/10
               </span>
             </div>
-            <p className="text-emerald-800 leading-relaxed">
+            <p className="text-p-s800 leading-relaxed">
               Vật phẩm đã được nhân viên ReGive tiếp nhận, khử khuẩn chuyên sâu, kiểm tra công năng và đóng gói theo quy chuẩn bảo vệ môi trường.
             </p>
           </div>
@@ -708,11 +708,11 @@ export default function ProductDetailPage() {
             </h1>
 
             {/* Price Box with original price comparison */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 flex flex-wrap items-baseline justify-between gap-4">
+            <div className="p-4 sm:p-5 rounded-2xl bg-p-s50/70 border border-p-s200/80 flex flex-wrap items-baseline justify-between gap-4">
               <div>
                 <span className="text-xs text-gray-500 font-medium block">Giá ủng hộ gây quỹ:</span>
                 <div className="flex items-baseline gap-3 flex-wrap">
-                  <span className="text-3xl sm:text-4xl font-black text-emerald-700">
+                  <span className="text-3xl sm:text-4xl font-black text-p-s700">
                     {formatVND(product.price)}
                   </span>
                   {product.originalPrice && product.originalPrice > product.price && (
@@ -723,8 +723,8 @@ export default function ProductDetailPage() {
                 </div>
               </div>
               <div className="text-right">
-                <span className="text-xs text-emerald-800 font-semibold bg-white px-3 py-1.5 rounded-xl border border-emerald-200 shadow-sm inline-flex items-center gap-1.5">
-                  <HeartHandshake className="w-4 h-4 text-emerald-600" />
+                <span className="text-xs text-p-s800 font-semibold bg-white px-3 py-1.5 rounded-xl border border-p-s200 shadow-sm inline-flex items-center gap-1.5">
+                  <HeartHandshake className="w-4 h-4 text-p-s600" />
                   100% nạp vào quỹ
                 </span>
               </div>
@@ -761,7 +761,7 @@ export default function ProductDetailPage() {
                 <ul className="space-y-1.5 text-xs text-gray-700">
                   {product.highlights.map((h, i) => (
                     <li key={i} className="flex items-start gap-2">
-                      <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                      <Check className="w-3.5 h-3.5 text-p-s600 shrink-0 mt-0.5" />
                       <span>{h}</span>
                     </li>
                   ))}
@@ -777,7 +777,7 @@ export default function ProductDetailPage() {
               </div>
               <div className="bg-slate-50 p-3 rounded-xl border border-gray-100">
                 <span className="text-gray-400 block mb-0.5">Vị trí kho lưu:</span>
-                <span className="font-bold text-emerald-700 text-sm truncate block">
+                <span className="font-bold text-p-s700 text-sm truncate block">
                   {product.storageLocation || 'Kho ReGive Trung Tâm'}
                 </span>
               </div>
@@ -791,7 +791,7 @@ export default function ProductDetailPage() {
                 disabled={product.stockQuantity <= 0}
                 onClick={handleOpenBuyModal}
                 icon={<ShoppingBag className="w-5 h-5" />}
-                className="w-full h-14 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-base shadow-xl shadow-emerald-600/25 transition-all"
+                className="w-full h-14 rounded-2xl bg-p-s600 hover:bg-p-s700 text-white font-bold text-base shadow-xl shadow-p-s600/25 transition-all"
               >
                 {product.stockQuantity > 0 ? 'Mua ngay để gây quỹ' : 'Tạm hết hàng'}
               </Button>
@@ -800,11 +800,11 @@ export default function ProductDetailPage() {
             {/* Micro reassurance assurances */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-gray-500 pt-1">
               <div className="flex items-center gap-2">
-                <Truck className="w-4 h-4 text-emerald-600 shrink-0" />
+                <Truck className="w-4 h-4 text-p-s600 shrink-0" />
                 <span>Giao hàng toàn quốc 2-3 ngày</span>
               </div>
               <div className="flex items-center gap-2">
-                <RefreshCw className="w-4 h-4 text-emerald-600 shrink-0" />
+                <RefreshCw className="w-4 h-4 text-p-s600 shrink-0" />
                 <span>Đồng kiểm & Đổi trả 30 ngày</span>
               </div>
             </div>
@@ -822,7 +822,7 @@ export default function ProductDetailPage() {
         <section className="pt-8 border-t border-gray-200">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider">
+              <span className="text-xs font-bold text-p-s600 uppercase tracking-wider">
                 Khám phá thêm
               </span>
               <h3 className="text-xl sm:text-2xl font-black text-gray-900 mt-0.5">
@@ -831,7 +831,7 @@ export default function ProductDetailPage() {
             </div>
             <Link
               href="/marketplace"
-              className="text-sm font-bold text-emerald-700 hover:text-emerald-800"
+              className="text-sm font-bold text-p-s700 hover:text-p-s800"
             >
               Xem tất cả
             </Link>
@@ -911,14 +911,14 @@ export default function ProductDetailPage() {
             </Form.Item>
 
             {/* Total calculation */}
-            <div className="bg-emerald-50/70 p-4 rounded-2xl border border-emerald-100 flex items-center justify-between mb-4">
+            <div className="bg-p-s50/70 p-4 rounded-2xl border border-p-s100 flex items-center justify-between mb-4">
               <div>
                 <span className="text-xs text-gray-500 block">Tổng tiền thanh toán:</span>
                 <span className="text-xs text-gray-400">
                   {formatVND(product.price)} × {quantity}
                 </span>
               </div>
-              <span className="text-2xl font-black text-emerald-700">
+              <span className="text-2xl font-black text-p-s700">
                 {formatVND(totalPrice)}
               </span>
             </div>
@@ -928,7 +928,7 @@ export default function ProductDetailPage() {
               htmlType="submit"
               loading={placingOrder}
               size="large"
-              className="w-full h-12 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-600/20"
+              className="w-full h-12 rounded-xl bg-p-s600 hover:bg-p-s700 text-white font-bold text-sm shadow-md shadow-p-s600/20"
             >
               Xác nhận và Chuyển đến thanh toán
             </Button>

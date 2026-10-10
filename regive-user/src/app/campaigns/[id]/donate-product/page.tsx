@@ -127,7 +127,7 @@ export default function DonateProductPage() {
         <div>
           <Link
             href={`/campaigns/${campaignId}`}
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-gray-500 hover:text-emerald-600 transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-gray-500 hover:text-p-s600 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Quay lại chi tiết chiến dịch</span>
@@ -143,7 +143,7 @@ export default function DonateProductPage() {
                 <div className="text-gray-600 text-sm space-y-3 mt-3">
                   <p>
                     Mã quyên góp của bạn là:{' '}
-                    <strong className="text-emerald-700 font-mono text-base">
+                    <strong className="text-p-s700 font-mono text-base">
                       {createdDonation._id}
                     </strong>
                   </p>
@@ -160,8 +160,8 @@ export default function DonateProductPage() {
                       </div>
                     )}
                   </div>
-                  <div className="bg-teal-50 text-teal-900 p-4 rounded-2xl text-xs text-left leading-relaxed border border-teal-200">
-                    <strong className="flex items-center gap-1 mb-1 font-bold text-teal-950">
+                  <div className="bg-sec-s50 text-sec-s900 p-4 rounded-2xl text-xs text-left leading-relaxed border border-sec-s200">
+                    <strong className="flex items-center gap-1 mb-1 font-bold text-sec-s950">
                       <Sparkles className="w-3.5 h-3.5" />
                       Quy trình tiếp nhận tiếp theo:
                     </strong>
@@ -171,7 +171,7 @@ export default function DonateProductPage() {
               }
               extra={[
                 <Link key="me" href="/me/donations">
-                  <Button type="primary" className="bg-emerald-600 rounded-xl h-11 px-6 font-bold">
+                  <Button type="primary" className="bg-p-s600 rounded-xl h-11 px-6 font-bold">
                     Xem lịch sử quyên góp
                   </Button>
                 </Link>,
@@ -183,14 +183,14 @@ export default function DonateProductPage() {
           ) : (
             <div className="space-y-6">
               <div className="border-b border-gray-100 pb-5">
-                <div className="flex items-center gap-2 text-teal-600 font-bold text-xs uppercase tracking-wider mb-1">
+                <div className="flex items-center gap-2 text-sec-s600 font-bold text-xs uppercase tracking-wider mb-1">
                   <Package className="w-4 h-4" />
                   <span>Tuần hoàn vật phẩm</span>
                 </div>
                 <h1 className="text-2xl font-black text-gray-900">Quyên Góp Hiện Vật</h1>
                 {campaign && (
-                  <div className="mt-2 p-3 bg-teal-50/60 rounded-xl border border-teal-100/80">
-                    <p className="text-xs text-teal-800 font-medium">Chiến dịch tiếp nhận:</p>
+                  <div className="mt-2 p-3 bg-sec-s50/60 rounded-xl border border-sec-s100/80">
+                    <p className="text-xs text-sec-s800 font-medium">Chiến dịch tiếp nhận:</p>
                     <p className="text-sm font-bold text-gray-900 mt-0.5">{campaign.title}</p>
                   </div>
                 )}
@@ -217,10 +217,10 @@ export default function DonateProductPage() {
                 requiredMark="optional"
               >
                 {/* AI Assistant Banner */}
-                <div className="bg-gradient-to-r from-teal-50 via-emerald-50 to-cyan-50 border border-teal-200/80 rounded-2xl p-4 sm:p-5 mb-5 space-y-3">
+                <div className="bg-gradient-to-r from-sec-s50 via-p-s50 to-cyan-50 border border-sec-s200/80 rounded-2xl p-4 sm:p-5 mb-5 space-y-3">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-xl bg-teal-600 text-white flex items-center justify-center shadow-sm">
+                      <div className="w-8 h-8 rounded-xl bg-sec-s600 text-white flex items-center justify-center shadow-sm">
                         <Sparkles className="w-4 h-4" />
                       </div>
                       <div>
@@ -232,7 +232,7 @@ export default function DonateProductPage() {
                       type="button"
                       onClick={handleAiAnalyze}
                       disabled={aiLoading}
-                      className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-md shadow-teal-600/20 disabled:opacity-50 transition-all shrink-0 cursor-pointer"
+                      className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-sec-s600 hover:bg-sec-s700 text-white font-bold text-xs shadow-md shadow-sec-s600/20 disabled:opacity-50 transition-all shrink-0 cursor-pointer"
                     >
                       <Sparkles className={`w-3.5 h-3.5 ${aiLoading ? 'animate-spin' : ''}`} />
                       <span>{aiLoading ? 'AI đang phân tích...' : 'Thẩm định cùng AI'}</span>
@@ -240,11 +240,11 @@ export default function DonateProductPage() {
                   </div>
 
                   {aiResult && (
-                    <div className="mt-3 p-4 bg-white/90 rounded-xl border border-teal-200 space-y-3 text-xs">
+                    <div className="mt-3 p-4 bg-white/90 rounded-xl border border-sec-s200 space-y-3 text-xs">
                       <div className="flex items-center justify-between border-b border-gray-100 pb-2">
-                        <span className="font-bold text-teal-900 text-sm flex items-center gap-1.5">
+                        <span className="font-bold text-sec-s900 text-sm flex items-center gap-1.5">
                           <span>Kết quả thẩm định AI</span>
-                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-teal-100 text-teal-800">
+                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-sec-s100 text-sec-s800">
                             Độ tin cậy {(aiResult.assessment.confidence * 100).toFixed(0)}%
                           </span>
                           {aiResult.provider && (
@@ -266,7 +266,7 @@ export default function DonateProductPage() {
                           type="dashed"
                           size="small"
                           onClick={handleApplyAi}
-                          className="!text-teal-700 !border-teal-400 font-bold hover:!bg-teal-50"
+                          className="!text-sec-s700 !border-sec-s400 font-bold hover:!bg-sec-s50"
                         >
                           Áp dụng thông số này
                         </Button>
@@ -287,9 +287,9 @@ export default function DonateProductPage() {
                           <span className="text-gray-400 block text-[10px]">Phẩm chất:</span>
                           <span className="font-bold text-gray-800 uppercase">{aiResult.assessment.quality}</span>
                         </div>
-                        <div className="p-2 bg-emerald-50 rounded-lg col-span-2 sm:col-span-1 border border-emerald-100">
-                          <span className="text-emerald-600 block text-[10px] font-medium">Giá trị ước tính:</span>
-                          <span className="font-black text-emerald-800 text-sm">
+                        <div className="p-2 bg-p-s50 rounded-lg col-span-2 sm:col-span-1 border border-p-s100">
+                          <span className="text-p-s600 block text-[10px] font-medium">Giá trị ước tính:</span>
+                          <span className="font-black text-p-s800 text-sm">
                             {formatVND(aiResult.assessment.suggestedPrice)}
                           </span>
                         </div>
@@ -405,7 +405,7 @@ export default function DonateProductPage() {
                     htmlType="submit"
                     loading={submitting}
                     size="large"
-                    className="w-full h-12 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-base shadow-lg shadow-teal-600/25"
+                    className="w-full h-12 rounded-xl bg-sec-s600 hover:bg-sec-s700 text-white font-bold text-base shadow-lg shadow-sec-s600/25"
                   >
                     Xác nhận gửi thông tin quyên góp
                   </Button>
@@ -413,7 +413,7 @@ export default function DonateProductPage() {
               </Form>
 
               <div className="pt-2 flex items-center justify-center gap-2 text-xs text-gray-400 text-center">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <ShieldCheck className="w-4 h-4 text-p-s600" />
                 <span>Vật phẩm sẽ được nhân viên ReGive kiểm định và chuyển giao minh bạch.</span>
               </div>
             </div>

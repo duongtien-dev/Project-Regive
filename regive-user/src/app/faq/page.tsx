@@ -65,7 +65,7 @@ export default function FAQPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
       <div className="text-center space-y-2 border-b border-gray-200 pb-8">
-        <div className="w-12 h-12 mx-auto rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-2">
+        <div className="w-12 h-12 mx-auto rounded-2xl bg-p-s100 text-p-s700 flex items-center justify-center mb-2">
           <HelpCircle className="w-6 h-6" />
         </div>
         <h1 className="text-3xl font-black text-gray-900">Câu Hỏi Thường Gặp (FAQ)</h1>

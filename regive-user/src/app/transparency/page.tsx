@@ -107,8 +107,8 @@ export default function TransparencyPage() {
           </span>
           <div>
             {record.direction === 'INFLOW' ? (
-              <span className="inline-flex items-center gap-1 text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
-                <ArrowDownLeft className="w-3 h-3 text-emerald-600" />
+              <span className="inline-flex items-center gap-1 text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-p-s100 text-p-s800">
+                <ArrowDownLeft className="w-3 h-3 text-p-s600" />
                 DÒNG TIỀN VÀO
               </span>
             ) : (
@@ -132,7 +132,7 @@ export default function TransparencyPage() {
           <div className="flex flex-wrap items-center gap-2 text-[11px] text-gray-500">
             <span>Đối tác: <strong className="text-gray-700">{record.partner}</strong></span>
             <span>•</span>
-            <span className="text-emerald-700 font-medium">{record.campaignTitle}</span>
+            <span className="text-p-s700 font-medium">{record.campaignTitle}</span>
           </div>
         </div>
       ),
@@ -147,7 +147,7 @@ export default function TransparencyPage() {
         <div className="text-right">
           <span
             className={`font-black text-sm sm:text-base font-mono ${
-              record.direction === 'INFLOW' ? 'text-emerald-700' : 'text-rose-600'
+              record.direction === 'INFLOW' ? 'text-p-s700' : 'text-rose-600'
             }`}
           >
             {record.direction === 'INFLOW' ? '+' : '-'} {formatVND(val)}
@@ -163,16 +163,16 @@ export default function TransparencyPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 rounded-3xl p-8 sm:p-10 text-white relative overflow-hidden">
+      <div className="bg-gradient-to-r from-p-s900 via-sec-s900 to-slate-900 rounded-3xl p-8 sm:p-10 text-white relative overflow-hidden">
         <div className="relative z-10 max-w-3xl space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-p-s500/20 text-p-s300 text-xs font-bold border border-p-s500/30">
+            <ShieldCheck className="w-4 h-4 text-p-s400" />
             <span>Sổ cái Thời gian thực (Real-time Transparency Ledger)</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-black tracking-tight leading-tight">
             Minh Bạch Tuyệt Đối Nguồn Lực Thiện Nguyện
           </h1>
-          <p className="text-emerald-100 text-sm leading-relaxed">
+          <p className="text-p-s100 text-sm leading-relaxed">
             ReGive cam kết công khai 100% dòng tiền quyên góp, doanh thu bán vật phẩm tuần hoàn từ Marketplace và các khoản giải ngân thực địa.
           </p>
         </div>
@@ -183,11 +183,11 @@ export default function TransparencyPage() {
         <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
           <div className="flex items-center justify-between text-gray-500 text-xs font-bold uppercase mb-2">
             <span>Tổng nguồn lực vào (Inflow)</span>
-            <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-p-s50 text-p-s600 flex items-center justify-center">
               <ArrowDownLeft className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl sm:text-3xl font-black text-emerald-700 font-mono">
+          <div className="text-2xl sm:text-3xl font-black text-p-s700 font-mono">
             {formatVND(data?.summary.totalInflow || 0)}
           </div>
           <p className="text-[11px] text-gray-400 mt-2">
@@ -213,11 +213,11 @@ export default function TransparencyPage() {
         <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
           <div className="flex items-center justify-between text-gray-500 text-xs font-bold uppercase mb-2">
             <span>Tồn quỹ khả dụng</span>
-            <div className="w-8 h-8 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-sec-s50 text-sec-s600 flex items-center justify-center">
               <Coins className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl sm:text-3xl font-black text-teal-700 font-mono">
+          <div className="text-2xl sm:text-3xl font-black text-sec-s700 font-mono">
             {formatVND(data?.summary.netBalance || 0)}
           </div>
           <p className="text-[11px] text-gray-400 mt-2">
@@ -302,7 +302,7 @@ export default function TransparencyPage() {
 
       {/* Assurance Note */}
       <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-start gap-4">
-        <HelpCircle className="w-5 h-5 text-teal-600 shrink-0 mt-0.5" />
+        <HelpCircle className="w-5 h-5 text-sec-s600 shrink-0 mt-0.5" />
         <div className="text-xs text-gray-600 space-y-1">
           <p className="font-bold text-gray-900 text-sm">Cơ chế bảo chứng minh bạch tại ReGive:</p>
           <p>

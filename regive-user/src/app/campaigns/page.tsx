@@ -116,17 +116,17 @@ export default function CampaignsPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       {/* Page Header with Action Button & Live Stats */}
-      <div className="bg-gradient-to-r from-emerald-800 via-teal-900 to-slate-900 text-white rounded-3xl p-8 sm:p-10 shadow-xl relative overflow-hidden">
+      <div className="bg-gradient-to-r from-p-s800 via-sec-s900 to-slate-900 text-white rounded-3xl p-8 sm:p-10 shadow-xl relative overflow-hidden">
         <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="space-y-2 max-w-2xl">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-p-s500/20 text-p-s300 text-xs font-bold border border-p-s500/30">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Nền tảng thiện nguyện tuần hoàn ReGive</span>
             </div>
             <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
               Chiến Dịch Thiện Nguyện
             </h1>
-            <p className="text-emerald-100/90 text-sm leading-relaxed">
+            <p className="text-p-s100/90 text-sm leading-relaxed">
               Khám phá và đồng hành cùng các hoạt động gây quỹ, quyên góp hiện vật và kêu gọi tình nguyện viên đang diễn ra trên khắp cả nước.
             </p>
           </div>
@@ -134,7 +134,7 @@ export default function CampaignsPage() {
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
             <Link
               href="/campaigns/create"
-              className="inline-flex h-12 items-center justify-center gap-2 px-6 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-500/30 border-0 transition-colors"
+              className="inline-flex h-12 items-center justify-center gap-2 px-6 rounded-2xl bg-p-s500 hover:bg-p-s400 text-slate-950 font-bold text-sm shadow-lg shadow-p-s500/30 border-0 transition-colors"
             >
               <Plus className="w-4 h-4" />
               <span>Đề xuất chiến dịch mới</span>
@@ -145,15 +145,15 @@ export default function CampaignsPage() {
         {/* Live Aggregates Strip */}
         <div className="mt-8 pt-6 border-t border-white/10 grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs">
           <div>
-            <span className="text-emerald-300 block mb-0.5">Chiến dịch đang gây quỹ:</span>
+            <span className="text-p-s300 block mb-0.5">Chiến dịch đang gây quỹ:</span>
             <strong className="text-white text-lg font-black">{campaigns.length} dự án</strong>
           </div>
           <div>
-            <span className="text-emerald-300 block mb-0.5">Tổng nguồn lực đóng góp:</span>
+            <span className="text-p-s300 block mb-0.5">Tổng nguồn lực đóng góp:</span>
             <strong className="text-white text-lg font-black">{formatVND(totalRaised)}</strong>
           </div>
           <div className="col-span-2 sm:col-span-1">
-            <span className="text-emerald-300 block mb-0.5">Quy trình kiểm định:</span>
+            <span className="text-p-s300 block mb-0.5">Quy trình kiểm định:</span>
             <strong className="text-white text-lg font-black">100% Minh bạch</strong>
           </div>
         </div>
@@ -166,11 +166,10 @@ export default function CampaignsPage() {
             key={cat.id}
             type="button"
             onClick={() => setSelectedCategory(cat.id)}
-            className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all border ${
-              selectedCategory === cat.id
-                ? 'bg-emerald-700 border-emerald-700 text-white shadow-sm'
+            className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all border ${selectedCategory === cat.id
+                ? 'bg-p-s700 border-p-s700 text-white shadow-sm'
                 : 'bg-white border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50'
-            }`}
+              }`}
           >
             <span>{cat.label}</span>
           </button>

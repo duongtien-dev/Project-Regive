@@ -30,7 +30,7 @@ export const RoleGuard: React.FC<RoleGuardProps> = ({
           subTitle={fallbackMessage}
           extra={
             <Link href="/">
-              <Button type="primary" className="bg-emerald-600">
+              <Button type="primary" className="bg-p-s600">
                 Về trang chủ
               </Button>
             </Link>

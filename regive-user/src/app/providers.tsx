@@ -13,7 +13,8 @@ export function Providers({ children }: ProvidersProps) {
       theme={{
         algorithm: theme.defaultAlgorithm,
         token: {
-          colorPrimary: "#059669",
+          colorPrimary: "#024870",
+          colorInfo: "#0aa3d6",
           borderRadius: 10,
           fontFamily: "var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
         },

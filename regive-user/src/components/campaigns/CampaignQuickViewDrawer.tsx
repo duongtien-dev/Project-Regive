@@ -56,7 +56,7 @@ export const CampaignQuickViewDrawer: React.FC<CampaignQuickViewDrawerProps> = (
       title={
         <div className="flex items-center justify-between pr-4">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">
+            <span className="text-xs font-bold uppercase tracking-wider text-p-s600 bg-p-s50 px-2.5 py-1 rounded-full">
               Xem nhanh chiến dịch
             </span>
             <StatusBadge type="campaign" status={campaign.status} />
@@ -64,7 +64,7 @@ export const CampaignQuickViewDrawer: React.FC<CampaignQuickViewDrawerProps> = (
           <Link
             href={`/campaigns/${campaign._id}`}
             onClick={onClose}
-            className="text-xs text-emerald-700 font-bold hover:underline flex items-center gap-1"
+            className="text-xs text-p-s700 font-bold hover:underline flex items-center gap-1"
           >
             <span>Trang đầy đủ</span>
             <ExternalLink className="w-3.5 h-3.5" />
@@ -82,23 +82,23 @@ export const CampaignQuickViewDrawer: React.FC<CampaignQuickViewDrawerProps> = (
           style={{
             backgroundImage: campaign.bannerImage
               ? `linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.2) 60%), url(${campaign.bannerImage})`
-              : 'linear-gradient(to tr, #047857, #0d9488, #0284c7)',
+              : 'linear-gradient(to tr, #024870, #0aa3d6, #18c9ff)',
           }}
         >
           <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-white border border-white/20 flex items-center gap-1">
-            <Clock className="w-3.5 h-3.5 text-emerald-400" />
+            <Clock className="w-3.5 h-3.5 text-p-s400" />
             {daysLeftText}
           </div>
 
           <div className="relative z-10 space-y-1.5">
-            <div className="flex items-center gap-2 text-xs text-emerald-200">
+            <div className="flex items-center gap-2 text-xs text-p-s200">
               <span className="inline-flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5 text-emerald-300" />
+                <MapPin className="w-3.5 h-3.5 text-p-s300" />
                 {campaign.location}
               </span>
               <span>•</span>
               <span className="inline-flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5 text-emerald-300" />
+                <Calendar className="w-3.5 h-3.5 text-p-s300" />
                 {formatDate(campaign.startDate)} — {formatDate(campaign.endDate)}
               </span>
             </div>
@@ -112,7 +112,7 @@ export const CampaignQuickViewDrawer: React.FC<CampaignQuickViewDrawerProps> = (
             <div className="flex items-baseline justify-between">
               <div>
                 <span className="text-xs text-gray-500 block mb-0.5">Tiến độ quyên góp:</span>
-                <span className="text-2xl font-black text-emerald-700">
+                <span className="text-2xl font-black text-p-s700">
                   {formatVND(campaign.raisedAmount)}
                 </span>
                 <span className="text-xs text-gray-400 ml-1.5">/ {formatVND(campaign.targetAmount)}</span>
@@ -125,12 +125,12 @@ export const CampaignQuickViewDrawer: React.FC<CampaignQuickViewDrawerProps> = (
             <Progress
               percent={progress}
               showInfo={false}
-              strokeColor={{ '0%': '#10b981', '100%': '#059669' }}
+              strokeColor={{ '0%': '#024870', '100%': '#18c9ff' }}
             />
 
             <div className="flex items-center justify-between text-xs text-gray-500 pt-1">
-              <span className="inline-flex items-center gap-1 text-emerald-700 font-semibold">
-                <Heart className="w-3.5 h-3.5 fill-emerald-600" />
+              <span className="inline-flex items-center gap-1 text-p-s700 font-semibold">
+                <Heart className="w-3.5 h-3.5 fill-p-s600" />
                 {campaign.donationCount || 0} lượt ủng hộ
               </span>
               <span className="inline-flex items-center gap-1 text-sky-700 font-semibold">
@@ -143,10 +143,10 @@ export const CampaignQuickViewDrawer: React.FC<CampaignQuickViewDrawerProps> = (
           {/* Goal & Short Description */}
           <div className="space-y-2">
             <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+              <Sparkles className="w-3.5 h-3.5 text-p-s600" />
               <span>Mục tiêu chiến dịch</span>
             </h4>
-            <p className="text-sm text-gray-800 font-medium bg-emerald-50/60 p-4 rounded-xl border border-emerald-100 leading-relaxed">
+            <p className="text-sm text-gray-800 font-medium bg-p-s50/60 p-4 rounded-xl border border-p-s100 leading-relaxed">
               {campaign.goal}
             </p>
           </div>
@@ -165,21 +165,21 @@ export const CampaignQuickViewDrawer: React.FC<CampaignQuickViewDrawerProps> = (
           {campaign.targetItems && campaign.targetItems.length > 0 && (
             <div className="space-y-2.5">
               <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-                <Package className="w-3.5 h-3.5 text-teal-600" />
+                <Package className="w-3.5 h-3.5 text-sec-s600" />
                 <span>Vật phẩm hiện vật đang kêu gọi ({campaign.targetItems.length})</span>
               </h4>
               <div className="space-y-2">
                 {campaign.targetItems.map((item, idx) => {
                   const itemProgress = item.targetQty ? Math.min(100, Math.round((item.receivedQty / item.targetQty) * 100)) : 0;
                   return (
-                    <div key={idx} className="p-3 bg-teal-50/50 rounded-xl border border-teal-100 text-xs space-y-1">
+                    <div key={idx} className="p-3 bg-sec-s50/50 rounded-xl border border-sec-s100 text-xs space-y-1">
                       <div className="flex justify-between font-bold text-gray-800">
                         <span>{item.name}</span>
-                        <span className="text-teal-800">
+                        <span className="text-sec-s800">
                           {item.receivedQty} / {item.targetQty} {item.unit}
                         </span>
                       </div>
-                      <Progress percent={itemProgress} size="small" strokeColor="#0d9488" />
+                      <Progress percent={itemProgress} size="small" strokeColor="#18c9ff" />
                     </div>
                   );
                 })}
@@ -200,13 +200,13 @@ export const CampaignQuickViewDrawer: React.FC<CampaignQuickViewDrawerProps> = (
               )}
               {campaign.contactInfo?.phone && (
                 <p className="flex items-center gap-1">
-                  <Phone className="w-3 h-3 text-emerald-600" />
+                  <Phone className="w-3 h-3 text-p-s600" />
                   <strong>Điện thoại:</strong> {campaign.contactInfo.phone}
                 </p>
               )}
               {campaign.contactInfo?.email && (
                 <p className="flex items-center gap-1">
-                  <Mail className="w-3 h-3 text-emerald-600" />
+                  <Mail className="w-3 h-3 text-p-s600" />
                   <strong>Email:</strong> {campaign.contactInfo.email}
                 </p>
               )}
@@ -230,7 +230,7 @@ export const CampaignQuickViewDrawer: React.FC<CampaignQuickViewDrawerProps> = (
           {campaign.activities && campaign.activities.length > 0 && (
             <div className="space-y-2">
               <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-                <Camera className="w-3.5 h-3.5 text-emerald-600" />
+                <Camera className="w-3.5 h-3.5 text-p-s600" />
                 <span>Hoạt động mới nhất ({campaign.activities.length})</span>
               </h4>
               <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-100 space-y-1 text-xs">
@@ -267,15 +267,15 @@ export const CampaignQuickViewDrawer: React.FC<CampaignQuickViewDrawerProps> = (
             onClose();
             if (onOpenDonateMoney) onOpenDonateMoney(campaign);
           }}
-          className="flex-1 h-11 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-600/20"
+          className="flex-1 h-11 rounded-xl bg-p-s600 hover:bg-p-s700 text-white font-bold text-xs shadow-md shadow-p-s600/20"
         >
           Ủng hộ tiền
         </Button>
 
         <Link href={`/campaigns/${campaign._id}/donate-product`} onClick={onClose} className="flex-1">
           <Button
-            icon={<Package className="w-4 h-4 text-teal-600" />}
-            className="w-full h-11 rounded-xl border-teal-200 text-teal-800 font-bold text-xs bg-teal-50 hover:bg-teal-100"
+            icon={<Package className="w-4 h-4 text-sec-s600" />}
+            className="w-full h-11 rounded-xl border-sec-s200 text-sec-s800 font-bold text-xs bg-sec-s50 hover:bg-sec-s100"
           >
             Ủng hộ đồ
           </Button>

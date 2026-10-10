@@ -81,7 +81,7 @@ export default function MyPaymentsPage() {
                   </div>
 
                   <div className="flex items-center gap-4">
-                    <span className="text-lg font-black text-emerald-700">
+                    <span className="text-lg font-black text-p-s700">
                       {formatVND(p.amount)}
                     </span>
 
@@ -90,7 +90,7 @@ export default function MyPaymentsPage() {
                         <Button
                           type="primary"
                           size="small"
-                          className="bg-emerald-600 rounded-lg text-xs"
+                          className="bg-p-s600 rounded-lg text-xs"
                         >
                           Thanh toán ngay
                         </Button>

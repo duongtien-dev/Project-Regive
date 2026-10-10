@@ -38,11 +38,11 @@ function LoginForm() {
       {/* Header */}
       <div className="text-center">
         <Link href="/" className="inline-flex items-center gap-2">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-md">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-p-s600 to-sec-s500 flex items-center justify-center text-white shadow-md">
             <Heart className="w-5 h-5 fill-white" />
           </div>
           <span className="text-2xl font-black text-gray-900">
-            Re<span className="text-emerald-600">Give</span>
+            Re<span className="text-p-s600">Give</span>
           </span>
         </Link>
         <h2 className="mt-4 text-2xl font-black text-gray-900">Đăng Nhập Tài Khoản</h2>
@@ -89,7 +89,7 @@ function LoginForm() {
             htmlType="submit"
             loading={submitting}
             size="large"
-            className="w-full h-12 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-600/20"
+            className="w-full h-12 rounded-xl bg-p-s600 hover:bg-p-s700 text-white font-bold text-sm shadow-md shadow-p-s600/20"
           >
             Đăng nhập
           </Button>
@@ -99,14 +99,14 @@ function LoginForm() {
       {/* Demo credentials hint */}
       <div className="bg-slate-50 p-3.5 rounded-xl border border-gray-100 text-xs text-gray-500 space-y-1">
         <p className="font-semibold text-gray-700">Tài khoản thử nghiệm hệ thống:</p>
-        <p>User: <code className="text-emerald-700 font-mono">user1@example.com</code> / <code className="text-gray-700 font-mono">password123</code></p>
-        <p>Beneficiary: <code className="text-emerald-700 font-mono">beneficiary1@example.com</code> / <code className="text-gray-700 font-mono">password123</code></p>
+        <p>User: <code className="text-p-s700 font-mono">user1@example.com</code> / <code className="text-gray-700 font-mono">password123</code></p>
+        <p>Beneficiary: <code className="text-p-s700 font-mono">beneficiary1@example.com</code> / <code className="text-gray-700 font-mono">password123</code></p>
       </div>
 
       {/* Register link */}
       <div className="text-center text-xs text-gray-500 pt-2 border-t border-gray-100">
         Chưa có tài khoản?{' '}
-        <Link href="/register" className="font-bold text-emerald-600 hover:text-emerald-700">
+        <Link href="/register" className="font-bold text-p-s600 hover:text-p-s700">
           Đăng ký ngay
         </Link>
       </div>

@@ -77,7 +77,7 @@ function DonateMoneyContent() {
       <div>
         <Link
           href={`/campaigns/${campaignId}`}
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-gray-500 hover:text-emerald-600 transition-colors"
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-gray-500 hover:text-p-s600 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Quay lại chi tiết chiến dịch</span>
@@ -86,14 +86,14 @@ function DonateMoneyContent() {
 
       <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-xl space-y-6">
         <div className="border-b border-gray-100 pb-5">
-          <div className="flex items-center gap-2 text-emerald-600 font-bold text-xs uppercase tracking-wider mb-1">
-            <Heart className="w-4 h-4 fill-emerald-600" />
+          <div className="flex items-center gap-2 text-p-s600 font-bold text-xs uppercase tracking-wider mb-1">
+            <Heart className="w-4 h-4 fill-p-s600" />
             <span>Ủng hộ tài chính</span>
           </div>
           <h1 className="text-2xl font-black text-gray-900">Quyên Góp Tiền Mặt</h1>
           {campaign && (
-            <div className="mt-2 p-3 bg-emerald-50/60 rounded-xl border border-emerald-100/80">
-              <p className="text-xs text-emerald-800 font-medium">Chiến dịch tiếp nhận:</p>
+            <div className="mt-2 p-3 bg-p-s50/60 rounded-xl border border-p-s100/80">
+              <p className="text-xs text-p-s800 font-medium">Chiến dịch tiếp nhận:</p>
               <p className="text-sm font-bold text-gray-900 mt-0.5">{campaign.title}</p>
             </div>
           )}
@@ -137,10 +137,10 @@ function DonateMoneyContent() {
           </Form.Item>
 
           {/* Summary preview */}
-          <div className="bg-emerald-50/70 border border-emerald-200/60 rounded-2xl p-4 space-y-2 text-xs text-gray-700">
+          <div className="bg-p-s50/70 border border-p-s200/60 rounded-2xl p-4 space-y-2 text-xs text-gray-700">
             <div className="flex justify-between items-center">
               <span>Số tiền quyên góp:</span>
-              <span className="text-lg font-black text-emerald-700">
+              <span className="text-lg font-black text-p-s700">
                 {formatVND(amount)}
               </span>
             </div>
@@ -156,7 +156,7 @@ function DonateMoneyContent() {
               htmlType="submit"
               loading={submitting}
               size="large"
-              className="w-full h-12 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-base shadow-lg shadow-emerald-600/25"
+              className="w-full h-12 rounded-xl bg-p-s600 hover:bg-p-s700 text-white font-bold text-base shadow-lg shadow-p-s600/25"
             >
               Tiến hành thanh toán {formatVND(amount)}
             </Button>
@@ -164,7 +164,7 @@ function DonateMoneyContent() {
         </Form>
 
         <div className="pt-2 flex items-center justify-center gap-2 text-xs text-gray-400 text-center">
-          <ShieldCheck className="w-4 h-4 text-emerald-600" />
+          <ShieldCheck className="w-4 h-4 text-p-s600" />
           <span>Khoản tiền sẽ được chuyển thẳng vào quỹ chiến dịch sau khi hoàn tất.</span>
         </div>
       </div>

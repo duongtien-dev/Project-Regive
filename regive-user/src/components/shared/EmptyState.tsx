@@ -31,7 +31,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       >
         {actionText && actionHref && (
           <Link href={actionHref}>
-            <Button type="primary" className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg">
+            <Button type="primary" className="bg-p-s600 hover:bg-p-s700 text-white rounded-lg">
               {actionText}
             </Button>
           </Link>
@@ -40,7 +40,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
           <Button
             type="primary"
             onClick={onAction}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg"
+            className="bg-p-s600 hover:bg-p-s700 text-white rounded-lg"
           >
             {actionText}
           </Button>

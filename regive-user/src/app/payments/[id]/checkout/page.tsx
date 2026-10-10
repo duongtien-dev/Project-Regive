@@ -140,7 +140,7 @@ export default function PaymentCheckoutPage() {
                   <p>
                     Giao dịch <strong className="font-mono text-gray-900">{payment?.paymentCode}</strong> đã được ghi nhận trực tiếp vào hệ thống cơ sở dữ liệu ReGive.
                   </p>
-                  <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 text-emerald-950 font-bold text-lg inline-block">
+                  <div className="p-4 bg-p-s50 rounded-2xl border border-p-s200 text-p-s950 font-bold text-lg inline-block">
                     Số tiền đóng góp: {formatVND(payment?.amount)}
                   </div>
                   <p className="text-xs text-gray-500 max-w-md mx-auto leading-relaxed">
@@ -151,13 +151,13 @@ export default function PaymentCheckoutPage() {
               extra={[
                 payment?.purpose === 'donation' ? (
                   <Link key="donation" href="/me/donations">
-                    <Button type="primary" className="bg-emerald-600 rounded-xl h-11 px-6 font-bold">
+                    <Button type="primary" className="bg-p-s600 rounded-xl h-11 px-6 font-bold">
                       Xem lịch sử quyên góp
                     </Button>
                   </Link>
                 ) : (
                   <Link key="order" href="/me/orders">
-                    <Button type="primary" className="bg-emerald-600 rounded-xl h-11 px-6 font-bold">
+                    <Button type="primary" className="bg-p-s600 rounded-xl h-11 px-6 font-bold">
                       Xem đơn hàng của tôi
                     </Button>
                   </Link>
@@ -171,7 +171,7 @@ export default function PaymentCheckoutPage() {
             <div className="space-y-6">
               {/* Header */}
               <div className="text-center pb-4 border-b border-gray-100">
-                <div className="w-14 h-14 mx-auto rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-3">
+                <div className="w-14 h-14 mx-auto rounded-2xl bg-p-s100 text-p-s700 flex items-center justify-center mb-3">
                   <CreditCard className="w-7 h-7" />
                 </div>
                 <h1 className="text-2xl font-black text-gray-900">Cổng Thanh Toán ReGive Sandbox</h1>
@@ -203,7 +203,7 @@ export default function PaymentCheckoutPage() {
 
                 <div className="pt-2 border-t border-gray-200/60 flex justify-between items-center">
                   <span className="font-bold text-gray-700">Tổng tiền cần thanh toán:</span>
-                  <span className="text-2xl font-black text-emerald-700">
+                  <span className="text-2xl font-black text-p-s700">
                     {formatVND(payment?.amount)}
                   </span>
                 </div>
@@ -211,9 +211,9 @@ export default function PaymentCheckoutPage() {
 
               {/* Payment Methods */}
               {payment?.checkoutUrl ? (
-                <div className="space-y-4 rounded-2xl border border-emerald-200 bg-emerald-50/70 p-5">
+                <div className="space-y-4 rounded-2xl border border-p-s200 bg-p-s50/70 p-5">
                   <div className="flex items-start gap-3">
-                    <ShieldCheck className="w-5 h-5 text-emerald-700 shrink-0 mt-0.5" />
+                    <ShieldCheck className="w-5 h-5 text-p-s700 shrink-0 mt-0.5" />
                     <div>
                       <h2 className="font-black text-gray-900">Thanh toan qua VNPay</h2>
                       <p className="text-xs text-gray-600 leading-relaxed mt-1">
@@ -226,7 +226,7 @@ export default function PaymentCheckoutPage() {
                     size="large"
                     loading={submitting}
                     onClick={handleVnpayCheckout}
-                    className="w-full h-12 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-lg shadow-emerald-600/25"
+                    className="w-full h-12 rounded-xl bg-p-s600 hover:bg-p-s700 text-white font-bold text-sm shadow-lg shadow-p-s600/25"
                     icon={<CreditCard className="w-4 h-4" />}
                   >
                     Thanh toan qua VNPay ({formatVND(payment?.amount)})
@@ -241,9 +241,9 @@ export default function PaymentCheckoutPage() {
                     label: 'Quét mã VietQR (Khuyên dùng)',
                     children: (
                       <div className="pt-2 space-y-6">
-                        <div className="flex flex-col sm:flex-row items-center gap-6 p-6 rounded-2xl bg-emerald-50/60 border border-emerald-200/70">
+                        <div className="flex flex-col sm:flex-row items-center gap-6 p-6 rounded-2xl bg-p-s50/60 border border-p-s200/70">
                           {/* QR preview */}
-                          <div className="bg-white p-3 rounded-2xl shadow-sm border border-emerald-100 shrink-0 text-center">
+                          <div className="bg-white p-3 rounded-2xl shadow-sm border border-p-s100 shrink-0 text-center">
                             <img src={qrUrl} alt="VietQR" className="w-44 h-44 mx-auto rounded-lg" />
                             <span className="text-[10px] text-gray-400 mt-2 block font-medium">
                               Quét bằng ứng dụng Ngân hàng
@@ -260,7 +260,7 @@ export default function PaymentCheckoutPage() {
                             <div>
                               <span className="text-gray-400 block text-[11px]">Số tài khoản:</span>
                               <div className="flex items-center gap-2">
-                                <span className="font-mono font-extrabold text-base text-emerald-800">
+                                <span className="font-mono font-extrabold text-base text-p-s800">
                                   0909REGIVE2026
                                 </span>
                                 <Button
@@ -282,7 +282,7 @@ export default function PaymentCheckoutPage() {
                             <div>
                               <span className="text-gray-400 block text-[11px]">Nội dung chuyển khoản:</span>
                               <div className="flex items-center gap-2">
-                                <span className="font-mono font-bold text-gray-900 bg-white px-2 py-1 rounded-md border border-emerald-200">
+                                <span className="font-mono font-bold text-gray-900 bg-white px-2 py-1 rounded-md border border-p-s200">
                                   REGIVE {payment?.paymentCode}
                                 </span>
                                 <Button
@@ -304,7 +304,7 @@ export default function PaymentCheckoutPage() {
                             size="large"
                             loading={submitting}
                             onClick={handleConfirmPayment}
-                            className="w-full h-12 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-lg shadow-emerald-600/25"
+                            className="w-full h-12 rounded-xl bg-p-s600 hover:bg-p-s700 text-white font-bold text-sm shadow-lg shadow-p-s600/25"
                           >
                             Xác nhận đã chuyển khoản ({formatVND(payment?.amount)})
                           </Button>
@@ -345,7 +345,7 @@ export default function PaymentCheckoutPage() {
                           size="large"
                           loading={submitting}
                           onClick={handleConfirmPayment}
-                          className="w-full h-12 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-600/20"
+                          className="w-full h-12 rounded-xl bg-p-s600 hover:bg-p-s700 text-white font-bold text-sm shadow-md shadow-p-s600/20"
                         >
                           Xác nhận Sandbox Token ({formatVND(payment?.amount)})
                         </Button>
@@ -357,7 +357,7 @@ export default function PaymentCheckoutPage() {
               )}
 
               <div className="flex items-center justify-center gap-2 text-xs text-gray-400 text-center pt-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <ShieldCheck className="w-4 h-4 text-p-s600" />
                 <span>Môi trường Sandbox không trừ tiền thật. Đảm bảo toàn vẹn dữ liệu cho đồ án ReGive.</span>
               </div>
             </div>

@@ -62,7 +62,7 @@ export default function MySupportRequestsPage() {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <Link href="/support/new">
-            <Button type="primary" className="bg-emerald-600 rounded-xl">
+            <Button type="primary" className="bg-p-s600 rounded-xl">
               + Tạo yêu cầu mới
             </Button>
           </Link>
@@ -128,8 +128,8 @@ export default function MySupportRequestsPage() {
                   {/* Confirm Received action */}
                   <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-gray-100">
                     {r.receivedConfirmed ? (
-                      <div className="flex items-center gap-1.5 text-xs text-emerald-700 font-semibold">
-                        <CheckCircle className="w-4 h-4 text-emerald-600" />
+                      <div className="flex items-center gap-1.5 text-xs text-p-s700 font-semibold">
+                        <CheckCircle className="w-4 h-4 text-p-s600" />
                         <span>Bạn đã xác nhận đã nhận hỗ trợ ({formatDate(r.receivedAt)})</span>
                       </div>
                     ) : canConfirm ? (
@@ -141,7 +141,7 @@ export default function MySupportRequestsPage() {
                           type="primary"
                           loading={confirmingId === r._id}
                           onClick={() => handleConfirmReceived(r._id)}
-                          className="bg-emerald-600 rounded-xl font-bold text-xs"
+                          className="bg-p-s600 rounded-xl font-bold text-xs"
                         >
                           Xác nhận đã nhận hỗ trợ
                         </Button>

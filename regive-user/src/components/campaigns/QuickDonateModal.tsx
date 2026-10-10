@@ -80,8 +80,8 @@ export const QuickDonateModal: React.FC<QuickDonateModalProps> = ({
     <Modal
       title={
         <div className="flex items-center gap-2 pb-2 border-b border-gray-100">
-          <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
-            <Heart className="w-4 h-4 fill-emerald-600" />
+          <div className="w-8 h-8 rounded-full bg-p-s100 flex items-center justify-center text-p-s600">
+            <Heart className="w-4 h-4 fill-p-s600" />
           </div>
           <div>
             <h3 className="font-bold text-base text-gray-900">Ủng Hộ Tiền Nhanh</h3>
@@ -125,9 +125,9 @@ export const QuickDonateModal: React.FC<QuickDonateModalProps> = ({
             />
           </Form.Item>
 
-          <div className="bg-emerald-50/70 p-3.5 rounded-xl border border-emerald-100 flex items-center justify-between text-xs text-gray-700 mb-4">
+          <div className="bg-p-s50/70 p-3.5 rounded-xl border border-p-s100 flex items-center justify-between text-xs text-gray-700 mb-4">
             <span>Tổng tiền ủng hộ:</span>
-            <span className="text-xl font-black text-emerald-700">{formatVND(amount)}</span>
+            <span className="text-xl font-black text-p-s700">{formatVND(amount)}</span>
           </div>
 
           <Button
@@ -135,14 +135,14 @@ export const QuickDonateModal: React.FC<QuickDonateModalProps> = ({
             htmlType="submit"
             loading={submitting}
             size="large"
-            className="w-full h-12 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-600/20"
+            className="w-full h-12 rounded-xl bg-p-s600 hover:bg-p-s700 text-white font-bold text-sm shadow-md shadow-p-s600/20"
           >
             Tiến hành thanh toán {formatVND(amount)}
           </Button>
         </Form>
 
         <div className="flex items-center justify-center gap-1.5 text-[11px] text-gray-400 text-center">
-          <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+          <ShieldCheck className="w-3.5 h-3.5 text-p-s600" />
           <span>Giao dịch an toàn & minh bạch 100% qua ReGive Sandbox.</span>
         </div>
       </div>

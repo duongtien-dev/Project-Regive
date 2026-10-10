@@ -42,7 +42,7 @@ export const CampaignCard: React.FC<CampaignCardProps> = ({
         style={{
           backgroundImage: campaign.bannerImage
             ? `linear-gradient(to top, rgba(15,23,42,.80) 0%, rgba(15,23,42,.20) 55%, rgba(15,23,42,.05) 100%), url(${campaign.bannerImage})`
-            : 'linear-gradient(135deg, #22C55E 0%, #34D399 50%, #60A5FA 100%)',
+            : 'linear-gradient(135deg, #024870 0%, #0aa3d6 50%, #18c9ff 100%)',
         }}
       >
         {/* Top badges */}

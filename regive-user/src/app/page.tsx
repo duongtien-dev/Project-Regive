@@ -192,15 +192,15 @@ export default function HomePage() {
         {/* Decorative floating blobs */}
         <div
           aria-hidden="true"
-          className="float-slow absolute -top-10 right-[5%] w-80 h-80 rounded-[62%_38%_50%_50%/46%_46%_54%_54%] bg-[radial-gradient(circle,rgba(34,197,94,0.18)_0%,transparent_70%)] pointer-events-none"
+          className="float-slow absolute -top-10 right-[5%] w-80 h-80 rounded-[62%_38%_50%_50%/46%_46%_54%_54%] bg-[radial-gradient(circle,rgba(24,201,255,0.20)_0%,transparent_70%)] pointer-events-none"
         />
         <div
           aria-hidden="true"
-          className="float-med absolute -bottom-16 left-[3%] w-60 h-60 rounded-full bg-[radial-gradient(circle,rgba(96,165,250,0.15)_0%,transparent_70%)] pointer-events-none"
+          className="float-med absolute -bottom-16 left-[3%] w-60 h-60 rounded-full bg-[radial-gradient(circle,rgba(2,72,112,0.14)_0%,transparent_70%)] pointer-events-none"
         />
         <div
           aria-hidden="true"
-          className="absolute top-[30%] left-[15%] w-32 h-32 rounded-full bg-[radial-gradient(circle,rgba(251,146,60,0.12)_0%,transparent_70%)] pointer-events-none"
+          className="absolute top-[30%] left-[15%] w-32 h-32 rounded-full bg-[radial-gradient(circle,rgba(107,211,243,0.18)_0%,transparent_70%)] pointer-events-none"
         />
 
         <div className="max-w-7xl mx-auto relative z-10">
@@ -250,7 +250,7 @@ export default function HomePage() {
                 { icon: <ShieldCheck className="w-5 h-5" />, title: 'Minh bạch 100%', sub: 'Sao kê tự động', colorClass: 'text-p-s600', bgClass: 'bg-p-s100' },
                 { icon: <Repeat className="w-5 h-5" />, title: 'Tuần hoàn đồ dùng', sub: 'Giảm rác thải nhựa', colorClass: 'text-sec-s600', bgClass: 'bg-sec-s100' },
                 { icon: <Users className="w-5 h-5" />, title: 'Tình nguyện viên', sub: 'Kết nối thực địa', colorClass: 'text-i-s600', bgClass: 'bg-i-s100' },
-                { icon: <Package className="w-5 h-5" />, title: 'Hỗ trợ đúng người', sub: 'Xác thực thụ hưởng', colorClass: 'text-purple-600', bgClass: 'bg-purple-100' },
+                { icon: <Package className="w-5 h-5" />, title: 'Hỗ trợ đúng người', sub: 'Xác thực thụ hưởng', colorClass: 'text-sec-s600', bgClass: 'bg-sec-s100' },
               ].map((item, idx) => (
                 <div key={idx} className="flex items-center gap-3 text-left">
                   <div className={`w-11 h-11 rounded-2xl ${item.bgClass} flex items-center justify-center ${item.colorClass} shrink-0 shadow-sm border border-white/80`}>
@@ -274,17 +274,17 @@ export default function HomePage() {
       {/* ── Impact Stats Banner ── */}
       <section className="px-6 -translate-y-10 relative z-10">
         <div className="max-w-7xl mx-auto">
-          <div className="bg-gradient-to-br from-n-s900 via-n-s800 to-p-s950 rounded-3xl p-8 sm:p-12 shadow-2xl border border-white/10 grid grid-cols-2 md:grid-cols-4 gap-8 relative overflow-hidden">
+          <div className="bg-gradient-to-br from-p-s900 via-p-s800 to-p-s950 rounded-3xl p-8 sm:p-12 shadow-2xl border border-white/10 grid grid-cols-2 md:grid-cols-4 gap-8 relative overflow-hidden">
             {/* Decorative glow */}
             <div
               aria-hidden="true"
-              className="absolute -top-16 -right-16 w-52 h-52 rounded-full bg-[radial-gradient(circle,rgba(34,197,94,0.25)_0%,transparent_70%)] pointer-events-none"
+              className="absolute -top-16 -right-16 w-52 h-52 rounded-full bg-[radial-gradient(circle,rgba(24,201,255,0.25)_0%,transparent_70%)] pointer-events-none"
             />
             {[
               { value: impactData?.totalCampaigns || campaigns.length, label: 'Chiến dịch thiện nguyện', colorClass: 'text-p-s400' },
-              { value: formatVND(impactData?.totalRaised || 385000000), label: 'Tổng nguồn lực quyên góp', colorClass: 'text-yellow-300', isFormatted: true },
-              { value: impactData?.totalDonations || 148, label: 'Lượt đóng góp thành công', colorClass: 'text-sky-300' },
-              { value: impactData?.totalVolunteers || 24, label: 'Tình nguyện viên đã xác nhận', colorClass: 'text-orange-300' },
+              { value: formatVND(impactData?.totalRaised || 385000000), label: 'Tổng nguồn lực quyên góp', colorClass: 'text-sec-s400', isFormatted: true },
+              { value: impactData?.totalDonations || 148, label: 'Lượt đóng góp thành công', colorClass: 'text-sec-s300' },
+              { value: impactData?.totalVolunteers || 24, label: 'Tình nguyện viên đã xác nhận', colorClass: 'text-sec-s300' },
             ].map((stat, idx) => (
               <div key={idx} className="text-center relative z-10">
                 <span className={`block font-bold ${stat.isFormatted ? 'text-xl sm:text-2xl' : 'text-3xl sm:text-4xl'} ${stat.colorClass} leading-tight mb-1.5`}>
@@ -591,15 +591,15 @@ export default function HomePage() {
       {/* ── Volunteer CTA Banner ── */}
       <section className="py-16 px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="rounded-3xl overflow-hidden bg-gradient-to-br from-n-s900 via-p-s900 to-n-s900 p-8 sm:p-16 relative shadow-2xl border border-white/10">
+          <div className="rounded-3xl overflow-hidden bg-gradient-to-br from-p-s900 via-p-s800 to-p-s900 p-8 sm:p-16 relative shadow-2xl border border-white/10">
             {/* Decorative blobs */}
             <div
               aria-hidden="true"
-              className="float-med absolute -top-16 right-[10%] w-60 h-60 rounded-full bg-[radial-gradient(circle,rgba(34,197,94,0.25)_0%,transparent_70%)] pointer-events-none"
+              className="float-med absolute -top-16 right-[10%] w-60 h-60 rounded-full bg-[radial-gradient(circle,rgba(24,201,255,0.25)_0%,transparent_70%)] pointer-events-none"
             />
             <div
               aria-hidden="true"
-              className="absolute -bottom-10 left-[5%] w-44 h-44 rounded-full bg-[radial-gradient(circle,rgba(96,165,250,0.20)_0%,transparent_70%)] pointer-events-none"
+              className="absolute -bottom-10 left-[5%] w-44 h-44 rounded-full bg-[radial-gradient(circle,rgba(107,211,243,0.20)_0%,transparent_70%)] pointer-events-none"
             />
 
             <div className="max-w-2xl relative z-10">

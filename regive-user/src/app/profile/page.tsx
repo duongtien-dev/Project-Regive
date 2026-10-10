@@ -55,7 +55,7 @@ export default function ProfilePage() {
           </div>
           <div>
             <span className="text-gray-400 block">Vai trò:</span>
-            <span className="inline-block font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">
+            <span className="inline-block font-bold px-2 py-0.5 rounded bg-p-s100 text-p-s800">
               {user?.role === 'BENEFICIARY' ? 'Người thụ hưởng' : 'Thành viên ReGive'}
             </span>
           </div>
@@ -100,7 +100,7 @@ export default function ProfilePage() {
           {user?.role === 'BENEFICIARY' && (
             <div className="pt-4 border-t border-gray-100 space-y-4">
               <h4 className="font-bold text-gray-900 text-sm flex items-center gap-1.5">
-                <Users className="w-4 h-4 text-emerald-600" />
+                <Users className="w-4 h-4 text-p-s600" />
                 <span>Thông tin hoàn cảnh người thụ hưởng</span>
               </h4>
 
@@ -125,7 +125,7 @@ export default function ProfilePage() {
               loading={submitting}
               icon={<Save className="w-4 h-4" />}
               size="large"
-              className="px-8 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-600/20"
+              className="px-8 rounded-xl bg-p-s600 hover:bg-p-s700 text-white font-bold text-sm shadow-md shadow-p-s600/20"
             >
               Lưu thay đổi
             </Button>

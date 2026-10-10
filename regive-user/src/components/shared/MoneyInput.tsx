@@ -34,8 +34,8 @@ export const MoneyInput: React.FC<MoneyInputProps> = ({
               onClick={() => onChange?.(preset)}
               className={`py-2 px-1 text-xs font-semibold rounded-xl border transition-all ${
                 isSelected
-                  ? 'border-emerald-600 bg-emerald-50 text-emerald-700 shadow-sm'
-                  : 'border-gray-200 bg-white text-gray-700 hover:border-emerald-300 hover:bg-gray-50'
+                  ? 'border-p-s600 bg-p-s50 text-p-s700 shadow-sm'
+                  : 'border-gray-200 bg-white text-gray-700 hover:border-p-s300 hover:bg-gray-50'
               }`}
             >
               {formatVND(preset)}

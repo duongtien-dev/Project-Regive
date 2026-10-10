@@ -68,7 +68,7 @@ export default function NotificationsPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-200 pb-5">
           <div>
             <h1 className="text-2xl font-black text-gray-900 flex items-center gap-2">
-              <Bell className="w-6 h-6 text-emerald-600" />
+              <Bell className="w-6 h-6 text-p-s600" />
               <span>Thông Báo Của Bạn</span>
             </h1>
             <p className="text-xs text-gray-500 mt-1">
@@ -80,7 +80,7 @@ export default function NotificationsPage() {
             <Button
               size="small"
               onClick={() => setUnreadOnly(!unreadOnly)}
-              className={unreadOnly ? 'border-emerald-600 text-emerald-700 bg-emerald-50' : ''}
+              className={unreadOnly ? 'border-p-s600 text-p-s700 bg-p-s50' : ''}
             >
               {unreadOnly ? 'Xem tất cả' : 'Chỉ chưa đọc'}
             </Button>
@@ -113,14 +113,14 @@ export default function NotificationsPage() {
                   className={`p-4 sm:p-5 rounded-2xl border transition-all flex items-start justify-between gap-4 ${
                     n.isRead
                       ? 'bg-white border-gray-100 text-gray-700'
-                      : 'bg-emerald-50/40 border-emerald-200 text-gray-900 shadow-xs'
+                      : 'bg-p-s50/40 border-p-s200 text-gray-900 shadow-xs'
                   }`}
                 >
                   <div className="space-y-1 flex-1">
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-sm text-gray-900">{n.title}</span>
                       {!n.isRead && (
-                        <span className="w-2 h-2 rounded-full bg-emerald-600 shrink-0" />
+                        <span className="w-2 h-2 rounded-full bg-p-s600 shrink-0" />
                       )}
                       <Tag color="cyan" className="text-[10px] uppercase font-bold px-1.5 py-0">
                         {n.type}
@@ -137,7 +137,7 @@ export default function NotificationsPage() {
 
                       <Link
                         href={link}
-                        className="inline-flex items-center gap-1 text-emerald-700 font-semibold hover:underline"
+                        className="inline-flex items-center gap-1 text-p-s700 font-semibold hover:underline"
                         onClick={() => !n.isRead && handleMarkRead(n._id)}
                       >
                         <span>Xem chi tiết</span>
@@ -152,7 +152,7 @@ export default function NotificationsPage() {
                       size="small"
                       onClick={() => handleMarkRead(n._id)}
                       title="Đánh dấu đã đọc"
-                      className="text-xs text-gray-400 hover:text-emerald-600 shrink-0"
+                      className="text-xs text-gray-400 hover:text-p-s600 shrink-0"
                     >
                       Đã đọc
                     </Button>

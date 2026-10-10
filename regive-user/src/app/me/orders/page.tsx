@@ -132,11 +132,11 @@ export default function MyOrdersPage() {
                   {o.items.map((item, idx) => (
                     <div key={idx} className="flex justify-between items-center text-xs text-gray-700">
                       <div className="flex items-center gap-2">
-                        <Package className="w-4 h-4 text-emerald-600" />
+                        <Package className="w-4 h-4 text-p-s600" />
                         <span className="font-bold">{item.name}</span>
                         <span className="text-gray-400">× {item.quantity}</span>
                       </div>
-                      <span className="font-bold text-emerald-800">{formatVND(item.price * item.quantity)}</span>
+                      <span className="font-bold text-p-s800">{formatVND(item.price * item.quantity)}</span>
                     </div>
                   ))}
                 </div>
@@ -151,7 +151,7 @@ export default function MyOrdersPage() {
                   <div className="flex items-center gap-3">
                     <div>
                       <span className="text-gray-400 mr-2">Tổng tiền:</span>
-                      <span className="text-base font-black text-emerald-700">
+                      <span className="text-base font-black text-p-s700">
                         {formatVND(o.totalAmount)}
                       </span>
                     </div>
@@ -164,7 +164,7 @@ export default function MyOrdersPage() {
                           loading={payingId === o._id}
                           icon={<CreditCard className="w-3.5 h-3.5" />}
                           onClick={() => handlePayOrder(o._id)}
-                          className="bg-emerald-600 rounded-lg text-xs"
+                          className="bg-p-s600 rounded-lg text-xs"
                         >
                           Thanh toán
                         </Button>
@@ -241,15 +241,15 @@ export default function MyOrdersPage() {
                 <StatusBadge type="order" status={selectedOrder.status} />
               </div>
 
-              <div className="space-y-2 bg-emerald-50/50 p-3.5 rounded-2xl border border-emerald-100">
-                <span className="font-bold text-emerald-950 block mb-1">Vật phẩm trong đơn:</span>
+              <div className="space-y-2 bg-p-s50/50 p-3.5 rounded-2xl border border-p-s100">
+                <span className="font-bold text-p-s950 block mb-1">Vật phẩm trong đơn:</span>
                 {selectedOrder.items.map((it, idx) => (
                   <div key={idx} className="flex justify-between">
                     <span>{it.name} (×{it.quantity})</span>
-                    <span className="font-bold text-emerald-900">{formatVND(it.price * itemQuantity(it))}</span>
+                    <span className="font-bold text-p-s900">{formatVND(it.price * itemQuantity(it))}</span>
                   </div>
                 ))}
-                <div className="pt-2 border-t border-emerald-200 flex justify-between font-black text-emerald-700 text-sm">
+                <div className="pt-2 border-t border-p-s200 flex justify-between font-black text-p-s700 text-sm">
                   <span>Tổng tiền thanh toán:</span>
                   <span>{formatVND(selectedOrder.totalAmount)}</span>
                 </div>

@@ -82,8 +82,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onBuyNow }) =
 
           {/* AI Verified Badge */}
           {product.latestAiAssessment?.suggestion && (
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-300/40 text-[11px] font-bold text-emerald-800 mb-1.5">
-              <Sparkles className="w-3 h-3 text-emerald-600" />
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-p-s50 border border-p-s300/40 text-[11px] font-bold text-p-s800 mb-1.5">
+              <Sparkles className="w-3 h-3 text-p-s600" />
               AI Verified · {product.condition || 'Tốt'}
             </div>
           )}

@@ -1,11 +1,10 @@
 /* ──────────────────────────────────────────────────────────────────
    REGIVE THEME SYSTEM (CSS Variables & Tailwind v4 Theme Tokens)
-   Supports:
-   - Primary: p-s50, p-s100, ..., p-s900 (text-p-s600, bg-p-s50, etc.)
-   - Neutral: n-s50, n-s100, ..., n-s900 (text-n-s800, bg-n-s50, etc.)
-   - Secondary / Accent: sec-s50, ..., sec-s900 (text-sec-s600, etc.)
+   Palette — "Trust + Hope":
+   - Primary (Navy đậm #024870): p-s50 ... p-s950 → navbar, CTA, footer, sidebar
+   - Neutral (Slate): n-s50 ... n-s950 → nền sáng (bg-white / bg-slate-50) & text
+   - Accent (Cyan #18c9ff + #6bd3f3): sec-s50 ... sec-s900 → điểm nhấn năng động
    - Semantic: s-s* (success), w-s* (warning), e-s* (error), i-s* (info)
-   - Multi-theme switching: .theme-default, .theme-purple, .theme-red, .theme-dark
 ────────────────────────────────────────────────────────────────── */
 
 @theme {
@@ -41,7 +40,7 @@
   --color-n-s900: var(--clk-color-n-s900);
   --color-n-s950: var(--clk-color-n-s950);
 
-  /* Secondary scale (Warm Coral) */
+  /* Secondary / Accent scale (Cyan) */
   --color-sec-s50: var(--clk-color-sec-s50);
   --color-sec-s100: var(--clk-color-sec-s100);
   --color-sec-s200: var(--clk-color-sec-s200);
@@ -128,34 +127,33 @@
 }
 
 /* ──────────────────────────────────────────────────────────────────
-   DEFAULT THEME (ReGive Eco / Fresh Green & Cream)
+   DEFAULT THEME (ReGive — Navy "Trust" + Cyan "Hope")
 ────────────────────────────────────────────────────────────────── */
 :root,
-.theme-default,
-.theme-green {
-  /* Primary Green Palette */
-  --clk-color-primary-300: #86efac;
-  --clk-color-primary-400: #4ade80;
-  --clk-color-primary: #22c55e;
-  --clk-color-primary-600: #16a34a;
-  --clk-color-primary-hover: #16a34a;
-  --clk-color-hover: #f0fdf4;
+.theme-default {
+  /* Primary — Navy Scale (đậm #024870) */
+  --clk-color-primary-300: #7dbede;
+  --clk-color-primary-400: #4aa3cf;
+  --clk-color-primary: #024870;
+  --clk-color-primary-600: #013a5c;
+  --clk-color-primary-hover: #013a5c;
+  --clk-color-hover: #eef7fb;
 
-  --clk-color-p-s50: #f0fdf4;
-  --clk-color-p-s100: #dcfce7;
-  --clk-color-p-s200: #bbf7d0;
-  --clk-color-p-s300: #86efac;
-  --clk-color-p-s400: #4ade80;
-  --clk-color-p-s500: #22c55e;
-  --clk-color-p-s600: #16a34a;
-  --clk-color-p-s700: #15803d;
-  --clk-color-p-s800: #166534;
-  --clk-color-p-s900: #14532d;
-  --clk-color-p-s950: #052e16;
+  --clk-color-p-s50: #eef7fb;
+  --clk-color-p-s100: #d8ecf6;
+  --clk-color-p-s200: #b0d8ec;
+  --clk-color-p-s300: #7dbede;
+  --clk-color-p-s400: #4aa3cf;
+  --clk-color-p-s500: #024870;
+  --clk-color-p-s600: #013a5c;
+  --clk-color-p-s700: #012d47;
+  --clk-color-p-s800: #012238;
+  --clk-color-p-s900: #011a2b;
+  --clk-color-p-s950: #001019;
 
-  /* Neutral Slate / Dark Navy Scale */
-  --clk-color-n-s50: #fff8f0;
-  --clk-color-n-s100: #f8fafc;
+  /* Neutral — Slate Scale (nền sáng + text) */
+  --clk-color-n-s50: #f8fafc;
+  --clk-color-n-s100: #f1f5f9;
   --clk-color-n-s200: #e2e8f0;
   --clk-color-n-s300: #cbd5e1;
   --clk-color-n-s400: #94a3b8;
@@ -166,17 +164,17 @@
   --clk-color-n-s900: #0f172a;
   --clk-color-n-s950: #020617;
 
-  /* Secondary Coral Scale */
-  --clk-color-sec-s50: #fff7ed;
-  --clk-color-sec-s100: #ffedd5;
-  --clk-color-sec-s200: #fed7aa;
-  --clk-color-sec-s300: #fdba74;
-  --clk-color-sec-s400: #fb923c;
-  --clk-color-sec-s500: #f97316;
-  --clk-color-sec-s600: #ea580c;
-  --clk-color-sec-s700: #c2410c;
-  --clk-color-sec-s800: #9a3412;
-  --clk-color-sec-s900: #7c2d12;
+  /* Accent — Cyan Scale (#18c9ff + #6bd3f3) */
+  --clk-color-sec-s50: #eafbff;
+  --clk-color-sec-s100: #d3f6ff;
+  --clk-color-sec-s200: #a8eeff;
+  --clk-color-sec-s300: #6bd3f3;
+  --clk-color-sec-s400: #3ecaf9;
+  --clk-color-sec-s500: #18c9ff;
+  --clk-color-sec-s600: #0aa3d6;
+  --clk-color-sec-s700: #087fae;
+  --clk-color-sec-s800: #066086;
+  --clk-color-sec-s900: #054a67;
 
   /* Semantic - Success */
   --clk-color-s-s50: #f0fdf4;
@@ -226,140 +224,35 @@
   --clk-color-i-s800: #075985;
   --clk-color-i-s900: #0c4a6e;
 
-  /* Layout and Surfaces */
-  --clk-bg-main: #fff8f0;
+  /* Layout and Surfaces (light mode: white / slate-50) */
+  --clk-bg-main: #ffffff;
   --clk-bg-card: #ffffff;
-  --clk-bg-soft: #fff3e6;
+  --clk-bg-soft: #f8fafc;
   --clk-border-subtle: rgba(15, 23, 42, 0.08);
 
   /* Clay Backward Compatibility */
   --clay-bg: var(--clk-bg-main);
   --clay-bg-soft: var(--clk-bg-soft);
   --clay-surface: var(--clk-bg-card);
-  --clay-surface-alt: #f0fdf4;
+  --clay-surface-alt: #eef7fb;
   --clay-green: var(--clk-color-p-s500);
   --clay-green-deep: var(--clk-color-p-s600);
   --clay-green-soft: var(--clk-color-p-s100);
   --clay-coral: var(--clk-color-sec-s400);
   --clay-coral-soft: var(--clk-color-sec-s50);
-  --clay-mint: #34d399;
-  --clay-mint-soft: #ecfdf5;
-  --clay-sky: #60a5fa;
-  --clay-sky-soft: #eff6ff;
+  --clay-mint: #6bd3f3;
+  --clay-mint-soft: #eafbff;
+  --clay-sky: #18c9ff;
+  --clay-sky-soft: #eafbff;
   --clay-yellow: #fbbf24;
   --clay-yellow-soft: #fffbeb;
   --clay-lavender: #a78bfa;
-  --clay-navy: var(--clk-color-n-s900);
-  --clay-navy-700: var(--clk-color-n-s800);
-  --clay-navy-500: var(--clk-color-n-s600);
-  --clay-navy-300: var(--clk-color-n-s400);
-  --clay-navy-100: var(--clk-color-n-s200);
+  --clay-navy: var(--clk-color-p-s900);
+  --clay-navy-700: var(--clk-color-p-s800);
+  --clay-navy-500: var(--clk-color-p-s600);
+  --clay-navy-300: var(--clk-color-p-s400);
+  --clay-navy-100: var(--clk-color-p-s100);
   --clay-border: var(--clk-border-subtle);
 }
 
-/* ──────────────────────────────────────────────────────────────────
-   THEME: PURPLE
-────────────────────────────────────────────────────────────────── */
-.theme-purple {
-  --clk-color-primary-300: #9894ff;
-  --clk-color-primary-400: #847fff;
-  --clk-color-primary: #655fff;
-  --clk-color-primary-600: #5c56e8;
-  --clk-color-primary-hover: #5c56e8;
-  --clk-color-hover: #eeeeee;
 
-  --clk-color-p-s50: #f0efff;
-  --clk-color-p-s100: #cfcdff;
-  --clk-color-p-s200: #b8b5ff;
-  --clk-color-p-s300: #9894ff;
-  --clk-color-p-s400: #847fff;
-  --clk-color-p-s500: #655fff;
-  --clk-color-p-s600: #5c56e8;
-  --clk-color-p-s700: #4a44cc;
-  --clk-color-p-s800: #3c36a8;
-  --clk-color-p-s900: #2c2780;
-  --clk-color-p-s950: #1a1654;
-
-  --clay-green: var(--clk-color-p-s500);
-  --clay-green-deep: var(--clk-color-p-s600);
-  --clay-green-soft: var(--clk-color-p-s100);
-}
-
-/* ──────────────────────────────────────────────────────────────────
-   THEME: RED
-────────────────────────────────────────────────────────────────── */
-.theme-red {
-  --clk-color-primary-300: #e03b78;
-  --clk-color-primary-400: #d62366;
-  --clk-color-primary: #b20845;
-  --clk-color-primary-600: #930638;
-  --clk-color-primary-hover: #930638;
-  --clk-color-hover: #eeeeee;
-
-  --clk-color-p-s50: #fff1f2;
-  --clk-color-p-s100: #ffe4e6;
-  --clk-color-p-s200: #fecdd3;
-  --clk-color-p-s300: #e03b78;
-  --clk-color-p-s400: #d62366;
-  --clk-color-p-s500: #b20845;
-  --clk-color-p-s600: #930638;
-  --clk-color-p-s700: #7a042e;
-  --clk-color-p-s800: #600324;
-  --clk-color-p-s900: #49021c;
-  --clk-color-p-s950: #2d0111;
-
-  --clay-green: var(--clk-color-p-s500);
-  --clay-green-deep: var(--clk-color-p-s600);
-  --clay-green-soft: var(--clk-color-p-s100);
-}
-
-/* ──────────────────────────────────────────────────────────────────
-   THEME: DARK
-────────────────────────────────────────────────────────────────── */
-.theme-dark {
-  --clk-color-primary-300: #2b3168;
-  --clk-color-primary-400: #232856;
-  --clk-color-primary: #1d2144;
-  --clk-color-primary-600: #141733;
-  --clk-color-primary-hover: #141733;
-  --clk-color-hover: #f3f3f3;
-
-  --clk-color-p-s50: #1e293b;
-  --clk-color-p-s100: #334155;
-  --clk-color-p-s200: #475569;
-  --clk-color-p-s300: #2b3168;
-  --clk-color-p-s400: #232856;
-  --clk-color-p-s500: #1d2144;
-  --clk-color-p-s600: #141733;
-  --clk-color-p-s700: #0e1024;
-  --clk-color-p-s800: #090a17;
-  --clk-color-p-s900: #04050b;
-  --clk-color-p-s950: #020205;
-
-  --clk-color-n-s50: #090d16;
-  --clk-color-n-s100: #0f172a;
-  --clk-color-n-s200: #1e293b;
-  --clk-color-n-s300: #334155;
-  --clk-color-n-s400: #64748b;
-  --clk-color-n-s500: #94a3b8;
-  --clk-color-n-s600: #cbd5e1;
-  --clk-color-n-s700: #e2e8f0;
-  --clk-color-n-s800: #f1f5f9;
-  --clk-color-n-s900: #f8fafc;
-  --clk-color-n-s950: #ffffff;
-
-  --clk-bg-main: #0b1120;
-  --clk-bg-card: #131d31;
-  --clk-bg-soft: #1e293b;
-  --clk-border-subtle: rgba(255, 255, 255, 0.1);
-
-  --clay-bg: var(--clk-bg-main);
-  --clay-bg-soft: var(--clk-bg-soft);
-  --clay-surface: var(--clk-bg-card);
-  --clay-navy: var(--clk-color-n-s900);
-  --clay-navy-700: var(--clk-color-n-s800);
-  --clay-navy-500: var(--clk-color-n-s600);
-  --clay-navy-300: var(--clk-color-n-s400);
-  --clay-navy-100: var(--clk-color-n-s200);
-  --clay-border: var(--clk-border-subtle);
-}

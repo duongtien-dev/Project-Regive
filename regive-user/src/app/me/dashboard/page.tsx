@@ -32,9 +32,9 @@ function getImpactBadge(totalMoney: number, volCount: number) {
     return { title: 'Đại Sứ Thiện Nguyện', level: 'Bạch Kim', color: 'from-amber-500 to-yellow-600', icon: '', nextGoal: 'Đạt danh hiệu cao nhất' };
   }
   if (totalMoney >= 1000000 || volCount >= 2) {
-    return { title: 'Trái Tim Vàng', level: 'Vàng', color: 'from-emerald-600 to-teal-700', icon: '', nextGoal: 'Ủng hộ thêm để đạt hạng Bạch Kim' };
+    return { title: 'Trái Tim Vàng', level: 'Vàng', color: 'from-p-s600 to-sec-s700', icon: '', nextGoal: 'Ủng hộ thêm để đạt hạng Bạch Kim' };
   }
-  return { title: 'Hạt Giống Hy Vọng', level: 'Đồng Hành', color: 'from-teal-600 to-sky-700', icon: '', nextGoal: 'Tích lũy từ 1.000.000đ để đạt Trái Tim Vàng' };
+  return { title: 'Hạt Giống Hy Vọng', level: 'Đồng Hành', color: 'from-sec-s600 to-sky-700', icon: '', nextGoal: 'Tích lũy từ 1.000.000đ để đạt Trái Tim Vàng' };
 }
 
 export default function UserDashboardPage() {
@@ -88,7 +88,7 @@ export default function UserDashboardPage() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+              <div className="w-12 h-12 rounded-xl bg-p-s50 text-p-s600 flex items-center justify-center shrink-0">
                 <Gift className="w-6 h-6" />
               </div>
               <div>
@@ -96,7 +96,7 @@ export default function UserDashboardPage() {
                 <span className="text-lg font-black text-gray-900 truncate block">
                   {formatVND(totalDonatedMoney)}
                 </span>
-                <span className="text-[11px] text-emerald-600 font-semibold">
+                <span className="text-[11px] text-p-s600 font-semibold">
                   {donations.length} lượt đóng góp ({productDonations.length} hiện vật)
                 </span>
               </div>
@@ -118,13 +118,13 @@ export default function UserDashboardPage() {
             </div>
 
             <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center shrink-0">
+              <div className="w-12 h-12 rounded-xl bg-sec-s50 text-sec-s600 flex items-center justify-center shrink-0">
                 <Package className="w-6 h-6" />
               </div>
               <div>
                 <span className="text-xs text-gray-400 font-medium block">Đơn hàng Marketplace</span>
                 <span className="text-xl font-black text-gray-900 block">{orders.length}</span>
-                <span className="text-[11px] text-teal-600 font-semibold">Vật phẩm trao tặng</span>
+                <span className="text-[11px] text-sec-s600 font-semibold">Vật phẩm trao tặng</span>
               </div>
             </div>
 
@@ -191,8 +191,8 @@ export default function UserDashboardPage() {
         </div>
 
         {/* Personal ESG & Green Footprint */}
-        <div className="bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 rounded-3xl p-6 sm:p-8 border border-emerald-200/80 shadow-sm space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-100 pb-3">
+        <div className="bg-gradient-to-br from-p-s50 via-sec-s50 to-cyan-50 rounded-3xl p-6 sm:p-8 border border-p-s200/80 shadow-sm space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-p-s100 pb-3">
             <div className="flex items-center gap-2">
               <span className="text-xl"></span>
               <div>
@@ -200,29 +200,29 @@ export default function UserDashboardPage() {
                 <p className="text-xs text-gray-500">Lượng hóa giá trị bảo vệ môi trường và đóng góp cộng đồng từ hành trình của bạn</p>
               </div>
             </div>
-            <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-600 text-white self-start sm:self-auto">
+            <span className="text-xs font-bold px-3 py-1 rounded-full bg-p-s600 text-white self-start sm:self-auto">
               Chỉ số ESG Cá Nhân
             </span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-1">
-            <div className="bg-white/90 p-4 rounded-2xl border border-emerald-100 shadow-xs">
+            <div className="bg-white/90 p-4 rounded-2xl border border-p-s100 shadow-xs">
               <span className="text-xs text-gray-400 font-medium block">Vật phẩm đã tuần hoàn</span>
-              <span className="text-2xl font-black text-emerald-800 font-mono mt-1 block">
+              <span className="text-2xl font-black text-p-s800 font-mono mt-1 block">
                 {productDonations.length} món
               </span>
-              <span className="text-[10px] text-emerald-600 font-semibold block mt-1">Được cứu khỏi bãi rác</span>
+              <span className="text-[10px] text-p-s600 font-semibold block mt-1">Được cứu khỏi bãi rác</span>
             </div>
 
-            <div className="bg-white/90 p-4 rounded-2xl border border-emerald-100 shadow-xs">
+            <div className="bg-white/90 p-4 rounded-2xl border border-p-s100 shadow-xs">
               <span className="text-xs text-gray-400 font-medium block">Rác thải giảm thiểu</span>
-              <span className="text-2xl font-black text-teal-800 font-mono mt-1 block">
+              <span className="text-2xl font-black text-sec-s800 font-mono mt-1 block">
                 ~{(productDonations.length * 1.2).toFixed(1)} kg
               </span>
-              <span className="text-[10px] text-teal-600 font-semibold block mt-1">Chuyển hướng tái sinh</span>
+              <span className="text-[10px] text-sec-s600 font-semibold block mt-1">Chuyển hướng tái sinh</span>
             </div>
 
-            <div className="bg-white/90 p-4 rounded-2xl border border-emerald-100 shadow-xs">
+            <div className="bg-white/90 p-4 rounded-2xl border border-p-s100 shadow-xs">
               <span className="text-xs text-gray-400 font-medium block">Giảm phát thải CO2</span>
               <span className="text-2xl font-black text-sky-800 font-mono mt-1 block">
                 ~{(productDonations.length * 1.2 * 2.5).toFixed(1)} kg
@@ -230,7 +230,7 @@ export default function UserDashboardPage() {
               <span className="text-[10px] text-sky-600 font-semibold block mt-1">Tiết kiệm năng lượng sản xuất</span>
             </div>
 
-            <div className="bg-white/90 p-4 rounded-2xl border border-emerald-100 shadow-xs">
+            <div className="bg-white/90 p-4 rounded-2xl border border-p-s100 shadow-xs">
               <span className="text-xs text-gray-400 font-medium block">Bữa ăn dinh dưỡng tạo ra</span>
               <span className="text-2xl font-black text-amber-700 font-mono mt-1 block">
                 ~{Math.max(1, Math.floor(totalDonatedMoney / 30000))} bữa
@@ -250,7 +250,7 @@ export default function UserDashboardPage() {
           </div>
           <div className="flex flex-wrap gap-2.5">
             <Link href="/campaigns">
-              <Button className="h-10 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold border-0">
+              <Button className="h-10 rounded-xl bg-p-s500 hover:bg-p-s400 text-slate-950 font-bold border-0">
                 Ủng hộ chiến dịch
               </Button>
             </Link>
@@ -275,10 +275,10 @@ export default function UserDashboardPage() {
           <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm space-y-4">
             <div className="flex items-center justify-between border-b border-gray-100 pb-3">
               <h3 className="font-bold text-gray-900 text-base flex items-center gap-2">
-                <Gift className="w-4 h-4 text-emerald-600" />
+                <Gift className="w-4 h-4 text-p-s600" />
                 <span>Quyên góp gần đây</span>
               </h3>
-              <Link href="/me/donations" className="text-xs font-semibold text-emerald-600 hover:underline">
+              <Link href="/me/donations" className="text-xs font-semibold text-p-s600 hover:underline">
                 Xem tất cả ({donations.length})
               </Link>
             </div>

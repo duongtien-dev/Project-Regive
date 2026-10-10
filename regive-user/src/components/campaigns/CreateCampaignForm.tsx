@@ -125,7 +125,7 @@ export const CreateCampaignForm: React.FC<CreateCampaignFormProps> = ({ onSucces
   return (
     <section className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
       <div className="px-5 sm:px-7 py-5 border-b border-gray-100 bg-slate-50/70">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-100 mb-3">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-p-s50 text-p-s700 text-xs font-bold border border-p-s100 mb-3">
           <Sparkles className="w-3.5 h-3.5" />
           <span>Đề xuất chiến dịch</span>
         </div>
@@ -273,12 +273,12 @@ export const CreateCampaignForm: React.FC<CreateCampaignFormProps> = ({ onSucces
             />
           </Form.Item>
 
-          <div className="p-4 bg-teal-50/60 rounded-2xl border border-teal-100 space-y-2 mb-6">
+          <div className="p-4 bg-sec-s50/60 rounded-2xl border border-sec-s100 space-y-2 mb-6">
             <div className="flex items-center justify-between gap-3">
-              <h3 className="font-bold text-xs uppercase tracking-wider text-teal-900">
+              <h3 className="font-bold text-xs uppercase tracking-wider text-sec-s900">
                 Vật phẩm hiện vật cần kêu gọi
               </h3>
-              <span className="text-[11px] text-teal-700 whitespace-nowrap">Không bắt buộc</span>
+              <span className="text-[11px] text-sec-s700 whitespace-nowrap">Không bắt buộc</span>
             </div>
             <Form.List name="targetItems">
               {(fields, { add, remove }) => (
@@ -308,7 +308,7 @@ export const CreateCampaignForm: React.FC<CreateCampaignFormProps> = ({ onSucces
                     onClick={() => add()}
                     block
                     icon={<Plus className="w-4 h-4" />}
-                    className="rounded-xl border-teal-300 text-teal-800"
+                    className="rounded-xl border-sec-s300 text-sec-s800"
                   >
                     Thêm vật phẩm kêu gọi
                   </Button>
@@ -330,7 +330,7 @@ export const CreateCampaignForm: React.FC<CreateCampaignFormProps> = ({ onSucces
               htmlType="submit"
               loading={submitting}
               size="large"
-              className="h-12 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-600/20"
+              className="h-12 rounded-xl bg-p-s600 hover:bg-p-s700 text-white font-bold text-sm shadow-md shadow-p-s600/20"
             >
               Gửi đề xuất phê duyệt
             </Button>

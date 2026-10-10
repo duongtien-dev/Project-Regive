@@ -61,7 +61,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           {
             label: 'Yêu cầu hỗ trợ của tôi',
             href: '/me/support-requests',
-            icon: <LifeBuoy className="w-4 h-4 text-emerald-600" />,
+            icon: <LifeBuoy className="w-4 h-4 text-p-s600" />,
           },
         ]
       : []),
@@ -95,7 +95,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm space-y-6 sticky top-24">
                 {/* User mini summary */}
                 <div className="flex items-center gap-3 pb-5 border-b border-gray-100">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white font-bold flex items-center justify-center text-lg shadow-sm">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-p-s500 to-p-s400 text-white font-bold flex items-center justify-center text-lg shadow-sm">
                     {user?.fullName?.charAt(0).toUpperCase()}
                   </div>
                   <div className="overflow-hidden">
@@ -103,7 +103,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                       {user?.fullName}
                     </h3>
                     <p className="text-xs text-gray-400 truncate">{user?.email}</p>
-                    <span className="inline-block mt-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">
+                    <span className="inline-block mt-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-p-s100 text-p-s700">
                       {user?.role === 'BENEFICIARY' ? 'Người thụ hưởng' : 'Thành viên'}
                     </span>
                   </div>
@@ -119,8 +119,8 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                         href={item.href}
                         className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
                           isActive
-                            ? 'bg-emerald-50 text-emerald-700 font-semibold shadow-xs'
-                            : 'text-gray-600 hover:bg-gray-50 hover:text-emerald-600'
+                            ? 'bg-p-s100 text-p-s700 font-semibold shadow-xs'
+                            : 'text-n-s600 hover:bg-n-s50 hover:text-p-s600'
                         }`}
                       >
                         {item.icon}

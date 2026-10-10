@@ -13,7 +13,7 @@ export default function PolicyPage() {
         {/* Section 1 */}
         <section className="space-y-3">
           <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-emerald-600" />
+            <ShieldCheck className="w-5 h-5 text-p-s600" />
             <span>1. Nguyên Tắc Minh Bạch Tài Chính</span>
           </h2>
           <p>
@@ -24,7 +24,7 @@ export default function PolicyPage() {
         {/* Section 2 */}
         <section className="space-y-3">
           <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-            <RefreshCw className="w-5 h-5 text-teal-600" />
+            <RefreshCw className="w-5 h-5 text-sec-s600" />
             <span>2. Quy Định Tiếp Nhận Vật Phẩm Quyên Góp</span>
           </h2>
           <p>

@@ -4,14 +4,14 @@ import { Heart, ShieldCheck, Mail, Phone, MapPin, Sprout } from 'lucide-react';
 
 export const AppFooter: React.FC = () => {
   return (
-    <footer className="bg-n-s900 text-n-s300 pt-16 pb-10 relative overflow-hidden">
+    <footer className="bg-p-s900 text-n-s300 pt-16 pb-10 relative overflow-hidden">
       {/* Decorative blobs */}
       <div
-        className="absolute -top-16 -right-16 w-60 h-60 rounded-full bg-[radial-gradient(circle,rgba(34,197,94,0.12)_0%,transparent_70%)] pointer-events-none"
+        className="absolute -top-16 -right-16 w-60 h-60 rounded-full bg-[radial-gradient(circle,rgba(24,201,255,0.16)_0%,transparent_70%)] pointer-events-none"
         aria-hidden="true"
       />
       <div
-        className="absolute -bottom-10 -left-10 w-44 h-44 rounded-full bg-[radial-gradient(circle,rgba(96,165,250,0.10)_0%,transparent_70%)] pointer-events-none"
+        className="absolute -bottom-10 -left-10 w-44 h-44 rounded-full bg-[radial-gradient(circle,rgba(107,211,243,0.14)_0%,transparent_70%)] pointer-events-none"
         aria-hidden="true"
       />
 
@@ -23,11 +23,11 @@ export const AppFooter: React.FC = () => {
               href="/"
               className="inline-flex items-center gap-3 no-underline mb-4 group"
             >
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-p-s500 to-p-s400 flex items-center justify-center shadow-lg shadow-p-s500/25 group-hover:scale-105 transition-transform">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-sec-s500 to-sec-s400 flex items-center justify-center shadow-lg shadow-sec-s500/30 group-hover:scale-105 transition-transform">
                 <Heart className="w-6 h-6 fill-white text-white" />
               </div>
               <span className="font-bold text-2xl text-white tracking-tight">
-                Re<span className="text-p-s400">Give</span>
+                Re<span className="text-sec-s400">Give</span>
               </span>
             </Link>
 
@@ -124,7 +124,7 @@ export const AppFooter: React.FC = () => {
             {/* CTA mini */}
             <Link
               href="/campaigns"
-              className="inline-flex items-center gap-2 mt-5 px-5 py-2.5 rounded-full bg-gradient-to-r from-p-s500 to-p-s400 text-white text-xs font-bold no-underline shadow-md shadow-p-s500/25 hover:opacity-90 transition-opacity"
+              className="inline-flex items-center gap-2 mt-5 px-5 py-2.5 rounded-full bg-gradient-to-r from-sec-s500 to-sec-s400 text-white text-xs font-bold no-underline shadow-md shadow-sec-s500/30 hover:opacity-90 transition-opacity"
             >
               <Heart className="w-3.5 h-3.5 fill-white" />
               Ủng hộ ngay
@@ -136,7 +136,7 @@ export const AppFooter: React.FC = () => {
         <div className="pt-7 flex flex-wrap items-center justify-between gap-3">
           <p className="text-xs text-n-s500 m-0">
             © {new Date().getFullYear()}{' '}
-            <span className="text-p-s400 font-bold">ReGive</span> Platform — Đồng lòng sẻ chia yêu thương
+            <span className="text-sec-s400 font-bold">ReGive</span> Platform — Đồng lòng sẻ chia yêu thương
           </p>
           <p className="text-xs text-n-s600 m-0">
             Đồ án Capstone 2 · ReGive Community Platform

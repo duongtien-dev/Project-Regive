@@ -96,26 +96,26 @@ export default function MyVolunteersPage() {
 
                   {/* Schedule Card if Approved */}
                   {isApproved && v.schedule && (v.schedule.date || v.schedule.location) && (
-                    <div className="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200 text-xs text-emerald-950 space-y-2">
-                      <span className="font-bold uppercase tracking-wider text-[11px] text-emerald-800 block">
+                    <div className="p-4 rounded-xl bg-p-s50/70 border border-p-s200 text-xs text-p-s950 space-y-2">
+                      <span className="font-bold uppercase tracking-wider text-[11px] text-p-s800 block">
                         Lịch phân công tình nguyện chính thức:
                       </span>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         {v.schedule.date && (
                           <div className="flex items-center gap-1.5">
-                            <Calendar className="w-4 h-4 text-emerald-600 shrink-0" />
+                            <Calendar className="w-4 h-4 text-p-s600 shrink-0" />
                             <span>Ngày: {formatDate(v.schedule.date)}</span>
                           </div>
                         )}
                         {v.schedule.timeSlot && (
                           <div className="flex items-center gap-1.5">
-                            <Clock className="w-4 h-4 text-emerald-600 shrink-0" />
+                            <Clock className="w-4 h-4 text-p-s600 shrink-0" />
                             <span>Khung giờ: {v.schedule.timeSlot}</span>
                           </div>
                         )}
                         {v.schedule.location && (
                           <div className="flex items-center gap-1.5">
-                            <MapPin className="w-4 h-4 text-emerald-600 shrink-0" />
+                            <MapPin className="w-4 h-4 text-p-s600 shrink-0" />
                             <span>Địa điểm: {v.schedule.location}</span>
                           </div>
                         )}
