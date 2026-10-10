@@ -37,6 +37,32 @@ function getImpactBadge(totalMoney: number, volCount: number) {
   return { title: 'Hạt Giống Hy Vọng', level: 'Đồng Hành', color: 'from-sec-s600 to-sky-700', icon: '', nextGoal: 'Tích lũy từ 1.000.000đ để đạt Trái Tim Vàng' };
 }
 
+function formatCompact(n: number) {
+  if (n >= 1000000) {
+    const m = n / 1000000;
+    return `${m >= 10 ? Math.round(m) : m.toFixed(1)}tr`;
+  }
+  if (n >= 1000) return `${Math.round(n / 1000)}k`;
+  return `${n}`;
+}
+
+function buildMonthlyData(donations: Donation[]) {
+  const now = new Date();
+  const months: { key: string; label: string; total: number }[] = [];
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    months.push({ key: `${d.getFullYear()}-${d.getMonth()}`, label: `T${d.getMonth() + 1}`, total: 0 });
+  }
+  donations.forEach((don) => {
+    if (don.type !== 'money' || don.status !== 'completed') return;
+    const d = new Date(don.createdAt);
+    const key = `${d.getFullYear()}-${d.getMonth()}`;
+    const m = months.find((x) => x.key === key);
+    if (m) m.total += don.amount || 0;
+  });
+  return months;
+}
+
 export default function UserDashboardPage() {
   const { user } = useAuthStore();
   const [donations, setDonations] = useState<Donation[]>([]);
@@ -75,6 +101,8 @@ export default function UserDashboardPage() {
 
   const productDonations = donations.filter((d) => d.type === 'product');
   const badgeInfo = getImpactBadge(totalDonatedMoney, volunteers.length);
+  const monthlyData = buildMonthlyData(donations);
+  const maxMonthly = Math.max(...monthlyData.map((m) => m.total), 1);
 
   return (
     <DashboardLayout
@@ -157,6 +185,32 @@ export default function UserDashboardPage() {
             )}
           </div>
         )}
+
+        {/* Donation Trend Chart */}
+        <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm">
+          <div className="flex items-center justify-between border-b border-gray-100 pb-3 mb-5">
+            <h3 className="font-bold text-gray-900 text-base flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-p-s600" />
+              <span>Xu hướng quyên góp</span>
+            </h3>
+            <span className="text-xs text-gray-400">6 tháng gần đây</span>
+          </div>
+          <div className="flex items-end gap-3 sm:gap-4">
+            {monthlyData.map((m) => (
+              <div key={m.key} className="flex-1 flex flex-col items-center gap-1.5 min-w-0">
+                <span className="text-[10px] font-bold text-n-s700 truncate">
+                  {m.total > 0 ? formatCompact(m.total) : ''}
+                </span>
+                <div
+                  className="w-full max-w-[44px] rounded-t-lg bg-gradient-to-t from-p-s500 to-sec-s400 transition-all"
+                  style={{ height: `${m.total > 0 ? Math.max(8, (m.total / maxMonthly) * 140) : 4}px` }}
+                  title={m.total > 0 ? formatVND(m.total) : 'Không có dữ liệu'}
+                />
+                <span className="text-[10px] text-n-s500">{m.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* Impact Passport Card */}
         <div className={`rounded-3xl p-6 sm:p-8 text-white shadow-xl bg-gradient-to-r ${badgeInfo.color} relative overflow-hidden`}>
@@ -241,7 +295,7 @@ export default function UserDashboardPage() {
         </div>
 
         {/* Quick Action Shortcuts */}
-        <div className="bg-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="bg-p-s900 rounded-3xl p-6 sm:p-8 text-white shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <h3 className="text-lg font-bold">Chung tay lan tỏa yêu thương</h3>
             <p className="text-xs text-slate-300 max-w-md">
@@ -250,7 +304,7 @@ export default function UserDashboardPage() {
           </div>
           <div className="flex flex-wrap gap-2.5">
             <Link href="/campaigns">
-              <Button className="h-10 rounded-xl bg-p-s500 hover:bg-p-s400 text-slate-950 font-bold border-0">
+              <Button className="h-10 rounded-xl bg-sec-s500 hover:bg-sec-s600 text-white font-bold border-0">
                 Ủng hộ chiến dịch
               </Button>
             </Link>

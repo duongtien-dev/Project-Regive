@@ -1,0 +1,223 @@
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { Badge, Drawer, Dropdown } from 'antd';
+import {
+  Heart,
+  Bell,
+  Menu,
+  X,
+  LogOut,
+  LayoutDashboard,
+  Gift,
+  HandHeart,
+  Package,
+  CreditCard,
+  LifeBuoy,
+  User as UserIcon,
+  ChevronDown,
+} from 'lucide-react';
+import { useAuthStore } from '@/store/useAuthStore';
+import { AuthGuard } from '@/components/shared/AuthGuard';
+import { notificationService } from '@/services/notificationService';
+
+interface DashboardShellProps {
+  children: React.ReactNode;
+  title?: string;
+  subtitle?: string;
+}
+
+export const DashboardShell: React.FC<DashboardShellProps> = ({
+  children,
+  title,
+  subtitle,
+}) => {
+  const pathname = usePathname();
+  const router = useRouter();
+  const { user, logout } = useAuthStore();
+  const [unread, setUnread] = useState(0);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      notificationService
+        .listMine({ unread: true })
+        .then((items) => setUnread(items.length))
+        .catch(() => {});
+    }
+  }, [user, pathname]);
+
+  const handleLogout = () => {
+    logout();
+    router.push('/login');
+  };
+
+  const navItems = [
+    { label: 'Tổng quan cá nhân', href: '/me/dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
+    { label: 'Lịch sử quyên góp', href: '/me/donations', icon: <Gift className="w-4 h-4" /> },
+    { label: 'Đăng ký tình nguyện', href: '/me/volunteers', icon: <HandHeart className="w-4 h-4" /> },
+    { label: 'Đơn hàng Marketplace', href: '/me/orders', icon: <Package className="w-4 h-4" /> },
+    { label: 'Lịch sử thanh toán', href: '/me/payments', icon: <CreditCard className="w-4 h-4" /> },
+    ...(user?.role === 'BENEFICIARY'
+      ? [
+          {
+            label: 'Yêu cầu hỗ trợ của tôi',
+            href: '/me/support-requests',
+            icon: <LifeBuoy className="w-4 h-4" />,
+          },
+        ]
+      : []),
+    { label: 'Thông báo', href: '/notifications', icon: <Bell className="w-4 h-4" /> },
+    { label: 'Cài đặt tài khoản', href: '/profile', icon: <UserIcon className="w-4 h-4" /> },
+  ];
+
+  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+
+  const brand = (
+    <div className="flex items-center gap-2.5">
+      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-sec-s500 to-sec-s400 flex items-center justify-center shadow-md shadow-sec-s500/30">
+        <Heart className="w-5 h-5 fill-white text-white" />
+      </div>
+      <span className="font-bold text-lg tracking-tight">
+        Re<span className="text-sec-s400">Give</span>
+      </span>
+    </div>
+  );
+
+  const sidebarNav = (
+    <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
+      {navItems.map((item) => {
+        const active = isActive(item.href);
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
+            onClick={() => setMobileOpen(false)}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm no-underline transition-colors ${
+              active
+                ? 'bg-white/10 text-white font-semibold border border-white/10'
+                : 'text-n-s300 hover:bg-white/5 hover:text-white'
+            }`}
+          >
+            <span className={active ? 'text-sec-s400' : 'text-n-s400'}>{item.icon}</span>
+            <span>{item.label}</span>
+          </Link>
+        );
+      })}
+    </nav>
+  );
+
+  const userMenuItems = [
+    { key: 'dashboard', label: <Link href="/me/dashboard">Tổng quan của tôi</Link> },
+    { key: 'profile', label: <Link href="/profile">Cài đặt tài khoản</Link> },
+    { type: 'divider' as const },
+    { key: 'logout', label: 'Đăng xuất', danger: true, onClick: handleLogout },
+  ];
+
+  return (
+    <AuthGuard>
+      <div className="flex min-h-dvh w-full">
+        {/* ── Desktop Sidebar ── */}
+        <aside className="hidden lg:flex flex-col w-64 shrink-0 bg-p-s900 text-white sticky top-0 h-dvh">
+          <div className="h-16 px-5 flex items-center border-b border-white/10">{brand}</div>
+          {sidebarNav}
+          <div className="p-3 border-t border-white/10">
+            <div className="flex items-center gap-3 px-2 py-2">
+              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-p-s500 to-p-s400 text-white flex items-center justify-center text-sm font-black shrink-0">
+                {user?.fullName?.charAt(0).toUpperCase()}
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-bold text-white truncate">{user?.fullName}</p>
+                <p className="text-[11px] text-n-s400 truncate">{user?.email}</p>
+              </div>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="mt-2 w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-n-s200 text-sm font-semibold border border-white/10 transition-colors cursor-pointer"
+            >
+              <LogOut className="w-4 h-4" /> Đăng xuất
+            </button>
+          </div>
+        </aside>
+
+        {/* ── Mobile Drawer ── */}
+        <Drawer
+          placement="left"
+          onClose={() => setMobileOpen(false)}
+          open={mobileOpen}
+          width={280}
+          closeIcon={<X className="w-5 h-5 text-white" />}
+          styles={{ body: { padding: 0, background: '#011a2b' } }}
+        >
+          <div className="flex flex-col h-full text-white">
+            <div className="h-16 px-5 flex items-center border-b border-white/10">{brand}</div>
+            {sidebarNav}
+            <div className="p-3 border-t border-white/10">
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-n-s200 text-sm font-semibold border border-white/10 transition-colors cursor-pointer"
+              >
+                <LogOut className="w-4 h-4" /> Đăng xuất
+              </button>
+            </div>
+          </div>
+        </Drawer>
+
+        {/* ── Main column ── */}
+        <div className="flex-1 min-w-0 flex flex-col bg-slate-50">
+          {/* Topbar */}
+          <header className="h-16 sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-n-s200 flex items-center justify-between px-4 sm:px-6">
+            <div className="flex items-center gap-3 min-w-0">
+              <button
+                onClick={() => setMobileOpen(true)}
+                className="lg:hidden p-2 rounded-xl border border-n-s200 text-n-s700 cursor-pointer"
+                aria-label="Mở menu điều hướng"
+              >
+                <Menu className="w-5 h-5" />
+              </button>
+              <div className="min-w-0">
+                {title && (
+                  <h1 className="text-base sm:text-lg font-bold text-n-s900 truncate leading-tight">
+                    {title}
+                  </h1>
+                )}
+                {subtitle && (
+                  <p className="text-xs text-n-s500 truncate hidden sm:block">{subtitle}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2.5 shrink-0">
+              <Link
+                href="/notifications"
+                className="relative p-2.5 rounded-xl border border-n-s200 text-n-s600 no-underline hover:border-p-s400 hover:text-p-s600 transition-colors"
+                aria-label="Thông báo"
+              >
+                <Badge count={unread} size="small" offset={[3, -3]}>
+                  <Bell className="w-5 h-5" />
+                </Badge>
+              </Link>
+
+              <Dropdown menu={{ items: userMenuItems }} trigger={['click']} placement="bottomRight">
+                <button className="flex items-center gap-2 pl-1.5 pr-2.5 py-1.5 rounded-full border border-n-s200 bg-white hover:border-p-s400 transition-colors cursor-pointer">
+                  <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-p-s100 to-p-s200 text-p-s700 font-black text-sm flex items-center justify-center">
+                    {user?.fullName?.charAt(0).toUpperCase()}
+                  </div>
+                  <span className="hidden sm:block text-xs font-bold text-n-s800 max-w-[120px] truncate">
+                    {user?.fullName}
+                  </span>
+                  <ChevronDown className="w-4 h-4 text-n-s400 hidden sm:block" />
+                </button>
+              </Dropdown>
+            </div>
+          </header>
+
+          {/* Main content */}
+          <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
+        </div>
+      </div>
+    </AuthGuard>
+  );
+};

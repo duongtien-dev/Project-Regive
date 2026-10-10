@@ -3,11 +3,11 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Button, Alert, Tag } from 'antd';
-import { Bell, CheckCheck, CheckCircle2, Clock, ArrowRight } from 'lucide-react';
+import { CheckCheck, CheckCircle2, Clock, ArrowRight } from 'lucide-react';
 import { notificationService } from '@/services/notificationService';
 import { Notification } from '@/types';
 import { formatDateTime } from '@/lib/format';
-import { AuthGuard } from '@/components/shared/AuthGuard';
+import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { TableSkeleton } from '@/components/shared/LoadingSkeleton';
 import { EmptyState } from '@/components/shared/EmptyState';
 
@@ -63,20 +63,12 @@ export default function NotificationsPage() {
   };
 
   return (
-    <AuthGuard>
-      <div className="max-w-4xl mx-auto px-4 py-10 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-200 pb-5">
-          <div>
-            <h1 className="text-2xl font-black text-gray-900 flex items-center gap-2">
-              <Bell className="w-6 h-6 text-p-s600" />
-              <span>Thông Báo Của Bạn</span>
-            </h1>
-            <p className="text-xs text-gray-500 mt-1">
-              Cập nhật trạng thái quyên góp, tình nguyện và đơn hàng của bạn
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3">
+    <DashboardLayout
+      title="Thông Báo Của Bạn"
+      subtitle="Cập nhật trạng thái quyên góp, tình nguyện và đơn hàng của bạn"
+    >
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-end gap-3">
             <Button
               size="small"
               onClick={() => setUnreadOnly(!unreadOnly)}
@@ -92,7 +84,6 @@ export default function NotificationsPage() {
               Đánh dấu tất cả đã đọc
             </Button>
           </div>
-        </div>
 
         {error && <Alert message="Lỗi" description={error} type="error" showIcon />}
 
@@ -163,6 +154,6 @@ export default function NotificationsPage() {
           </div>
         )}
       </div>
-    </AuthGuard>
+    </DashboardLayout>
   );
 }

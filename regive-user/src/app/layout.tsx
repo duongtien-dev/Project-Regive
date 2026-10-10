@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Be_Vietnam_Pro } from "next/font/google";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Providers } from "./providers";
-import { AppHeader } from "@/components/layout/AppHeader";
-import { AppFooter } from "@/components/layout/AppFooter";
+import { AppShell } from "@/components/layout/AppShell";
 import "./globals.css";
 
 const beVietnamPro = Be_Vietnam_Pro({
@@ -29,9 +28,7 @@ export default function RootLayout({
       <body className="min-h-dvh flex flex-col bg-n-s50 text-n-s900">
         <AntdRegistry>
           <Providers>
-            <AppHeader />
-            <main className="flex-1">{children}</main>
-            <AppFooter />
+            <AppShell>{children}</AppShell>
           </Providers>
         </AntdRegistry>
       </body>
