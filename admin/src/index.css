@@ -4,16 +4,16 @@
   --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Fraunces", Georgia, serif;
 
-  --color-ink: #10231a;
-  --color-forest: #163528;
-  --color-moss: #2f6a4a;
-  --color-leaf: #3f8f62;
-  --color-lime: #d8f36a;
-  --color-sand: #f4efe4;
-  --color-paper: #fbf8f1;
-  --color-mist: #e7efe8;
-  --color-clay: #c45c26;
-  --color-rose: #b42318;
+  --color-ink: #0f172a;
+  --color-forest: #024870;
+  --color-moss: #0aa3d6;
+  --color-leaf: #0ea5e9;
+  --color-lime: #18c9ff;
+  --color-sand: #f8fafc;
+  --color-paper: #ffffff;
+  --color-mist: #f1f5f9;
+  --color-clay: #d97706;
+  --color-rose: #dc2626;
 }
 
 html,
