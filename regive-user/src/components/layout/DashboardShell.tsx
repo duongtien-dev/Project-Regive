@@ -170,7 +170,7 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({
         </Drawer>
 
         {/* ── Main column ── */}
-        <div className="flex-1 min-w-0 flex flex-col bg-slate-50">
+        <div className="flex-1 min-w-0 flex flex-col bg-gradient-to-br from-n-s50 via-white to-p-s50/30">
           {/* Topbar */}
           <header className="h-16 sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-n-s200 flex items-center justify-between px-4 sm:px-6">
             <div className="flex items-center gap-3 min-w-0">
