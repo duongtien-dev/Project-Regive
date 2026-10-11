@@ -80,7 +80,7 @@ export const QuickVolunteerModal: React.FC<QuickVolunteerModalProps> = ({
       open={open}
       onCancel={handleModalClose}
       footer={null}
-      destroyOnClose
+      destroyOnHidden
       centered
       className="rounded-2xl"
     >

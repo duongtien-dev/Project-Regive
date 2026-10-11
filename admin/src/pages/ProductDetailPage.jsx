@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { aiApi, inventoryApi, productApi } from '../api/client';
+import { aiApi, inventoryApi, productApi, uploadApi } from '../api/client';
 import {
   Badge,
   Button,
   Card,
   ErrorBox,
   Field,
+  ImageUpload,
   Input,
   PageHeader,
   Select,
@@ -53,6 +54,7 @@ export default function ProductDetailPage() {
   const [edit, setEdit] = useState({ name: '', description: '', category: '', price: 0, storageLocation: '' });
   const [stockQty, setStockQty] = useState(1);
   const [busy, setBusy] = useState('');
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   async function load() {
     setLoading(true);
@@ -104,6 +106,29 @@ export default function ProductDetailPage() {
     }
   }
 
+  async function handleImageUpload(file) {
+    if (!file) return;
+    setUploadingImage(true);
+    try {
+      // If file is a File object, upload it first
+      let imageUrl = file;
+      if (file instanceof File) {
+        const res = await uploadApi.single(file);
+        imageUrl = res.data?.url;
+      }
+
+      if (imageUrl) {
+        await productApi.update(id, { images: [...(product.images || []), imageUrl] });
+        toast.success('Đã thêm ảnh sản phẩm');
+        await load();
+      }
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setUploadingImage(false);
+    }
+  }
+
   if (loading) return <ProductDetailSkeleton />;
   if (error) return <ErrorBox error={error} onRetry={load} />;
   if (!product) return null;
@@ -152,11 +177,18 @@ export default function ProductDetailPage() {
                 <img key={src} src={src} alt={`Ảnh sản phẩm ${product.name}`} className="h-28 w-28 rounded-2xl object-cover" />
               ))}
             </div>
-          ) : (
-            <div className="flex h-28 items-center justify-center rounded-2xl bg-mist text-sm text-ink/50">
-              Chưa có ảnh
-            </div>
-          )}
+          ) : null}
+          <div className="w-48">
+            <ImageUpload
+              value={null}
+              onChange={(file) => {
+                if (file) {
+                  handleImageUpload(file);
+                }
+              }}
+              label="Thêm ảnh sản phẩm"
+            />
+          </div>
           <p className="text-sm text-ink/70">{product.description || 'Chưa có mô tả.'}</p>
           <dl className="grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
             <div>

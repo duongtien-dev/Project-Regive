@@ -20,7 +20,7 @@ router.post(
 );
 
 router.delete(
-  '/:filename',
+  '/delete',
   authenticate,
   ctrl.deleteImage
 );

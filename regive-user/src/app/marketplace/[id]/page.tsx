@@ -862,7 +862,7 @@ export default function ProductDetailPage() {
         open={modalOpen}
         onCancel={() => setModalOpen(false)}
         footer={null}
-        destroyOnClose
+        destroyOnHidden
         className="rounded-2xl"
       >
         <div className="py-4 space-y-4">

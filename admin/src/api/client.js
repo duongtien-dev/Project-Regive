@@ -23,19 +23,19 @@ function buildUrl(path, query) {
   return `${url.pathname}${url.search}`;
 }
 
-export async function api(path, { method = 'GET', body, query } = {}) {
+export async function api(path, { method = 'GET', body, query, isFormData = false } = {}) {
   const requestMethod = method.toUpperCase();
   const url = buildUrl(path, query);
   const headers = { Accept: 'application/json' };
   const token = getToken();
   if (token) headers.Authorization = `Bearer ${token}`;
-  if (body !== undefined) headers['Content-Type'] = 'application/json';
+  if (body !== undefined && !isFormData) headers['Content-Type'] = 'application/json';
 
   const run = async () => {
     const res = await fetch(url, {
       method: requestMethod,
       headers,
-      body: body !== undefined ? JSON.stringify(body) : undefined,
+      body: body !== undefined ? (isFormData ? body : JSON.stringify(body)) : undefined,
     });
 
     const json = await res.json().catch(() => ({}));
@@ -138,6 +138,20 @@ export const aiApi = {
   get: (id) => api(`/api/ai/assessments/${id}`),
   confirm: (id, body) => api(`/api/ai/assessments/${id}/confirm`, { method: 'POST', body }),
   reject: (id) => api(`/api/ai/assessments/${id}/reject`, { method: 'POST' }),
+};
+
+export const uploadApi = {
+  single: (file) => {
+    const formData = new FormData();
+    formData.append('image', file);
+    return api('/api/uploads/single', { method: 'POST', body: formData, isFormData: true });
+  },
+  multiple: (files) => {
+    const formData = new FormData();
+    files.forEach((file) => formData.append('images', file));
+    return api('/api/uploads/multiple', { method: 'POST', body: formData, isFormData: true });
+  },
+  delete: (publicId) => api('/api/uploads/delete', { method: 'DELETE', body: { publicId } }),
 };
 
 export const notificationApi = {

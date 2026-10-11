@@ -1,21 +1,35 @@
-const path = require('path');
-const fs = require('fs');
+const cloudinary = require('cloudinary').v2;
 const config = require('../config');
 const { success, asyncHandler, ApiError } = require('../utils/api');
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: config.cloudinary?.cloudName || process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: config.cloudinary?.apiKey || process.env.CLOUDINARY_API_KEY,
+  api_secret: config.cloudinary?.apiSecret || process.env.CLOUDINARY_API_SECRET,
+});
 
 const uploadImage = asyncHandler(async (req, res) => {
   if (!req.file) {
     throw new ApiError(400, 'Vui lòng chọn file ảnh để upload');
   }
 
-  const fileUrl = `${config.frontendUrl.replace(':3000', ':5000')}/uploads/${req.file.filename}`;
+  // Upload to Cloudinary
+  const result = await cloudinary.uploader.upload(req.file.path, {
+    folder: 'regive',
+    resource_type: 'image',
+    transformation: [
+      { quality: 'auto', fetch_format: 'auto' },
+    ],
+  });
 
   return success(res, {
-    url: fileUrl,
-    filename: req.file.filename,
-    originalName: req.file.originalname,
-    size: req.file.size,
-    mimetype: req.file.mimetype,
+    url: result.secure_url,
+    publicId: result.public_id,
+    width: result.width,
+    height: result.height,
+    format: result.format,
+    size: result.bytes,
   }, 'Upload ảnh thành công');
 });
 
@@ -24,27 +38,43 @@ const uploadMultipleImages = asyncHandler(async (req, res) => {
     throw new ApiError(400, 'Vui lòng chọn ít nhất một file ảnh');
   }
 
-  const baseUrl = config.frontendUrl.replace(':3000', ':5000');
-  const files = req.files.map((file) => ({
-    url: `${baseUrl}/uploads/${file.filename}`,
-    filename: file.filename,
-    originalName: file.originalname,
-    size: file.size,
-    mimetype: file.mimetype,
+  const uploadPromises = req.files.map((file) =>
+    cloudinary.uploader.upload(file.path, {
+      folder: 'regive',
+      resource_type: 'image',
+      transformation: [
+        { quality: 'auto', fetch_format: 'auto' },
+      ],
+    })
+  );
+
+  const results = await Promise.all(uploadPromises);
+
+  const files = results.map((result) => ({
+    url: result.secure_url,
+    publicId: result.public_id,
+    width: result.width,
+    height: result.height,
+    format: result.format,
+    size: result.bytes,
   }));
 
   return success(res, { files }, `Upload ${files.length} ảnh thành công`);
 });
 
 const deleteImage = asyncHandler(async (req, res) => {
-  const { filename } = req.params;
-  const filePath = path.join(__dirname, '../../uploads', filename);
+  const { publicId } = req.body;
 
-  if (!fs.existsSync(filePath)) {
-    throw new ApiError(404, 'Không tìm thấy file');
+  if (!publicId) {
+    throw new ApiError(400, 'Vui lòng cung cấp publicId của ảnh');
   }
 
-  fs.unlinkSync(filePath);
+  const result = await cloudinary.uploader.destroy(publicId);
+
+  if (result.result !== 'ok') {
+    throw new ApiError(500, 'Không thể xoá ảnh từ Cloudinary');
+  }
+
   return success(res, null, 'Xoá ảnh thành công');
 });
 

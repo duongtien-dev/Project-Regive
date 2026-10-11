@@ -94,7 +94,7 @@ export const QuickDonateModal: React.FC<QuickDonateModalProps> = ({
       open={open}
       onCancel={onClose}
       footer={null}
-      destroyOnClose
+      destroyOnHidden
       centered
       className="rounded-2xl"
     >
