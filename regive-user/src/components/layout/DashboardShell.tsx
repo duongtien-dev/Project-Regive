@@ -76,18 +76,23 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 
   const brand = (
-    <div className="flex items-center gap-2.5">
-      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-p-s500 to-p-s400 flex items-center justify-center shadow-md shadow-p-s500/25">
+    <Link
+      href="/"
+      aria-label="Về trang chủ ReGive"
+      onClick={() => setMobileOpen(false)}
+      className="flex items-center gap-2.5 group no-underline shrink-0"
+    >
+      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-p-s500 to-p-s400 flex items-center justify-center shadow-md shadow-p-s500/25 group-hover:scale-110 transition-transform duration-200">
         <Heart className="w-5 h-5 fill-white text-white" />
       </div>
       <span className="font-bold text-lg tracking-tight text-n-s900">
         Re<span className="text-p-s600">Give</span>
       </span>
-    </div>
+    </Link>
   );
 
   const sidebarNav = (
-    <nav className="flex-1 px-3 space-y-2 overflow-y-auto">
+    <nav className="flex-1 px-3 space-y-4 overflow-y-auto">
       {navItems.map((item) => {
         const active = isActive(item.href);
         return (
