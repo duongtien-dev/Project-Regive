@@ -164,7 +164,7 @@ export default function AiReviewPage() {
           }
         />
         <div className="mb-4 rounded-2xl bg-lime/30 px-4 py-3 text-sm text-ink">
-          Trạng thái: <Badge value={detail.status} map={LABELS.ai} /> · Provider {detail.provider || 'mock'} ·{' '}
+          Trạng thái: <Badge value={detail.status} map={LABELS.ai} /> · Provider {detail.provider || 'heuristic'} ·{' '}
           {formatDate(detail.createdAt)}
         </div>
         <div className="grid gap-4 lg:grid-cols-2">

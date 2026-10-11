@@ -282,9 +282,9 @@ export default function HomePage() {
             />
             {[
               { value: impactData?.totalCampaigns || campaigns.length, label: 'Chiến dịch thiện nguyện', colorClass: 'text-p-s400' },
-              { value: formatVND(impactData?.totalRaised || 385000000), label: 'Tổng nguồn lực quyên góp', colorClass: 'text-sec-s400', isFormatted: true },
-              { value: impactData?.totalDonations || 148, label: 'Lượt đóng góp thành công', colorClass: 'text-sec-s300' },
-              { value: impactData?.totalVolunteers || 24, label: 'Tình nguyện viên đã xác nhận', colorClass: 'text-sec-s300' },
+              { value: formatVND(impactData?.totalRaised || 0), label: 'Tổng nguồn lực quyên góp', colorClass: 'text-sec-s400', isFormatted: true },
+              { value: impactData?.totalDonations || 0, label: 'Lượt đóng góp thành công', colorClass: 'text-sec-s300' },
+              { value: impactData?.totalVolunteers || 0, label: 'Tình nguyện viên đã xác nhận', colorClass: 'text-sec-s300' },
             ].map((stat, idx) => (
               <div key={idx} className="text-center relative z-10">
                 <span className={`block font-bold ${stat.isFormatted ? 'text-xl sm:text-2xl' : 'text-3xl sm:text-4xl'} ${stat.colorClass} leading-tight mb-1.5`}>

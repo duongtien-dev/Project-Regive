@@ -4,7 +4,6 @@ import React, { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import { Input, Select, Button, Alert } from 'antd';
 import {
-  Search,
   RefreshCw,
   Plus,
   Sparkles,
@@ -14,6 +13,7 @@ import { Campaign } from '@/types';
 import { CampaignCard } from '@/components/shared/CampaignCard';
 import { CardSkeleton } from '@/components/shared/LoadingSkeleton';
 import { EmptyState } from '@/components/shared/EmptyState';
+import { SearchInput } from '@/components/shared/SearchInput';
 import { CampaignQuickViewDrawer } from '@/components/campaigns/CampaignQuickViewDrawer';
 import { QuickDonateModal } from '@/components/campaigns/QuickDonateModal';
 import { QuickVolunteerModal } from '@/components/campaigns/QuickVolunteerModal';
@@ -179,14 +179,10 @@ export default function CampaignsPage() {
       {/* Search & Multifaceted Filter Bar */}
       <div className="bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col lg:flex-row gap-3 items-stretch lg:items-center justify-between">
         <div className="flex-1">
-          <Input
+          <SearchInput
             placeholder="Tìm theo tên chiến dịch, mục tiêu, tổ chức hoặc địa phương..."
-            prefix={<Search className="w-4 h-4 text-gray-400 mr-1" />}
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            allowClear
-            size="large"
-            className="!rounded-xl"
+            onChange={setSearchQuery}
           />
         </div>
 

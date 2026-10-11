@@ -13,6 +13,7 @@ export type User = {
   address?: string;
   role: Role;
   isActive: boolean;
+  isEmailVerified?: boolean;
   beneficiaryInfo?: BeneficiaryInfo;
   createdAt?: string;
   updatedAt?: string;

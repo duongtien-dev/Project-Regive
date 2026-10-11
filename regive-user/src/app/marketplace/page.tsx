@@ -2,12 +2,13 @@
 
 import React, { useEffect, useState, useMemo } from 'react';
 import { Input, Select, Button, Alert } from 'antd';
-import { Search, ShoppingBag, RefreshCw, Filter } from 'lucide-react';
+import { ShoppingBag, RefreshCw, Filter } from 'lucide-react';
 import { marketplaceService } from '@/services/marketplaceService';
 import { Product } from '@/types';
 import { ProductCard } from '@/components/shared/ProductCard';
 import { CardSkeleton } from '@/components/shared/LoadingSkeleton';
 import { EmptyState } from '@/components/shared/EmptyState';
+import { SearchInput } from '@/components/shared/SearchInput';
 
 export default function MarketplacePage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -79,14 +80,10 @@ export default function MarketplacePage() {
       {/* Filter and Search Bar */}
       <div className="bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
         <div className="flex-1">
-          <Input
+          <SearchInput
             placeholder="Tìm kiếm vật phẩm theo tên hoặc mô tả..."
-            prefix={<Search className="w-4 h-4 text-gray-400 mr-1" />}
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            allowClear
-            size="large"
-            className="!rounded-xl"
+            onChange={setSearchQuery}
           />
         </div>
 

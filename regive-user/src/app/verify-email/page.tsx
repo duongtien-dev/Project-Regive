@@ -1,0 +1,120 @@
+'use client';
+
+import React, { useEffect, useState, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import { Button, Spin, Alert } from 'antd';
+import { Heart, CheckCircle, XCircle, ArrowRight } from 'lucide-react';
+import { authService } from '@/services/authService';
+import { useAuthStore } from '@/store/useAuthStore';
+
+function VerifyEmailContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const token = searchParams?.get('token') || '';
+  const { setUser } = useAuthStore();
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    if (!token) {
+      setError('Link xác thực không hợp lệ');
+      setLoading(false);
+      return;
+    }
+
+    authService
+      .verifyEmail({ token })
+      .then((user) => {
+        setUser(user);
+        setSuccess(true);
+      })
+      .catch((err: any) => {
+        setError(err.message || 'Xác thực email thất bại');
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [token, setUser]);
+
+  if (loading) {
+    return (
+      <div className="text-center space-y-4">
+        <Spin size="large" />
+        <p className="text-sm text-gray-500">Đang xác thực email...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-4">
+        <div className="text-center">
+          <XCircle className="w-16 h-16 text-red-400 mx-auto" />
+          <h3 className="mt-4 text-xl font-bold text-gray-900">Xác thực thất bại</h3>
+        </div>
+        <Alert message="Lỗi xác thực" description={error} type="error" showIcon />
+        <div className="flex flex-col gap-3">
+          <Link href="/login">
+            <Button type="primary" size="large" className="w-full h-12 rounded-xl bg-p-s600 font-bold">
+              Quay lại đăng nhập
+            </Button>
+          </Link>
+          <Link href="/forgot-password">
+            <Button size="large" className="w-full h-12 rounded-xl font-bold">
+              Yêu cầu gửi lại email xác thực
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="text-center">
+        <CheckCircle className="w-16 h-16 text-green-500 mx-auto" />
+        <h3 className="mt-4 text-xl font-bold text-gray-900">Xác thực email thành công!</h3>
+        <p className="mt-2 text-sm text-gray-500">
+          Tài khoản ReGive của bạn đã được xác thực. Giờ bạn có thể sử dụng đầy đủ các tính năng.
+        </p>
+      </div>
+      <Button
+        type="primary"
+        size="large"
+        onClick={() => router.push('/me/dashboard')}
+        icon={<ArrowRight className="w-4 h-4" />}
+        className="w-full h-12 rounded-xl bg-p-s600 hover:bg-p-s700 text-white font-bold"
+      >
+        Vào trang cá nhân
+      </Button>
+    </div>
+  );
+}
+
+export default function VerifyEmailPage() {
+  return (
+    <div className="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 bg-white p-8 sm:p-10 rounded-3xl border border-gray-100 shadow-xl">
+        {/* Header */}
+        <div className="text-center">
+          <Link href="/" className="inline-flex items-center gap-2">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-p-s600 to-sec-s500 flex items-center justify-center text-white shadow-md">
+              <Heart className="w-5 h-5 fill-white" />
+            </div>
+            <span className="text-2xl font-black text-gray-900">
+              Re<span className="text-p-s600">Give</span>
+            </span>
+          </Link>
+          <h2 className="mt-4 text-2xl font-black text-gray-900">Xác Thực Email</h2>
+        </div>
+
+        <Suspense fallback={<Spin size="large" />}>
+          <VerifyEmailContent />
+        </Suspense>
+      </div>
+    </div>
+  );
+}

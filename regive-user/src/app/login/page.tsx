@@ -83,6 +83,15 @@ function LoginForm() {
           />
         </Form.Item>
 
+        <div className="flex justify-end -mt-2">
+          <Link
+            href="/forgot-password"
+            className="text-xs font-semibold text-p-s600 hover:text-p-s700"
+          >
+            Quên mật khẩu?
+          </Link>
+        </div>
+
         <div className="pt-2">
           <Button
             type="primary"

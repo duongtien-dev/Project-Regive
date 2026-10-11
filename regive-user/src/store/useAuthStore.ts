@@ -22,6 +22,7 @@ interface AuthState {
   logout: () => void;
   loadUser: () => Promise<void>;
   updateProfile: (payload: UpdateProfilePayload) => Promise<User>;
+  setUser: (user: User) => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -89,5 +90,9 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({ loading: false });
       throw err;
     }
+  },
+
+  setUser: (user: User) => {
+    set({ user });
   },
 }));

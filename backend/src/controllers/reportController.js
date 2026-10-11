@@ -151,12 +151,12 @@ const publicImpact = asyncHandler(async (_req, res) => {
   }));
 
   return success(res, {
-    totalRaised: moneyStats[0]?.total || 38500000,
-    totalDonations: totalDonations || 48,
-    totalCampaigns: totalCampaigns || 6,
-    activeCampaigns: activeCampaigns || 5,
-    totalProducts: totalProducts || 12,
-    totalVolunteers: totalVolunteers || 15,
+    totalRaised: moneyStats[0]?.total || 0,
+    totalDonations: totalDonations || 0,
+    totalCampaigns: totalCampaigns || 0,
+    activeCampaigns: activeCampaigns || 0,
+    totalProducts: totalProducts || 0,
+    totalVolunteers: totalVolunteers || 0,
     topDonors: sanitizedTopDonors,
     recentDonations: sanitizedRecent,
   });

@@ -43,6 +43,7 @@ import { formatVND, formatDate, calculateProgress } from '@/lib/format';
 import { StatusBadge } from '@/components/shared/StatusBadge';
 import { DetailSkeleton } from '@/components/shared/LoadingSkeleton';
 import { CommentSection } from '@/components/shared/CommentSection';
+import { Timeline } from '@/components/shared/Timeline';
 import { QuickDonateModal } from '@/components/campaigns/QuickDonateModal';
 import { QuickVolunteerModal } from '@/components/campaigns/QuickVolunteerModal';
 import { AddActivityModal } from '@/components/campaigns/AddActivityModal';
@@ -203,41 +204,17 @@ export default function CampaignDetailPage() {
 
           {/* Timeline Milestones Section */}
           {campaign.timeline && campaign.timeline.length > 0 && (
-            <div className="space-y-4">
-              <h4 className="font-extrabold text-gray-900 text-base flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-p-s600" />
-                Lộ trình triển khai theo các giai đoạn (Milestones)
-              </h4>
-              <div className="relative border-l-2 border-p-s200 ml-4 pl-6 space-y-6">
-                {campaign.timeline.map((tl, i) => (
-                  <div key={i} className="relative group">
-                    <span
-                      className={`absolute -left-[31px] top-1 w-4 h-4 rounded-full border-4 border-white shadow-xs ${
-                        tl.status === 'completed'
-                          ? 'bg-p-s600'
-                          : tl.status === 'in_progress'
-                          ? 'bg-amber-500 animate-pulse'
-                          : 'bg-gray-300'
-                      }`}
-                    />
-                    <div className="bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 shadow-sm space-y-2">
-                      <div className="flex flex-wrap items-center justify-between gap-2">
-                        <div className="flex items-center gap-2">
-                          {tl.phase && (
-                            <span className="text-[11px] font-bold uppercase tracking-wider text-p-s700 bg-p-s50 px-2.5 py-0.5 rounded-md">
-                              {tl.phase}
-                            </span>
-                          )}
-                          <h5 className="font-bold text-gray-900 text-sm">{tl.title}</h5>
-                        </div>
-                        <span className="text-xs text-gray-400 font-mono">{tl.date}</span>
-                      </div>
-                      <p className="text-xs text-gray-600 leading-relaxed">{tl.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <Timeline
+              title="Lộ trình triển khai theo các giai đoạn (Milestones)"
+              icon={<Calendar className="w-4 h-4 text-p-s600" />}
+              items={campaign.timeline.map((tl) => ({
+                phase: tl.phase,
+                title: tl.title,
+                date: tl.date,
+                description: tl.description,
+                status: tl.status as any,
+              }))}
+            />
           )}
 
           {/* Donation Guidelines */}

@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { Table, Tag, Input, Select, Button, Card, Statistic, Alert } from 'antd';
 import {
   ShieldCheck,
-  Search,
   ArrowDownLeft,
   ArrowUpRight,
   Filter,
@@ -20,6 +19,7 @@ import {
 import { reportService } from '@/services/reportService';
 import { TransparencyLedgerData, TransparencyTransaction } from '@/types';
 import { formatVND, formatDateTime } from '@/lib/format';
+import { SearchInput } from '@/components/shared/SearchInput';
 
 export default function TransparencyPage() {
   const [data, setData] = useState<TransparencyLedgerData | null>(null);
@@ -229,14 +229,10 @@ export default function TransparencyPage() {
       {/* Filter and Search Bar */}
       <div className="bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
         <div className="flex-1">
-          <Input
+          <SearchInput
             placeholder="Tìm theo mã giao dịch, tên đối tác hoặc chiến dịch..."
-            prefix={<Search className="w-4 h-4 text-gray-400 mr-1" />}
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            allowClear
-            size="large"
-            className="!rounded-xl"
+            onChange={setSearch}
           />
         </div>
 

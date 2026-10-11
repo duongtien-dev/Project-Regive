@@ -1,7 +1,7 @@
 # ReGive Backend — Final Delivery (Phase 5)
 
 **Version:** 1.0.0  
-**Stack:** Node.js · Express · MongoDB · JWT · Mock AI  
+**Stack:** Node.js · Express · MongoDB · JWT · Gemini AI  
 **Ngày:** 10/09/2026
 
 ## Phạm vi đã bàn giao (Backend)
